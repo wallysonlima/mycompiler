@@ -5,7 +5,12 @@
  */
 package view;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import javax.swing.JFileChooser;
 
 /**
@@ -125,6 +130,7 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemOpenActionPerformed
+
         // Handle open button action
         if ( evt.getSource() == menuItemOpen )
         {
@@ -135,6 +141,23 @@ public class Main extends javax.swing.JFrame {
             if ( returnVal == JFileChooser.APPROVE_OPTION)
             {
                 File file = fc.getSelectedFile();
+                
+                try
+                {
+                    BufferedReader in = new BufferedReader(new FileReader(file));
+                    
+                    String line = null;
+
+                    while ( (line = in.readLine()) != null )
+                    {
+                        System.out.println(line);
+                    }
+                }
+                
+                catch (IOException ex)
+                {
+                    System.err.println("Error ! Doesn't possible open the file ! " + ex);
+                }
                 
                 // This is where a real application would open the file
                 System.out.println("Opening: " + file.getName() + "\n");
