@@ -5,25 +5,32 @@
  */
 package view;
 
+import controller.Control;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
+import model.Analyse;
 
 /**
  *
  * @author wallysonlima
  */
 public class Main extends javax.swing.JFrame {
-
+    private Control control;
+    private ArrayList<Analyse> listAnalyse;
+    File file;
     /**
      * Creates new form Main
      */
     public Main() {
         initComponents();
+        control = new Control();
+        listAnalyse = new ArrayList<>();
     }
 
     /**
@@ -35,9 +42,7 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tableInformation = new javax.swing.JTabbedPane();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        textInformation = new javax.swing.JTextArea();
+        tableLexical = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableLexic = new javax.swing.JTable();
         jTabbedPane2 = new javax.swing.JTabbedPane();
@@ -52,34 +57,46 @@ public class Main extends javax.swing.JFrame {
         menuItemLexic = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("myCompiler");
+        setResizable(false);
         setSize(new java.awt.Dimension(1024, 768));
-
-        textInformation.setColumns(20);
-        textInformation.setRows(5);
-        jScrollPane3.setViewportView(textInformation);
-
-        tableInformation.addTab("tab2", jScrollPane3);
 
         tableLexic.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Lexeme", "Token", "Value", "Line", "Column"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tableLexic);
 
-        tableInformation.addTab("tab2", jScrollPane1);
+        tableLexical.addTab("Lexical Table", jScrollPane1);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane2.setViewportView(jTextArea1);
 
-        jTabbedPane2.addTab("tab1", jScrollPane2);
+        jTabbedPane2.addTab("Editor", jScrollPane2);
 
         menuFile.setText("File");
 
@@ -99,6 +116,11 @@ public class Main extends javax.swing.JFrame {
         menuAnalyse.setText("Analyse");
 
         menuItemLexic.setText("Lexic");
+        menuItemLexic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemLexicActionPerformed(evt);
+            }
+        });
         menuAnalyse.add(menuItemLexic);
 
         jMenuBar1.add(menuAnalyse);
@@ -113,7 +135,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane2))
-            .addComponent(tableInformation, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+            .addComponent(tableLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,10 +144,11 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableInformation, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                .addComponent(tableLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemOpenActionPerformed
@@ -138,9 +161,7 @@ public class Main extends javax.swing.JFrame {
             
             if ( returnVal == JFileChooser.APPROVE_OPTION)
             {
-                File file = fc.getSelectedFile();
-                
-                
+                file = fc.getSelectedFile();
                 
                 // This is where a real application would open the file
                 System.out.println("Opening: " + file.getName() + "\n");
@@ -153,6 +174,17 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_menuItemOpenActionPerformed
 
+    private void menuItemLexicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemLexicActionPerformed
+        
+        // Do Analyse Lexic
+        listAnalyse = control.analyseLexic(file);
+        
+        
+
+    }//GEN-LAST:event_menuItemLexicActionPerformed
+
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -192,7 +224,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextArea jTextArea1;
@@ -201,8 +232,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemClose;
     private javax.swing.JMenuItem menuItemLexic;
     private javax.swing.JMenuItem menuItemOpen;
-    private javax.swing.JTabbedPane tableInformation;
     private javax.swing.JTable tableLexic;
-    private javax.swing.JTextArea textInformation;
+    private javax.swing.JTabbedPane tableLexical;
     // End of variables declaration//GEN-END:variables
 }

@@ -18,6 +18,8 @@ import model.Analyse;
  */
 public class Control {
     
+    public void Control() {}
+    
     // Read Text in file
     public ArrayList<Analyse> analyseLexic(File file)
     {
