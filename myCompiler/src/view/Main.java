@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Analyse;
 
 /**
@@ -42,9 +44,13 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tableLexical = new javax.swing.JTabbedPane();
+        tabbedLexical = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableLexic = new javax.swing.JTable();
+        tableLexical = new javax.swing.JTable();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea2 = new javax.swing.JTextArea();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextArea3 = new javax.swing.JTextArea();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -61,13 +67,9 @@ public class Main extends javax.swing.JFrame {
         setResizable(false);
         setSize(new java.awt.Dimension(1024, 768));
 
-        tableLexic.setModel(new javax.swing.table.DefaultTableModel(
+        tableLexical.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Lexeme", "Token", "Value", "Line", "Column"
@@ -88,9 +90,21 @@ public class Main extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tableLexic);
+        jScrollPane1.setViewportView(tableLexical);
 
-        tableLexical.addTab("Lexical Table", jScrollPane1);
+        tabbedLexical.addTab("Lexical Table", jScrollPane1);
+
+        jTextArea2.setColumns(20);
+        jTextArea2.setRows(5);
+        jScrollPane3.setViewportView(jTextArea2);
+
+        tabbedLexical.addTab("Lexical Errors", jScrollPane3);
+
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(5);
+        jScrollPane4.setViewportView(jTextArea3);
+
+        tabbedLexical.addTab("Syntatic Errors", jScrollPane4);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -109,6 +123,11 @@ public class Main extends javax.swing.JFrame {
         menuFile.add(menuItemOpen);
 
         menuItemClose.setText("Close");
+        menuItemClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemCloseActionPerformed(evt);
+            }
+        });
         menuFile.add(menuItemClose);
 
         jMenuBar1.add(menuFile);
@@ -135,7 +154,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane2))
-            .addComponent(tableLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+            .addComponent(tabbedLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -144,7 +163,7 @@ public class Main extends javax.swing.JFrame {
                     .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tableLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                .addComponent(tabbedLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
         );
 
         pack();
@@ -179,11 +198,35 @@ public class Main extends javax.swing.JFrame {
         // Do Analyse Lexic
         listAnalyse = control.analyseLexic(file);
         
-        
+        // Popula Table
+        populateLexicalTable(listAnalyse);
 
     }//GEN-LAST:event_menuItemLexicActionPerformed
 
-    
+    private void menuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemCloseActionPerformed
+        int input = JOptionPane.showConfirmDialog(this, "Do you really want close the application ?");
+        
+        if ( input == 0 )
+            this.dispose();
+    }//GEN-LAST:event_menuItemCloseActionPerformed
+
+    public void populateLexicalTable(ArrayList<Analyse> list)
+    {
+        DefaultTableModel model = (DefaultTableModel) tableLexical.getModel();
+        
+        Object rowData[] = new Object[5];
+        
+        for( int i = 0; i < list.size(); i++ )
+        {
+            rowData[0] = list.get(i).getLexema();
+            rowData[0] = list.get(i).getToken();
+            rowData[0] = list.get(i).getValor();
+            rowData[0] = list.get(i).getLinha();
+            rowData[0] = list.get(i).getColuna();
+            
+            model.addRow(rowData);
+        }
+    }
     
     /**
      * @param args the command line arguments
@@ -224,15 +267,19 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea jTextArea3;
     private javax.swing.JMenu menuAnalyse;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuItemClose;
     private javax.swing.JMenuItem menuItemLexic;
     private javax.swing.JMenuItem menuItemOpen;
-    private javax.swing.JTable tableLexic;
-    private javax.swing.JTabbedPane tableLexical;
+    private javax.swing.JTabbedPane tabbedLexical;
+    private javax.swing.JTable tableLexical;
     // End of variables declaration//GEN-END:variables
 }
