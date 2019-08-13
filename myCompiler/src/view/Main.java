@@ -53,7 +53,7 @@ public class Main extends javax.swing.JFrame {
         jTextArea3 = new javax.swing.JTextArea();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        textAreaEdit = new javax.swing.JTextArea();
         jScrollPane5 = new javax.swing.JScrollPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
@@ -106,9 +106,9 @@ public class Main extends javax.swing.JFrame {
 
         tabbedLexical.addTab("Syntatic Errors", jScrollPane4);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        textAreaEdit.setColumns(20);
+        textAreaEdit.setRows(5);
+        jScrollPane2.setViewportView(textAreaEdit);
 
         jTabbedPane2.addTab("Editor", jScrollPane2);
 
@@ -171,6 +171,8 @@ public class Main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void menuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemOpenActionPerformed
+        String line = "";
+        
         // Handle open button action
         if ( evt.getSource() == menuItemOpen )
         {
@@ -182,13 +184,31 @@ public class Main extends javax.swing.JFrame {
             {
                 file = fc.getSelectedFile();
                 
-                // This is where a real application would open the file
-                System.out.println("Opening: " + file.getName() + "\n");
+                try
+                {
+                    BufferedReader in = new BufferedReader(new FileReader(file));
+                    
+                    while ( (line = in.readLine()) != null )
+                    {
+                        line += "\n"; 
+                    }
+
+                    // This is where a real application would open the file
+                    System.out.println("Opening: " + file.getName() + "\n");
+                    System.out.println("\n\n" + line);
+                }
+                
+                catch (IOException ex)
+                {
+                    System.err.println("Error ! Isn't possible open the file ! " + ex);
+                }
+                
+                textAreaEdit.setText(line);
             }
             
             else
             {
-                System.out.println("Open command cancelled by user.");
+                JOptionPane.showMessageDialog(null, "Open command cancelled by user.");
             }
         }
     }//GEN-LAST:event_menuItemOpenActionPerformed
@@ -196,7 +216,7 @@ public class Main extends javax.swing.JFrame {
     private void menuItemLexicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemLexicActionPerformed
         
         // Do Analyse Lexic
-        listAnalyse = control.analyseLexic(file);
+        listAnalyse = control.analyseLexic(textAreaEdit.getText());
         
         // Popula Table
         populateLexicalTable(listAnalyse);
@@ -271,7 +291,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JMenu menuAnalyse;
@@ -281,5 +300,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemOpen;
     private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTable tableLexical;
+    private javax.swing.JTextArea textAreaEdit;
     // End of variables declaration//GEN-END:variables
 }
