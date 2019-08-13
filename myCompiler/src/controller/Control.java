@@ -29,30 +29,39 @@ public class Control {
         try
         {
             BufferedReader in = new BufferedReader(new FileReader(file));
-
             String line = null;
-            boolean closeComment = false;
-
+            String temp;
+            boolean isFloat = false;
+            
             while ( (line = in.readLine()) != null )
             {
                 char [] chLine = line.toCharArray();
                 int max = chLine.length - 1;
+                int i = 0;
                 
-                for( int i = 0; i < chLine.length; i++ )
+                while( i < chLine.length )
                 {
-                    if ( chLine[i] == ' ' )
+                    temp = "";
+                    
+                    // Empty or Comment
+                    if ( chLine[i] == ' ' || ignore )
                         continue;
                     
-                    if ( chLine[i] == '/' )
-                        if ( i < max )
-                            if ( chLine[++i] == '*' )
-                            {
-                                ignore = true;
-                                continue;
-                            }
+                    // Close Comment
+                    if ( chLine[i] == '*' && i < max )
+                        if ( chLine[++i] == '/' )
+                            ignore = false;
                     
-                            else if ( chLine[++i] == '/' )
-                                break;
+                    // Ignore -- Open Comment
+                    if ( chLine[i] == '/' && i < max )
+                        if ( chLine[++i] == '*' )
+                        {
+                            ignore = true;
+                            continue;
+                        }
+                    
+                        else if ( chLine[++i] == '/' )
+                            break;
                     
                     switch( chLine[i] )
                     {
@@ -79,15 +88,35 @@ public class Control {
                         case ')':
                             list.add(new Analyse(String.valueOf(chLine[i]), "FP", "", Integer.toString(lineQtde), Integer.toString(i)) );
                         
+                           
+                        case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+                            while ( (chLine[i+1] >= 48 && chLine[i+1] <= 57) || chLine[i+1] == 46 )
+                            {
+                                temp += chLine[i];
+                                temp += chLine[++i];
+                                
+                                if ( chLine[i+1] == 46 )
+                                    isFloat = true;
+                            }
+                            
+                            list.add(new Analyse(temp, isFloat ? "Inteiro" : "Real", "", Integer.toString(lineQtde), Integer.toString(i)) );
+                            isFloat = false;
+                            break;
                     }
+                    
+                    i++;
                 }
-                        
+                
+                if ( ignore )
+                    list.add(new Analyse("Error", "", "", "", "") );
             }
         }
 
         catch (IOException ex)
         {
-            System.err.println("Error ! Doesn't possible open the file ! " + ex);
+            System.err.println("Error ! Isn't possible open the file ! " + ex);
         }
+        
+        return list;
     }
 }

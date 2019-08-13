@@ -69,7 +69,6 @@
               <Component id="jScrollPane5" min="-2" pref="40" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jTabbedPane2" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
           </Group>
           <Component id="tableInformation" pref="808" max="32767" attributes="0"/>
       </Group>
