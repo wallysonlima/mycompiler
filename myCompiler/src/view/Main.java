@@ -15,10 +15,13 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.paint.Color;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import model.Analyse;
+import model.ColumnCellRenderer;
 
 /**
  *
@@ -272,6 +275,12 @@ public class Main extends javax.swing.JFrame {
         
         for( int i = 0; i < list.size(); i++ )
         {
+            for ( int j = 0; j < 5; j++ )
+            {
+                TableColumn column = tableLexical.getColumnModel().getColumn(j);
+                column.setCellRenderer(new ColumnCellRenderer());
+            }
+        
             rowData[0] = list.get(i).getLexeme();
             rowData[1] = list.get(i).getToken();
             rowData[2] = list.get(i).getValue();
