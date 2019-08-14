@@ -20,12 +20,12 @@ public class Analyse {
         this.column = column;
     }
 
-    public String getLexema() {
+    public String getLexeme() {
         return lexeme;
     }
 
-    public void setLexema(String lexema) {
-        this.lexeme = lexema;
+    public void setLexeme(String lexeme) {
+        this.lexeme = lexeme;
     }
 
     public String getToken() {
@@ -36,27 +36,27 @@ public class Analyse {
         this.token = token;
     }
 
-    public String getValor() {
+    public String getValue() {
         return value;
     }
 
-    public void setValor(String valor) {
-        this.value = valor;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public String getLinha() {
+    public String getLine() {
         return line;
     }
 
-    public void setLinha(String linha) {
-        this.line = linha;
+    public void setLine(String line) {
+        this.line = line;
     }
 
-    public String getColuna() {
+    public String getColumn() {
         return column;
     }
 
-    public void setColuna(String coluna) {
-        this.column = coluna;
+    public void setColumn(String column) {
+        this.column = column;
     }
 }

@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -47,17 +49,15 @@ public class Main extends javax.swing.JFrame {
         tabbedLexical = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableLexical = new javax.swing.JTable();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea3 = new javax.swing.JTextArea();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         textAreaEdit = new javax.swing.JTextArea();
-        jScrollPane5 = new javax.swing.JScrollPane();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        textAreaLines = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuFile = new javax.swing.JMenu();
         menuItemOpen = new javax.swing.JMenuItem();
+        menuItemSave = new javax.swing.JMenuItem();
         menuItemClose = new javax.swing.JMenuItem();
         menuAnalyse = new javax.swing.JMenu();
         menuItemLexic = new javax.swing.JMenuItem();
@@ -94,23 +94,16 @@ public class Main extends javax.swing.JFrame {
 
         tabbedLexical.addTab("Lexical Table", jScrollPane1);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jScrollPane3.setViewportView(jTextArea2);
-
-        tabbedLexical.addTab("Lexical Errors", jScrollPane3);
-
-        jTextArea3.setColumns(20);
-        jTextArea3.setRows(5);
-        jScrollPane4.setViewportView(jTextArea3);
-
-        tabbedLexical.addTab("Syntatic Errors", jScrollPane4);
-
         textAreaEdit.setColumns(20);
         textAreaEdit.setRows(5);
         jScrollPane2.setViewportView(textAreaEdit);
 
         jTabbedPane2.addTab("Editor", jScrollPane2);
+
+        textAreaLines.setEditable(false);
+        textAreaLines.setColumns(20);
+        textAreaLines.setRows(5);
+        jScrollPane6.setViewportView(textAreaLines);
 
         menuFile.setText("File");
 
@@ -121,6 +114,14 @@ public class Main extends javax.swing.JFrame {
             }
         });
         menuFile.add(menuItemOpen);
+
+        menuItemSave.setText("Save");
+        menuItemSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSaveActionPerformed(evt);
+            }
+        });
+        menuFile.add(menuItemSave);
 
         menuItemClose.setText("Close");
         menuItemClose.addActionListener(new java.awt.event.ActionListener() {
@@ -135,6 +136,11 @@ public class Main extends javax.swing.JFrame {
         menuAnalyse.setText("Analyse");
 
         menuItemLexic.setText("Lexic");
+        menuItemLexic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuItemLexicMouseClicked(evt);
+            }
+        });
         menuItemLexic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuItemLexicActionPerformed(evt);
@@ -151,7 +157,8 @@ public class Main extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane2))
             .addComponent(tabbedLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
@@ -161,7 +168,7 @@ public class Main extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabbedLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
         );
@@ -172,54 +179,73 @@ public class Main extends javax.swing.JFrame {
 
     private void menuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemOpenActionPerformed
         String line = "";
+        String textEdit = "";
+        BufferedReader in = null;
+        int counter = 0;
         
         // Handle open button action
-        if ( evt.getSource() == menuItemOpen )
-        {
-            final JFileChooser fc = new JFileChooser();
-            
-            int returnVal = fc.showOpenDialog(this);
-            
-            if ( returnVal == JFileChooser.APPROVE_OPTION)
-            {
-                file = fc.getSelectedFile();
-                
-                try
-                {
-                    BufferedReader in = new BufferedReader(new FileReader(file));
-                    
-                    while ( (line = in.readLine()) != null )
-                    {
-                        line += "\n"; 
-                    }
+        final JFileChooser fc = new JFileChooser();
 
-                    // This is where a real application would open the file
-                    System.out.println("Opening: " + file.getName() + "\n");
-                    System.out.println("\n\n" + line);
-                }
-                
-                catch (IOException ex)
-                {
-                    System.err.println("Error ! Isn't possible open the file ! " + ex);
-                }
-                
-                textAreaEdit.setText(line);
-            }
-            
-            else
+        int returnVal = fc.showOpenDialog(this);
+
+        if ( returnVal == JFileChooser.APPROVE_OPTION)
+        {
+            file = fc.getSelectedFile();
+
+            try
             {
-                JOptionPane.showMessageDialog(null, "Open command cancelled by user.");
+                in = new BufferedReader(new FileReader(file));
+                
+                while ( (line = in.readLine()) != null )
+                {
+                    counter++;
+                    textEdit += line + "\n";
+                }
+
+                // This is where a real application would open the file
+                System.out.println("Opening: " + file.getName() + "\n");
+                System.out.println("\n\n" + line);
             }
+
+            catch (IOException ex)
+            {
+                System.err.println("Error ! Isn't possible open the file ! " + ex);
+            }
+
+            finally
+            {
+                try {
+                    in.close();
+                    
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                textAreaEdit.setText(textEdit);
+                textAreaLines.setText( populateLines(counter) );
+            }
+        }
+
+        else
+        {
+            JOptionPane.showMessageDialog(null, "Open command cancelled by user.");
         }
     }//GEN-LAST:event_menuItemOpenActionPerformed
 
     private void menuItemLexicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemLexicActionPerformed
-        
         // Do Analyse Lexic
-        listAnalyse = control.analyseLexic(textAreaEdit.getText());
+        //JOptionPane.showMessageDialog(null, "Entrou aqui !");
+        
+        if ( textAreaEdit.getText() != "" )
+            listAnalyse = control.analyseLexic(textAreaEdit.getText());
+        else
+            JOptionPane.showMessageDialog(null, "Error ! Without Text ! You need fill the textArea !");
         
         // Popula Table
         populateLexicalTable(listAnalyse);
+        
+        if ( listAnalyse.get( listAnalyse.size() - 1).getLexeme().equals("Error") )
+            JOptionPane.showMessageDialog(null, "Error ! You missed close the comment !");
 
     }//GEN-LAST:event_menuItemLexicActionPerformed
 
@@ -230,6 +256,14 @@ public class Main extends javax.swing.JFrame {
             this.dispose();
     }//GEN-LAST:event_menuItemCloseActionPerformed
 
+    private void menuItemLexicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuItemLexicMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuItemLexicMouseClicked
+
+    private void menuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuItemSaveActionPerformed
+
     public void populateLexicalTable(ArrayList<Analyse> list)
     {
         DefaultTableModel model = (DefaultTableModel) tableLexical.getModel();
@@ -238,14 +272,26 @@ public class Main extends javax.swing.JFrame {
         
         for( int i = 0; i < list.size(); i++ )
         {
-            rowData[0] = list.get(i).getLexema();
-            rowData[0] = list.get(i).getToken();
-            rowData[0] = list.get(i).getValor();
-            rowData[0] = list.get(i).getLinha();
-            rowData[0] = list.get(i).getColuna();
+            rowData[0] = list.get(i).getLexeme();
+            rowData[1] = list.get(i).getToken();
+            rowData[2] = list.get(i).getValue();
+            rowData[3] = list.get(i).getLine();
+            rowData[4] = list.get(i).getColumn();
             
             model.addRow(rowData);
         }
+        
+        tableLexical.setModel(model);
+    }
+    
+    public String populateLines(int QtdLines)
+    {
+        String lines = "";
+        
+        for(int i = 1; i <= QtdLines; i++)
+            lines += i + "\n";
+        
+        return lines;
     }
     
     /**
@@ -287,19 +333,17 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextArea jTextArea2;
-    private javax.swing.JTextArea jTextArea3;
     private javax.swing.JMenu menuAnalyse;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuItemClose;
     private javax.swing.JMenuItem menuItemLexic;
     private javax.swing.JMenuItem menuItemOpen;
+    private javax.swing.JMenuItem menuItemSave;
     private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTable tableLexical;
     private javax.swing.JTextArea textAreaEdit;
+    private javax.swing.JTextArea textAreaLines;
     // End of variables declaration//GEN-END:variables
 }

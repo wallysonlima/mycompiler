@@ -35,37 +35,49 @@ public class Control {
         while ( scanner.hasNextLine() )
         {
             char [] chLine = (scanner.nextLine()).toCharArray();
-            int max = chLine.length - 1;
+            int max = chLine.length;
             int i = 0;
 
             while( i < chLine.length )
             {
                 temp = "";
 
+                // Close Comment
+                if ( chLine[i] == '*' && (i + 1) < max )
+                    if ( chLine[i + 1] == '/' )
+                    {
+                        ignore = false;
+                        i += 2;
+                        continue;
+                    }
+                
                 // Empty or Comment
                 if ( chLine[i] == ' ' || ignore )
+                {
+                    i++;
                     continue;
-
-                // Close Comment
-                if ( chLine[i] == '*' && i < max )
-                    if ( chLine[++i] == '/' )
-                        ignore = false;
+                }
 
                 // Ignore -- Open Comment
-                if ( chLine[i] == '/' && i < max )
-                    if ( chLine[++i] == '*' )
+                if ( chLine[i] == '/' && (i + 1) < max )
+                    if ( chLine[i + 1] == '*' )
                     {
                         ignore = true;
+                        i++;
                         continue;
                     }
 
-                    else if ( chLine[++i] == '/' )
+                    else if ( chLine[i + 1] == '/' )
                         break;
 
                 switch( chLine[i] )
                 {
                     case '+':
                         list.add(new Analyse(String.valueOf(chLine[i]), "op_soma", "", Integer.toString(lineQtde), Integer.toString(i)) );
+                        break;
+                        
+                    case '=':
+                        list.add(new Analyse(String.valueOf(chLine[i]), "op_igual", "", Integer.toString(lineQtde), Integer.toString(i)) );
                         break;
 
                     case '-':
@@ -86,29 +98,36 @@ public class Control {
 
                     case ')':
                         list.add(new Analyse(String.valueOf(chLine[i]), "FP", "", Integer.toString(lineQtde), Integer.toString(i)) );
-
+                        break;
 
                     case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
-                        while ( (chLine[i+1] >= 48 && chLine[i+1] <= 57) || chLine[i+1] == 46 )
-                        {
                             temp += chLine[i];
-                            temp += chLine[++i];
+                            
+                            if ( i + 1 < max)
+                                while ( (chLine[i+1] >= 48 && chLine[i+1] <= 57) || chLine[i+1] == 46 )
+                                {
+                                    temp += chLine[++i];
 
-                            if ( chLine[i+1] == 46 )
-                                isFloat = true;
-                        }
+                                    if ( chLine[i] == 46 )
+                                        isFloat = true;
 
-                        list.add(new Analyse(temp, isFloat ? "Inteiro" : "Real", "", Integer.toString(lineQtde), Integer.toString(i)) );
+                                    if ( i + 1 >= max )
+                                        break;                                    
+                                }
+
+                        list.add(new Analyse(temp, isFloat ? "Float" : "Integer", "", Integer.toString(lineQtde), Integer.toString(i)) );
                         isFloat = false;
                         break;
                 }
 
                 i++;
             }
-
-            if ( ignore )
-                list.add(new Analyse("Error", "", "", "", "") );
+            
+            lineQtde++;
         } 
+        
+        if ( ignore )
+            list.add(new Analyse("Error", "", "", "", "") );
         
         return list;
     }
