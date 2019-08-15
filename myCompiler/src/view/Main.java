@@ -6,11 +6,14 @@
 package view;
 
 import controller.Control;
+import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -110,6 +113,7 @@ public class Main extends javax.swing.JFrame {
 
         menuFile.setText("File");
 
+        menuItemOpen.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
         menuItemOpen.setText("Open");
         menuItemOpen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -118,6 +122,7 @@ public class Main extends javax.swing.JFrame {
         });
         menuFile.add(menuItemOpen);
 
+        menuItemSave.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         menuItemSave.setText("Save");
         menuItemSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -126,6 +131,7 @@ public class Main extends javax.swing.JFrame {
         });
         menuFile.add(menuItemSave);
 
+        menuItemClose.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         menuItemClose.setText("Close");
         menuItemClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,6 +144,7 @@ public class Main extends javax.swing.JFrame {
 
         menuAnalyse.setText("Analyse");
 
+        menuItemLexic.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.CTRL_MASK));
         menuItemLexic.setText("Lexic");
         menuItemLexic.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -264,7 +271,31 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemLexicMouseClicked
 
     private void menuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSaveActionPerformed
-        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        
+        int retval = fileChooser.showSaveDialog(this);
+        
+        if ( retval == JFileChooser.APPROVE_OPTION )
+        {
+            File file = fileChooser.getSelectedFile();
+            
+            if ( file == null )
+                return;
+            
+            if ( !file.getName().toLowerCase().endsWith(".txt") )
+                file = new File(file.getParentFile(), file.getName() + ".txt");
+            
+            try
+            {
+                textAreaEdit.write(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
+                Desktop.getDesktop().open(file);
+            }
+            
+             catch (Exception e)
+             {
+                 e.printStackTrace();
+             }
+        }
     }//GEN-LAST:event_menuItemSaveActionPerformed
 
     public void populateLexicalTable(ArrayList<Analyse> list)
