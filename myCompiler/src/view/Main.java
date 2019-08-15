@@ -55,7 +55,7 @@ public class Main extends javax.swing.JFrame {
         tabbedLexical = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableLexical = new javax.swing.JTable();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
+        tabbedPaneEditor = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         textAreaEdit = new javax.swing.JTextArea();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -104,7 +104,7 @@ public class Main extends javax.swing.JFrame {
         textAreaEdit.setRows(5);
         jScrollPane2.setViewportView(textAreaEdit);
 
-        jTabbedPane2.addTab("Editor", jScrollPane2);
+        tabbedPaneEditor.addTab("Editor", jScrollPane2);
 
         textAreaLines.setEditable(false);
         textAreaLines.setColumns(20);
@@ -170,17 +170,20 @@ public class Main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane2))
-            .addComponent(tabbedLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+                .addComponent(tabbedPaneEditor))
+            .addComponent(tabbedLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tabbedPaneEditor)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 30, Short.MAX_VALUE)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabbedLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
+                .addComponent(tabbedLexical, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -374,7 +377,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JMenu menuAnalyse;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuItemClose;
@@ -382,6 +384,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemOpen;
     private javax.swing.JMenuItem menuItemSave;
     private javax.swing.JTabbedPane tabbedLexical;
+    private javax.swing.JTabbedPane tabbedPaneEditor;
     private javax.swing.JTable tableLexical;
     private javax.swing.JTextArea textAreaEdit;
     private javax.swing.JTextArea textAreaLines;
