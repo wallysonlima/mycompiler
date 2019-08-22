@@ -3,28 +3,46 @@
 
 %{
 
-private void imprimir(String descricao, String lexema) {
-    System.out.println(lexema + " - " + descricao);
+private Analyse createAnalyse(String lexeme, String token, String line, String iniCol, String endCol) {
+    return (new Analyse(lexeme, token, line, iniCol, String.valueOf(lexeme.length() + Integer.parseInt(endCol))));
 }
 
 %}
 
-%class Analyze
-%type void
+%public
+%class LexicalAnalyser
+%unicode
+%cup
+%line
+%column
+%type Analyse
 
 
 BRANCO = [\n| |\t|\r]
-ID = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
+IDENTIFICADOR = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
+INTEIRO = 0|[1-9][0-9]*
+REAL = [0-9][0-9]*","[0-9]+
+
+LineTerminator = \r|\n|\r\n
+InputCharacter = [^\r\n]
+EndOfLineComment = "//" {InputCharacter}* {LineTerminator}
+Comment = "{" {InputCharacter}* "}" {LineTerminator}
+
+AC = "{"
+FC = "}"
+
 OP_SOMA = "+"
 OP_SUB = "-"
 OP_DIV = "/"
 OP_MULT = "*"
+
 OP_MENOR = "<"
 OP_IGUAL = "="
 OP_MAIOR = ">"
 OP_MENORIGUAL = "<="
 OP_MAIORIGUAL = ">="
 OP_DIFERENTE = "<>"
+
 PROGRAM = "program"
 PROCEDURE = "procedure"
 VAR = "var"
@@ -44,17 +62,52 @@ THEN = "then"
 DIV = "div"
 AND = "and"
 OR = "or"
-
-INTEIRO = 0|[1-9][0-9]*
-REAL = [0-9][0-9]*","[0-9]+
+NOT = "not"
 
 %%
 
-"if"                         { imprimir("Palavra reservada if", yytext()); }
-"then"                       { imprimir("Palavra reservada then", yytext()); }
-{BRANCO}                     { imprimir("Espaço em branco", yytext()); }
-{ID}                         { imprimir("Identificador", yytext()); }
-{SOMA}                         { imprimir("Operador de soma", yytext()); }
-{INTEIRO}                     { imprimir("Número Inteiro", yytext()); }
+{BRANCO} { /* */ }
+{IDENTIFICADOR} { return createAnalyse(yytext(), "Identificador", yyline(), yycolumn(), yycolumn()); }
+{INTEIRO} { return createAnalyse(yytext(), "Inteiro", yyline(), yycolumn(), yycolumn()); }
+{REAL} { return createAnalyse(yytext(), "Real", yyline(), yycolumn(), yycolumn()); }
 
-. { throw new RuntimeException("Caractere inválido " + yytext()); }
+{AC} { return createAnalyse(yytext(), "Abre Chaves", yyline(), yycolumn(), yycolumn()); }
+{FC} { return createAnalyse(yytext(), "Fecha Chaves", yyline(), yycolumn(), yycolumn()); }
+
+{OP_SOMA} { return createAnalyse(yytext(), "Operador_Soma", yyline(), yycolumn(), yycolumn()); }
+{OP_SUB} { return createAnalyse(yytext(), "Operador_Subtração", yyline(), yycolumn(), yycolumn()); }
+{OP_DIV} { return createAnalyse(yytext(), "Operador_Divisão", yyline(), yycolumn(), yycolumn()); }
+{OP_MULT} { return createAnalyse(yytext(), "Operador_Multiplicação", yyline(), yycolumn(), yycolumn()); }
+
+{OP_MENOR} { return createAnalyse(yytext(), "Operador_Menor", yyline(), yycolumn(), yycolumn()); }
+{OP_IGUAL} { return createAnalyse(yytext(), "Operador_Igual", yyline(), yycolumn(), yycolumn()); }
+{OP_MAIOR} { return createAnalyse(yytext(), "Operador_Maior", yyline(), yycolumn(), yycolumn()); }
+{OP_MENORIGUAL} { return createAnalyse(yytext(), "Operador_Menor_Igual", yyline(), yycolumn(), yycolumn()); }
+{OP_MAIORIGUAL} { return createAnalyse(yytext(), "Operador_Maior_Igual", yyline(), yycolumn(), yycolumn()); }
+{OP_DIFERENTE} { return createAnalyse(yytext(), "Operador_Diferente", yyline(), yycolumn(), yycolumn()); }
+
+{PROGRAM} { return createAnalyse(yytext(), "Palavra_Reservada_Program", yyline(), yycolumn(), yycolumn()); }
+{PROCEDURE} { return createAnalyse(yytext(), "Palavra_Reservada_Procedure", yyline(), yycolumn(), yycolumn()); }
+{VAR} { return createAnalyse(yytext(), "Palavra_Reservada_Var", yyline(), yycolumn(), yycolumn()); }
+{INT} { return createAnalyse(yytext(), "Palavra_Reservada_Int", yyline(), yycolumn(), yycolumn()); }
+{BOOLEAN} { return createAnalyse(yytext(), "Palavra_Reservada_Boolean", yyline(), yycolumn(), yycolumn()); }
+{READ} { return createAnalyse(yytext(), "Palavra_Reservada_Read", yyline(), yycolumn(), yycolumn()); }
+{WRITE} { return createAnalyse(yytext(), "Palavra_Reservada_Write", yyline(), yycolumn(), yycolumn()); }
+{TRUE} { return createAnalyse(yytext(), "Palavra_Reservada_True", yyline(), yycolumn(), yycolumn()); }
+{FALSE} { return createAnalyse(yytext(), "Palavra_Reservada_False", yyline(), yycolumn(), yycolumn()); }
+{BEGIN} { return createAnalyse(yytext(), "Palavra_Reservada_Begin", yyline(), yycolumn(), yycolumn()); }
+{END} { return createAnalyse(yytext(), "Palavra_Reservada_End", yyline(), yycolumn(), yycolumn()); }
+{IF} { return createAnalyse(yytext(), "Palavra_Reservada_If", yyline(), yycolumn(), yycolumn()); }
+{WHILE} { return createAnalyse(yytext(), "Palavra_Reservada_While", yyline(), yycolumn(), yycolumn()); }
+{DO} { return createAnalyse(yytext(), "Palavra_Reservada_Do", yyline(), yycolumn(), yycolumn()); }
+{ELSE} { return createAnalyse(yytext(), "Palavra_Reservada_Else", yyline(), yycolumn(), yycolumn()); }
+{THEN} { return createAnalyse(yytext(), "Palavra_Reservada_Then", yyline(), yycolumn(), yycolumn()); }
+{DIV} { return createAnalyse(yytext(), "Palavra_Reservada_Div", yyline(), yycolumn(), yycolumn()); }
+{AND} { return createAnalyse(yytext(), "Palavra_Reservada_And", yyline(), yycolumn(), yycolumn()); }
+{OR} { return createAnalyse(yytext(), "Palavra_Reservada_Or", yyline(), yycolumn(), yycolumn()); }
+{NOT} { return createAnalyse(yytext(), "Palavra_Reservada_Not", yyline(), yycolumn(), yycolumn()); }
+
+. { return createAnalyse(yytext(), "Caractere_Inválido", yyline(), yycolumn(), yycolumn()); }
+
+{Comment} { /* Ignore Comments */ }
+{EndOfLineComment}  { /* Ignore Comments */ }
