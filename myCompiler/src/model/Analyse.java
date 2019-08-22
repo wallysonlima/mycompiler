@@ -10,14 +10,14 @@ package model;
  * @author wallysonlima
  */
 public class Analyse {
-    private String lexeme, token, value, line, column;
+    private String lexeme, token, line, iniCol, endCol;
 
-    public Analyse(String lexeme, String token, String value, String line, String column) {
+    public Analyse(String lexeme, String token, String line, String iniCol, String endCol) {
         this.lexeme = lexeme;
         this.token = token;
-        this.value = value;
         this.line = line;
-        this.column = column;
+        this.iniCol = iniCol;
+        this.endCol = endCol;
     }
 
     public String getLexeme() {
@@ -36,14 +36,6 @@ public class Analyse {
         this.token = token;
     }
 
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public String getLine() {
         return line;
     }
@@ -52,11 +44,19 @@ public class Analyse {
         this.line = line;
     }
 
-    public String getColumn() {
-        return column;
+    public String getIniCol() {
+        return iniCol;
     }
 
-    public void setColumn(String column) {
-        this.column = column;
+    public void setIniCol(String iniCol) {
+        this.iniCol = iniCol;
+    }
+
+    public String getEndCol() {
+        return endCol;
+    }
+
+    public void setEndCol(String endCol) {
+        this.endCol = endCol;
     }
 }

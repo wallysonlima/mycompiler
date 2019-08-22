@@ -78,7 +78,7 @@ public class Main extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Lexeme", "Token", "Value", "Line", "Column"
+                "Lexeme", "Token", "Line", "IniCol", "EndCol"
             }
         ) {
             Class[] types = new Class [] {
@@ -317,9 +317,9 @@ public class Main extends javax.swing.JFrame {
         
             rowData[0] = list.get(i).getLexeme();
             rowData[1] = list.get(i).getToken();
-            rowData[2] = list.get(i).getValue();
-            rowData[3] = list.get(i).getLine();
-            rowData[4] = list.get(i).getColumn();
+            rowData[2] = list.get(i).getLine();
+            rowData[3] = list.get(i).getIniCol();
+            rowData[4] = list.get(i).getEndCol();
             
             model.addRow(rowData);
         }

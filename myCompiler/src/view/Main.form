@@ -142,9 +142,9 @@
                   <Table columnCount="5" rowCount="0">
                     <Column editable="false" title="Lexeme" type="java.lang.String"/>
                     <Column editable="false" title="Token" type="java.lang.String"/>
-                    <Column editable="false" title="Value" type="java.lang.String"/>
                     <Column editable="false" title="Line" type="java.lang.String"/>
-                    <Column editable="false" title="Column" type="java.lang.String"/>
+                    <Column editable="false" title="IniCol" type="java.lang.String"/>
+                    <Column editable="false" title="EndCol" type="java.lang.String"/>
                   </Table>
                 </Property>
               </Properties>
