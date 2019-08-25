@@ -628,7 +628,7 @@ private Analyse createAnalyse(String lexeme, String token, int line, int iniCol,
             // fall through
           case 24: break;
           case 2: 
-            { return createAnalyse(yytext(), "Erro ! Programa Abortado ! Símbolo não identificado na linguagem !", yyline, yycolumn, yycolumn);
+            { return createAnalyse(yytext(), "Error ! Invalid Charactere !", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 25: break;

@@ -119,5 +119,5 @@ NOT = "not"
 {Comment} { /* Ignore Comments */ }
 {EndOfLineComment}  { /* Ignore Comments */ }
 
-. { return createAnalyse(yytext(), "Erro ! Programa Abortado ! Símbolo não identificado na linguagem !", yyline, yycolumn, yycolumn); }
+. { return createAnalyse(yytext(), "Error ! Invalid Charactere !", yyline, yycolumn, yycolumn); }
 
