@@ -9,9 +9,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Analyse;
+import model.LexicalAnalyzer;
 
 /**
  *
@@ -24,110 +28,22 @@ public class Control {
     // Read Text in file
     public ArrayList<Analyse> analyseLexic(String textEdit)
     {
-        int lineQtde;
         ArrayList<Analyse> list = new ArrayList<>();
-        lineQtde = 0;
-        boolean ignore = false;
-        String temp;
-        boolean isFloat = false;
         Scanner scanner = new Scanner(textEdit);
+        Analyse token = new Analyse();
         
         while ( scanner.hasNextLine() )
         {
-            char [] chLine = (scanner.nextLine()).toCharArray();
-            int max = chLine.length;
-            int i = 0;
-
-            while( i < chLine.length )
-            {
-                temp = "";
-
-                // Close Comment
-                if ( chLine[i] == '*' && (i + 1) < max )
-                    if ( chLine[i + 1] == '/' )
-                    {
-                        ignore = false;
-                        i += 2;
-                        continue;
-                    }
-                
-                // Empty or Comment
-                if ( chLine[i] == ' ' || ignore )
-                {
-                    i++;
-                    continue;
-                }
-
-                // Ignore -- Open Comment
-                if ( chLine[i] == '/' && (i + 1) < max )
-                    if ( chLine[i + 1] == '*' )
-                    {
-                        ignore = true;
-                        i++;
-                        continue;
-                    }
-
-                    else if ( chLine[i + 1] == '/' )
-                        break;
-
-                switch( chLine[i] )
-                {
-                    case '+':
-                        list.add(new Analyse(String.valueOf(chLine[i]), "op_soma", "", Integer.toString(lineQtde), Integer.toString(i)) );
-                        break;
-                        
-                    case '=':
-                        list.add(new Analyse(String.valueOf(chLine[i]), "op_igual", "", Integer.toString(lineQtde), Integer.toString(i)) );
-                        break;
-
-                    case '-':
-                        list.add(new Analyse(String.valueOf(chLine[i]), "op_subtração", "", Integer.toString(lineQtde), Integer.toString(i)) );
-                        break;
-
-                    case '*':
-                        list.add(new Analyse(String.valueOf(chLine[i]), "op_multiplicação", "", Integer.toString(lineQtde), Integer.toString(i)) );
-                        break;
-
-                    case '/':
-                        list.add(new Analyse(String.valueOf(chLine[i]), "op_divisao", "", Integer.toString(lineQtde), Integer.toString(i)) );
-                        break;
-
-                    case '(':
-                        list.add(new Analyse(String.valueOf(chLine[i]), "AP", "", Integer.toString(lineQtde), Integer.toString(i)) );
-                        break;
-
-                    case ')':
-                        list.add(new Analyse(String.valueOf(chLine[i]), "FP", "", Integer.toString(lineQtde), Integer.toString(i)) );
-                        break;
-
-                    case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
-                            temp += chLine[i];
-                            
-                            if ( i + 1 < max)
-                                while ( (chLine[i+1] >= 48 && chLine[i+1] <= 57) || chLine[i+1] == 46 )
-                                {
-                                    temp += chLine[++i];
-
-                                    if ( chLine[i] == 46 )
-                                        isFloat = true;
-
-                                    if ( i + 1 >= max )
-                                        break;                                    
-                                }
-
-                        list.add(new Analyse(temp, isFloat ? "Float" : "Integer", "", Integer.toString(lineQtde), Integer.toString(i)) );
-                        isFloat = false;
-                        break;
-                }
-
-                i++;
-            }
+            String line = (scanner.nextLine()).toString();
+            LexicalAnalyzer lexic = new LexicalAnalyzer(new StringReader(line));
             
-            lineQtde++;
+            try {
+                while ( (token = lexic.yylex()) != null )
+                    list.add(token);
+            } catch (IOException ex) {
+                Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } 
-        
-        if ( ignore )
-            list.add(new Analyse("Error", "", "", "", "") );
         
         return list;
     }

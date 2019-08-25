@@ -21,14 +21,19 @@ BRANCO = [\n| |\t|\r]
 IDENTIFICADOR = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 INTEIRO = 0|[1-9][0-9]*
 REAL = [0-9][0-9]*","[0-9]+
+INVALID_CHARACTERE = [ ! | @ | # | $ | % | & ]*
 
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
-EndOfLineComment = "//" {InputCharacter}* {LineTerminator}
-Comment = "{" {InputCharacter}* "}" {LineTerminator}
+EndOfLineComment = "//" {InputCharacter}* {LineTerminator}?
+Comment = "{" {InputCharacter}* "}" {LineTerminator}?
 
 AC = "{"
 FC = "}"
+AP = "("
+FP = ")"
+ACO = "["
+FCO = "]"
 
 OP_SOMA = "+"
 OP_SUB = "-"
@@ -69,9 +74,14 @@ NOT = "not"
 {IDENTIFICADOR} { return createAnalyse(yytext(), "Identificador", yyline, yycolumn, yycolumn); }
 {INTEIRO} { return createAnalyse(yytext(), "Inteiro", yyline, yycolumn, yycolumn); }
 {REAL} { return createAnalyse(yytext(), "Real", yyline, yycolumn, yycolumn); }
+{INVALID_CHARACTERE} { return createAnalyse(yytext(), "Caractere_Inválido", yyline, yycolumn, yycolumn); }
 
-{AC} { return createAnalyse(yytext(), "Abre Chaves", yyline, yycolumn, yycolumn); }
-{FC} { return createAnalyse(yytext(), "Fecha Chaves", yyline, yycolumn, yycolumn); }
+{AC} { return createAnalyse(yytext(), "Abre_Chaves", yyline, yycolumn, yycolumn); }
+{FC} { return createAnalyse(yytext(), "Fecha_Chaves", yyline, yycolumn, yycolumn); }
+{AP} { return createAnalyse(yytext(), "Abre_Parenteses", yyline, yycolumn, yycolumn); }
+{FP} { return createAnalyse(yytext(), "Fecha_Parenteses", yyline, yycolumn, yycolumn); }
+{ACO} { return createAnalyse(yytext(), "Abre_Colchetes", yyline, yycolumn, yycolumn); }
+{FCO} { return createAnalyse(yytext(), "Fecha_Colchetes", yyline, yycolumn, yycolumn); }
 
 {OP_SOMA} { return createAnalyse(yytext(), "Operador_Soma", yyline, yycolumn, yycolumn); }
 {OP_SUB} { return createAnalyse(yytext(), "Operador_Subtração", yyline, yycolumn, yycolumn); }
@@ -109,5 +119,5 @@ NOT = "not"
 {Comment} { /* Ignore Comments */ }
 {EndOfLineComment}  { /* Ignore Comments */ }
 
-. { return createAnalyse(yytext(), "Caractere_Inválido", yyline, yycolumn, yycolumn); }
+. { return createAnalyse(yytext(), "Erro ! Programa Abortado ! Símbolo não identificado na linguagem !", yyline, yycolumn, yycolumn); }
 

@@ -19,6 +19,8 @@ public class Analyse {
         this.iniCol = iniCol;
         this.endCol = endCol;
     }
+    
+    public Analyse() {}
 
     public String getLexeme() {
         return lexeme;

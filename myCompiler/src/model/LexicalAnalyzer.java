@@ -36,12 +36,13 @@ public class LexicalAnalyzer {
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED = 
-    "\11\0\1\1\1\10\1\22\1\22\1\7\22\0\1\1\11\0\1\16"+
-    "\1\14\1\6\1\15\1\0\1\11\1\5\11\4\2\0\1\17\1\20"+
-    "\1\21\2\0\32\2\4\0\1\2\1\0\1\2\1\2\1\2\1\2"+
-    "\1\2\1\2\1\2\1\2\1\2\2\2\1\2\1\2\1\2\1\2"+
-    "\1\2\1\2\1\2\1\2\1\2\1\2\1\2\1\2\3\2\1\12"+
-    "\1\3\1\13\7\0\1\22\u1fa2\0\1\22\1\22\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
+    "\11\0\1\1\1\12\1\30\1\30\1\11\22\0\1\10\1\7\1\0"+
+    "\4\7\1\0\1\16\1\17\1\24\1\22\1\6\1\23\1\0\1\13"+
+    "\1\5\11\4\2\0\1\25\1\26\1\27\1\0\1\7\32\2\1\20"+
+    "\1\0\1\21\1\0\1\2\1\0\1\2\1\2\1\2\1\2\1\2"+
+    "\1\2\1\2\1\2\1\2\2\2\1\2\1\2\1\2\1\2\1\2"+
+    "\1\2\1\2\1\2\1\2\1\2\1\2\1\2\3\2\1\14\1\3"+
+    "\1\15\7\0\1\30\u1fa2\0\1\30\1\30\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\udfe6\0";
 
   /** 
    * Translates characters to character classes
@@ -54,12 +55,13 @@ public class LexicalAnalyzer {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1\1\2\1\3\1\2\2\4\1\5\1\6"+
-    "\1\7\1\10\1\11\1\12\1\13\1\14\1\15\5\0"+
-    "\1\16\1\17\1\20\1\21\2\22";
+    "\1\1\1\2\1\3\1\4\1\3\2\5\1\1\1\3"+
+    "\1\6\1\7\1\10\1\11\1\12\1\13\1\14\1\15"+
+    "\1\16\1\17\1\20\1\21\1\22\1\4\2\0\1\23"+
+    "\1\0\1\23\1\24\1\25\1\26\1\27\2\23";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[27];
+    int [] result = new int[34];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -84,13 +86,14 @@ public class LexicalAnalyzer {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\23\0\23\0\46\0\46\0\71\0\114\0\137"+
-    "\0\162\0\23\0\23\0\23\0\23\0\205\0\23\0\230"+
-    "\0\253\0\114\0\276\0\162\0\321\0\23\0\23\0\23"+
-    "\0\253\0\344\0\23";
+    "\0\0\0\31\0\31\0\62\0\113\0\144\0\175\0\226"+
+    "\0\226\0\257\0\310\0\31\0\31\0\31\0\31\0\31"+
+    "\0\31\0\31\0\31\0\341\0\31\0\372\0\113\0\u0113"+
+    "\0\175\0\u012c\0\310\0\u0145\0\31\0\31\0\31\0\u0113"+
+    "\0\u015e\0\31";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[27];
+    int [] result = new int[34];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -113,16 +116,18 @@ public class LexicalAnalyzer {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\1\3\1\4\1\5\1\6\1\7\1\2\2\3"+
-    "\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17"+
-    "\1\20\26\0\4\4\21\0\2\6\1\21\20\0\2\22"+
-    "\1\21\25\0\1\23\11\0\7\24\2\0\2\24\1\25"+
-    "\7\24\20\0\1\26\1\27\21\0\1\30\6\0\2\31"+
-    "\15\0\7\23\1\32\1\33\12\23\7\24\1\32\1\33"+
-    "\2\24\1\25\7\24\10\0\1\33\12\0";
+    "\1\2\1\3\1\4\1\5\1\6\1\7\1\2\1\10"+
+    "\1\11\2\3\1\12\1\13\1\14\1\15\1\16\1\17"+
+    "\1\20\1\21\1\22\1\23\1\24\1\25\1\26\34\0"+
+    "\4\4\25\0\1\4\1\27\2\4\1\0\2\10\24\0"+
+    "\2\6\1\30\26\0\2\31\1\30\25\0\1\10\3\0"+
+    "\2\10\33\0\1\32\15\0\11\33\2\0\2\33\1\34"+
+    "\13\33\26\0\1\35\1\36\27\0\1\37\6\0\2\40"+
+    "\23\0\11\32\1\41\1\42\16\32\11\33\1\41\1\42"+
+    "\2\33\1\34\13\33\12\0\1\42\16\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[247];
+    int [] result = new int[375];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -160,11 +165,11 @@ public class LexicalAnalyzer {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\2\11\6\1\4\11\1\1\1\11\1\1\5\0"+
-    "\3\11\2\1\1\11";
+    "\1\1\2\11\10\1\10\11\1\1\1\11\2\1\2\0"+
+    "\1\1\1\0\1\1\3\11\2\1\1\11";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[27];
+    int [] result = new int[34];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -267,7 +272,7 @@ private Analyse createAnalyse(String lexeme, String token, int line, int iniCol,
     char [] map = new char[0x110000];
     int i = 0;  /* index in packed string  */
     int j = 0;  /* index in unpacked array */
-    while (i < 148) {
+    while (i < 166) {
       int  count = packed.charAt(i++);
       char value = packed.charAt(i++);
       do map[j++] = value; while (--count > 0);
@@ -621,92 +626,117 @@ private Analyse createAnalyse(String lexeme, String token, int line, int iniCol,
             { return createAnalyse(yytext(), "Caractere_Inválido", yyline, yycolumn, yycolumn);
             } 
             // fall through
-          case 19: break;
-          case 2: 
-            { /* */
-            } 
-            // fall through
-          case 20: break;
-          case 3: 
-            { return createAnalyse(yytext(), "Identificador", yyline, yycolumn, yycolumn);
-            } 
-            // fall through
-          case 21: break;
-          case 4: 
-            { return createAnalyse(yytext(), "Inteiro", yyline, yycolumn, yycolumn);
-            } 
-            // fall through
-          case 22: break;
-          case 5: 
-            { return createAnalyse(yytext(), "Operador_Divisão", yyline, yycolumn, yycolumn);
-            } 
-            // fall through
-          case 23: break;
-          case 6: 
-            { return createAnalyse(yytext(), "Abre Chaves", yyline, yycolumn, yycolumn);
-            } 
-            // fall through
           case 24: break;
-          case 7: 
-            { return createAnalyse(yytext(), "Fecha Chaves", yyline, yycolumn, yycolumn);
+          case 2: 
+            { return createAnalyse(yytext(), "Erro ! Programa Abortado ! Símbolo não identificado na linguagem !", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 25: break;
-          case 8: 
-            { return createAnalyse(yytext(), "Operador_Soma", yyline, yycolumn, yycolumn);
+          case 3: 
+            { /* */
             } 
             // fall through
           case 26: break;
-          case 9: 
-            { return createAnalyse(yytext(), "Operador_Subtração", yyline, yycolumn, yycolumn);
+          case 4: 
+            { return createAnalyse(yytext(), "Identificador", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 27: break;
-          case 10: 
-            { return createAnalyse(yytext(), "Operador_Multiplicação", yyline, yycolumn, yycolumn);
+          case 5: 
+            { return createAnalyse(yytext(), "Inteiro", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 28: break;
-          case 11: 
-            { return createAnalyse(yytext(), "Operador_Menor", yyline, yycolumn, yycolumn);
+          case 6: 
+            { return createAnalyse(yytext(), "Operador_Divisão", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 29: break;
-          case 12: 
-            { return createAnalyse(yytext(), "Operador_Igual", yyline, yycolumn, yycolumn);
+          case 7: 
+            { return createAnalyse(yytext(), "Abre_Chaves", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 30: break;
-          case 13: 
-            { return createAnalyse(yytext(), "Operador_Maior", yyline, yycolumn, yycolumn);
+          case 8: 
+            { return createAnalyse(yytext(), "Fecha_Chaves", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 31: break;
-          case 14: 
-            { return createAnalyse(yytext(), "Operador_Menor_Igual", yyline, yycolumn, yycolumn);
+          case 9: 
+            { return createAnalyse(yytext(), "Abre_Parenteses", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 32: break;
-          case 15: 
-            { return createAnalyse(yytext(), "Operador_Diferente", yyline, yycolumn, yycolumn);
+          case 10: 
+            { return createAnalyse(yytext(), "Fecha_Parenteses", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 33: break;
-          case 16: 
-            { return createAnalyse(yytext(), "Operador_Maior_Igual", yyline, yycolumn, yycolumn);
+          case 11: 
+            { return createAnalyse(yytext(), "Abre_Colchetes", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 34: break;
-          case 17: 
-            { return createAnalyse(yytext(), "Real", yyline, yycolumn, yycolumn);
+          case 12: 
+            { return createAnalyse(yytext(), "Fecha_Colchetes", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 35: break;
-          case 18: 
-            { /* Ignore Comments */
+          case 13: 
+            { return createAnalyse(yytext(), "Operador_Soma", yyline, yycolumn, yycolumn);
             } 
             // fall through
           case 36: break;
+          case 14: 
+            { return createAnalyse(yytext(), "Operador_Subtração", yyline, yycolumn, yycolumn);
+            } 
+            // fall through
+          case 37: break;
+          case 15: 
+            { return createAnalyse(yytext(), "Operador_Multiplicação", yyline, yycolumn, yycolumn);
+            } 
+            // fall through
+          case 38: break;
+          case 16: 
+            { return createAnalyse(yytext(), "Operador_Menor", yyline, yycolumn, yycolumn);
+            } 
+            // fall through
+          case 39: break;
+          case 17: 
+            { return createAnalyse(yytext(), "Operador_Igual", yyline, yycolumn, yycolumn);
+            } 
+            // fall through
+          case 40: break;
+          case 18: 
+            { return createAnalyse(yytext(), "Operador_Maior", yyline, yycolumn, yycolumn);
+            } 
+            // fall through
+          case 41: break;
+          case 19: 
+            { /* Ignore Comments */
+            } 
+            // fall through
+          case 42: break;
+          case 20: 
+            { return createAnalyse(yytext(), "Operador_Menor_Igual", yyline, yycolumn, yycolumn);
+            } 
+            // fall through
+          case 43: break;
+          case 21: 
+            { return createAnalyse(yytext(), "Operador_Diferente", yyline, yycolumn, yycolumn);
+            } 
+            // fall through
+          case 44: break;
+          case 22: 
+            { return createAnalyse(yytext(), "Operador_Maior_Igual", yyline, yycolumn, yycolumn);
+            } 
+            // fall through
+          case 45: break;
+          case 23: 
+            { return createAnalyse(yytext(), "Real", yyline, yycolumn, yycolumn);
+            } 
+            // fall through
+          case 46: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }
