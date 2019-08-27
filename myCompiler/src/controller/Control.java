@@ -28,7 +28,7 @@ public class Control {
     // Read Text in file
     public ArrayList<Analyse> analyseLexic(String textEdit)
     {
-        int i = 0;
+        int i = 1;
         boolean ignore = false;
         ArrayList<Analyse> list = new ArrayList<>();
         Scanner scanner = new Scanner(textEdit);
@@ -43,7 +43,7 @@ public class Control {
                 while ( (token = lexic.yylex()) != null )
                 {
                     token.setLine(String.valueOf(i));
-                    i++;
+                    
                     
                     if ( token.getLexeme().equals("{") )
                         ignore = true;
@@ -56,6 +56,8 @@ public class Control {
                     if ( !ignore)
                         list.add(token);
                 }
+                
+            i++;
                     
             } catch (IOException ex) {
                 Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);

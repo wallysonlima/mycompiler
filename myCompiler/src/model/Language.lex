@@ -21,7 +21,6 @@ BRANCO = [\n| |\t|\r]
 IDENTIFICADOR = [_|a-z|A-Z][a-z|A-Z|0-9|_]*
 INTEIRO = 0|[1-9][0-9]*
 REAL = [0-9][0-9]*","[0-9]+
-INVALID_CHARACTERE = [ ! | @ | # | $ | % | & ]*
 
 LineTerminator = \r|\n|\r\n
 AC = \{
@@ -38,6 +37,7 @@ FCO = "]"
 PONTO = "."
 VIRGULA = ","
 PONTO_VIRGULA = ";"
+DOIS_PONTOS = ":"
 
 OP_SOMA = "+"
 OP_SUB = "-"
@@ -78,8 +78,6 @@ NOT = "not"
 
 {INTEIRO} { return createAnalyse(yytext(), "Inteiro", yyline, yycolumn, yycolumn); }
 {REAL} { return createAnalyse(yytext(), "Real", yyline, yycolumn, yycolumn); }
-{INVALID_CHARACTERE} { return createAnalyse(yytext(), "Caractere_Inválido", yyline, yycolumn, yycolumn); }
-
 
 {AP} { return createAnalyse(yytext(), "Abre_Parenteses", yyline, yycolumn, yycolumn); }
 {FP} { return createAnalyse(yytext(), "Fecha_Parenteses", yyline, yycolumn, yycolumn); }
@@ -129,6 +127,7 @@ NOT = "not"
 {AC} { return createAnalyse(yytext(), "Abre_Chaves", yyline, yycolumn, yycolumn); }
 {FC} { return createAnalyse(yytext(), "Fecha_Chaves", yyline, yycolumn, yycolumn); }
 {OP_DIV} { return createAnalyse(yytext(), "Operador_Divisão", yyline, yycolumn, yycolumn); }
+{DOIS_PONTOS} { return createAnalyse(yytext(), "Operador_Dois_Pontos", yyline, yycolumn, yycolumn); }
 
-. { return createAnalyse(yytext(), "Error ! Invalid Charactere !", yyline, yycolumn, yycolumn); }
+. { return createAnalyse(yytext(), "Caractere_Invalido", yyline, yycolumn, yycolumn); }
 

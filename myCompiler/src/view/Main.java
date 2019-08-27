@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import model.Analyse;
-import model.ColumnCellRenderer;
+import model.TableCellRenderer;
 
 /**
  *
@@ -304,16 +304,19 @@ public class Main extends javax.swing.JFrame {
     public void populateLexicalTable(ArrayList<Analyse> list)
     {
         DefaultTableModel model = (DefaultTableModel) tableLexical.getModel();
+        ArrayList<Integer> wrong = new ArrayList<>(); 
         
         Object rowData[] = new Object[5];
         
+        model.getDataVector().removeAllElements();
+        model.fireTableDataChanged();
+        
         for( int i = 0; i < list.size(); i++ )
-        {
-            for ( int j = 0; j < 5; j++ )
-            {
-                TableColumn column = tableLexical.getColumnModel().getColumn(j);
-                column.setCellRenderer(new ColumnCellRenderer());
-            }
+        {   
+            if ( list.get(i).getToken().equalsIgnoreCase("Caractere_Invalido") )
+                wrong.add(1); 
+            else
+                wrong.add(0);
         
             rowData[0] = list.get(i).getLexeme();
             rowData[1] = list.get(i).getToken();
@@ -324,6 +327,7 @@ public class Main extends javax.swing.JFrame {
             model.addRow(rowData);
         }
         
+        tableLexical.setDefaultRenderer(Object.class, new TableCellRenderer(wrong));
         tableLexical.setModel(model);
     }
     
