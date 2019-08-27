@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.Analyse;
 import model.LexicalAnalyzer;
 
@@ -44,7 +45,6 @@ public class Control {
                 {
                     token.setLine(String.valueOf(i));
                     
-                    
                     if ( token.getLexeme().equals("{") )
                         ignore = true;
                     else if ( token.getLexeme().equals("}") )
@@ -64,6 +64,9 @@ public class Control {
             }
         } 
         
+        if ( ignore )
+            JOptionPane.showMessageDialog(null, "Error ! You miss close the comment !");
+       
         return list;
     }
 }
