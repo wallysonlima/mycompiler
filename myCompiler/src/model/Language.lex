@@ -34,6 +34,9 @@ AP = "("
 FP = ")"
 ACO = "["
 FCO = "]"
+PONTO = "."
+VIRGULA = ","
+PONTO_VIRGULA = ";"
 
 OP_SOMA = "+"
 OP_SUB = "-"
@@ -41,7 +44,7 @@ OP_DIV = "/"
 OP_MULT = "*"
 
 OP_MENOR = "<"
-OP_IGUAL = "="
+OP_IGUAL = ":="
 OP_MAIOR = ">"
 OP_MENORIGUAL = "<="
 OP_MAIORIGUAL = ">="
@@ -71,7 +74,7 @@ NOT = "not"
 %%
 
 {BRANCO} { /* */ }
-{IDENTIFICADOR} { return createAnalyse(yytext(), "Identificador", yyline, yycolumn, yycolumn); }
+
 {INTEIRO} { return createAnalyse(yytext(), "Inteiro", yyline, yycolumn, yycolumn); }
 {REAL} { return createAnalyse(yytext(), "Real", yyline, yycolumn, yycolumn); }
 {INVALID_CHARACTERE} { return createAnalyse(yytext(), "Caractere_Inválido", yyline, yycolumn, yycolumn); }
@@ -82,6 +85,9 @@ NOT = "not"
 {FP} { return createAnalyse(yytext(), "Fecha_Parenteses", yyline, yycolumn, yycolumn); }
 {ACO} { return createAnalyse(yytext(), "Abre_Colchetes", yyline, yycolumn, yycolumn); }
 {FCO} { return createAnalyse(yytext(), "Fecha_Colchetes", yyline, yycolumn, yycolumn); }
+{PONTO} { return createAnalyse(yytext(), "Ponto", yyline, yycolumn, yycolumn); }
+{VIRGULA} { return createAnalyse(yytext(), "Virgula", yyline, yycolumn, yycolumn); }
+{PONTO_VIRGULA} { return createAnalyse(yytext(), "Ponto_Virgula", yyline, yycolumn, yycolumn); }
 
 {OP_SOMA} { return createAnalyse(yytext(), "Operador_Soma", yyline, yycolumn, yycolumn); }
 {OP_SUB} { return createAnalyse(yytext(), "Operador_Subtração", yyline, yycolumn, yycolumn); }
@@ -115,6 +121,8 @@ NOT = "not"
 {AND} { return createAnalyse(yytext(), "Palavra_Reservada_And", yyline, yycolumn, yycolumn); }
 {OR} { return createAnalyse(yytext(), "Palavra_Reservada_Or", yyline, yycolumn, yycolumn); }
 {NOT} { return createAnalyse(yytext(), "Palavra_Reservada_Not", yyline, yycolumn, yycolumn); }
+
+{IDENTIFICADOR} { return createAnalyse(yytext(), "Identificador", yyline, yycolumn, yycolumn); }
 
 {Comment} { /* Ignore Comments */ }
 {EndOfLineComment}  { /* Ignore Comments */ }
