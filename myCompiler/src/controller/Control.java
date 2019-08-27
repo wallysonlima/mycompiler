@@ -29,6 +29,7 @@ public class Control {
     public ArrayList<Analyse> analyseLexic(String textEdit)
     {
         int i = 0;
+        boolean ignore = false;
         ArrayList<Analyse> list = new ArrayList<>();
         Scanner scanner = new Scanner(textEdit);
         Analyse token = new Analyse();
@@ -43,7 +44,17 @@ public class Control {
                 {
                     token.setLine(String.valueOf(i));
                     i++;
-                    list.add(token);
+                    
+                    if ( token.getLexeme().equals("{") )
+                        ignore = true;
+                    else if ( token.getLexeme().equals("}") )
+                    {
+                        ignore = false;
+                        continue;
+                    }
+                    
+                    if ( !ignore)
+                        list.add(token);
                 }
                     
             } catch (IOException ex) {

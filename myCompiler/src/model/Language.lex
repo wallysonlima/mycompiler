@@ -24,12 +24,13 @@ REAL = [0-9][0-9]*","[0-9]+
 INVALID_CHARACTERE = [ ! | @ | # | $ | % | & ]*
 
 LineTerminator = \r|\n|\r\n
-InputCharacter = [^\r\n]
-EndOfLineComment = "//" {InputCharacter}* {LineTerminator}?
-Comment = "{" {InputCharacter}* "}" {LineTerminator}?
+AC = \{
+FC = \}
+AbreChaveNegado = [^}]
+ComentarioCorpo = {AbreChaveNegado}*
+Comment = {AC}{ComentarioCorpo}{FC}
+CommentLine = {OP_DIV}{OP_DIV}{ComentarioCorpo}
 
-AC = "{"
-FC = "}"
 AP = "("
 FP = ")"
 ACO = "["
@@ -79,8 +80,7 @@ NOT = "not"
 {REAL} { return createAnalyse(yytext(), "Real", yyline, yycolumn, yycolumn); }
 {INVALID_CHARACTERE} { return createAnalyse(yytext(), "Caractere_Inválido", yyline, yycolumn, yycolumn); }
 
-{AC} { return createAnalyse(yytext(), "Abre_Chaves", yyline, yycolumn, yycolumn); }
-{FC} { return createAnalyse(yytext(), "Fecha_Chaves", yyline, yycolumn, yycolumn); }
+
 {AP} { return createAnalyse(yytext(), "Abre_Parenteses", yyline, yycolumn, yycolumn); }
 {FP} { return createAnalyse(yytext(), "Fecha_Parenteses", yyline, yycolumn, yycolumn); }
 {ACO} { return createAnalyse(yytext(), "Abre_Colchetes", yyline, yycolumn, yycolumn); }
@@ -91,7 +91,6 @@ NOT = "not"
 
 {OP_SOMA} { return createAnalyse(yytext(), "Operador_Soma", yyline, yycolumn, yycolumn); }
 {OP_SUB} { return createAnalyse(yytext(), "Operador_Subtração", yyline, yycolumn, yycolumn); }
-{OP_DIV} { return createAnalyse(yytext(), "Operador_Divisão", yyline, yycolumn, yycolumn); }
 {OP_MULT} { return createAnalyse(yytext(), "Operador_Multiplicação", yyline, yycolumn, yycolumn); }
 
 {OP_MENOR} { return createAnalyse(yytext(), "Operador_Menor", yyline, yycolumn, yycolumn); }
@@ -125,7 +124,11 @@ NOT = "not"
 {IDENTIFICADOR} { return createAnalyse(yytext(), "Identificador", yyline, yycolumn, yycolumn); }
 
 {Comment} { /* Ignore Comments */ }
-{EndOfLineComment}  { /* Ignore Comments */ }
+{CommentLine} { /* Ignore Comments */ }
+
+{AC} { return createAnalyse(yytext(), "Abre_Chaves", yyline, yycolumn, yycolumn); }
+{FC} { return createAnalyse(yytext(), "Fecha_Chaves", yyline, yycolumn, yycolumn); }
+{OP_DIV} { return createAnalyse(yytext(), "Operador_Divisão", yyline, yycolumn, yycolumn); }
 
 . { return createAnalyse(yytext(), "Error ! Invalid Charactere !", yyline, yycolumn, yycolumn); }
 
