@@ -10,14 +10,15 @@ package model;
  * @author wallysonlima
  */
 public class Analyse {
-    private String lexeme, token, line, iniCol, endCol;
+    private String lexeme, token, line, iniCol, endCol, error;
 
-    public Analyse(String lexeme, String token, String line, String iniCol, String endCol) {
+    public Analyse(String lexeme, String token, String line, String iniCol, String endCol, String error) {
         this.lexeme = lexeme;
         this.token = token;
         this.line = line;
         this.iniCol = iniCol;
         this.endCol = endCol;
+        this.error = error;
     }
     
     public Analyse() {}
@@ -60,5 +61,13 @@ public class Analyse {
 
     public void setEndCol(String endCol) {
         this.endCol = endCol;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

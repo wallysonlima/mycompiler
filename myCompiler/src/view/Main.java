@@ -78,14 +78,14 @@ public class Main extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Lexeme", "Token", "Line", "IniCol", "EndCol"
+                "Lexeme", "Token", "Line", "IniCol", "EndCol", "Error"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -306,7 +306,7 @@ public class Main extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) tableLexical.getModel();
         ArrayList<Integer> wrong = new ArrayList<>(); 
         
-        Object rowData[] = new Object[5];
+        Object rowData[] = new Object[6];
         
         model.getDataVector().removeAllElements();
         model.fireTableDataChanged();
@@ -323,6 +323,7 @@ public class Main extends javax.swing.JFrame {
             rowData[2] = list.get(i).getLine();
             rowData[3] = list.get(i).getIniCol();
             rowData[4] = list.get(i).getEndCol();
+            rowData[5] = list.get(i).getError();
             
             model.addRow(rowData);
         }

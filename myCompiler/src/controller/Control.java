@@ -23,6 +23,7 @@ import model.LexicalAnalyzer;
  * @author wallysonlima
  */
 public class Control {
+    int MAX = 15;
     
     public void Control() {}
     
@@ -45,6 +46,14 @@ public class Control {
                 {
                     token.setLine(String.valueOf(i));
                     
+                    if ( token.getToken().equals("Identificador") )
+                    {
+                        int length = Integer.parseInt(token.getEndCol()) - Integer.parseInt(token.getIniCol());
+                        
+                        if ( length > MAX )
+                            token.setError("Identificador excedeu o tamanho máximo (15) !\n");
+                    }
+                    
                     if ( token.getLexeme().equals("{") )
                         ignore = true;
                     else if ( token.getLexeme().equals("}") )
@@ -53,7 +62,7 @@ public class Control {
                         continue;
                     }
                     
-                    if ( !ignore)
+                    if (!ignore)
                         list.add(token);
                 }
                 
