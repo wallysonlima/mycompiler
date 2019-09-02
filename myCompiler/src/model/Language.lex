@@ -34,7 +34,6 @@ AP = "("
 FP = ")"
 ACO = "["
 FCO = "]"
-PONTO = "."
 VIRGULA = ","
 PONTO_VIRGULA = ";"
 DOIS_PONTOS = ":"
@@ -83,7 +82,6 @@ NOT = "not"
 {FP} { return createAnalyse(yytext(), "Fecha_Parenteses", yyline, yycolumn, yycolumn); }
 {ACO} { return createAnalyse(yytext(), "Abre_Colchetes", yyline, yycolumn, yycolumn); }
 {FCO} { return createAnalyse(yytext(), "Fecha_Colchetes", yyline, yycolumn, yycolumn); }
-{PONTO} { return createAnalyse(yytext(), "Ponto", yyline, yycolumn, yycolumn); }
 {VIRGULA} { return createAnalyse(yytext(), "Virgula", yyline, yycolumn, yycolumn); }
 {PONTO_VIRGULA} { return createAnalyse(yytext(), "Ponto_Virgula", yyline, yycolumn, yycolumn); }
 

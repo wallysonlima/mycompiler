@@ -313,7 +313,7 @@ public class Main extends javax.swing.JFrame {
         
         for( int i = 0; i < list.size(); i++ )
         {   
-            if ( list.get(i).getToken().equalsIgnoreCase("Caractere_Invalido") )
+            if ( list.get(i).getToken().equalsIgnoreCase("Caractere_Invalido") || !list.get(i).getError().equalsIgnoreCase("") )
                 wrong.add(1); 
             else
                 wrong.add(0);

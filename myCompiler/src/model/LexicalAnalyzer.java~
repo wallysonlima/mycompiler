@@ -302,7 +302,7 @@ public class LexicalAnalyzer {
   /* user code: */
 
 private Analyse createAnalyse(String lexeme, String token, int line, int iniCol, int endCol) {
-    return (new Analyse(lexeme, token, String.valueOf(line), String.valueOf(iniCol), String.valueOf(yylength() + endCol)));
+    return (new Analyse(lexeme, token, String.valueOf(line), String.valueOf(iniCol), String.valueOf(yylength() + endCol), ""));
 }
 
 

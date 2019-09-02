@@ -46,12 +46,12 @@ public class Control {
                 {
                     token.setLine(String.valueOf(i));
                     
-                    if ( token.getToken().equals("Identificador") )
+                    if ( token.getToken().equals("Identificador") || token.getToken().equals("Inteiro") || token.getToken().equals("Real") )
                     {
                         int length = Integer.parseInt(token.getEndCol()) - Integer.parseInt(token.getIniCol());
                         
                         if ( length > MAX )
-                            token.setError("Identificador excedeu o tamanho máximo (15) !\n");
+                            token.setError("Erro ! Excedeu o tamanho máximo (15) !\n");
                     }
                     
                     if ( token.getLexeme().equals("{") )
