@@ -6,6 +6,7 @@
 package view;
 
 import controller.Control;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,13 +17,17 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.paint.Color;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import model.Analyse;
 import model.TableCellRenderer;
 
@@ -34,6 +39,7 @@ public class Main extends javax.swing.JFrame {
     private Control control;
     private ArrayList<Analyse> listAnalyse;
     File file;
+    HashSet<String> hashWord;
     /**
      * Creates new form Main
      */
@@ -41,6 +47,7 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         control = new Control();
         listAnalyse = new ArrayList<>();
+        initializeReservedWord();
     }
 
     /**
@@ -57,7 +64,7 @@ public class Main extends javax.swing.JFrame {
         tableLexical = new javax.swing.JTable();
         tabbedPaneEditor = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
-        textAreaEdit = new javax.swing.JTextArea();
+        textPaneAreaEdit = new javax.swing.JTextPane();
         jScrollPane6 = new javax.swing.JScrollPane();
         textAreaLines = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -100,9 +107,7 @@ public class Main extends javax.swing.JFrame {
 
         tabbedLexical.addTab("Lexical Table", jScrollPane1);
 
-        textAreaEdit.setColumns(20);
-        textAreaEdit.setRows(5);
-        jScrollPane2.setViewportView(textAreaEdit);
+        jScrollPane2.setViewportView(textPaneAreaEdit);
 
         tabbedPaneEditor.addTab("Editor", jScrollPane2);
 
@@ -234,7 +239,10 @@ public class Main extends javax.swing.JFrame {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-                textAreaEdit.setText(textEdit);
+                
+                
+                textPaneAreaEdit.setText(textEdit);
+                setColorReservedWords();
                 textAreaLines.setText( populateLines(counter) );
             }
         }
@@ -249,8 +257,8 @@ public class Main extends javax.swing.JFrame {
         // Do Analyse Lexic
         //JOptionPane.showMessageDialog(null, "Entrou aqui !");
         
-        if ( textAreaEdit.getText() != "" )
-            listAnalyse = control.analyseLexic(textAreaEdit.getText());
+        if ( textPaneAreaEdit.getText() != "" )
+            listAnalyse = control.analyseLexic(textPaneAreaEdit.getText());
         else
             JOptionPane.showMessageDialog(null, "Error ! Without Text ! You need fill the textArea !");
         
@@ -290,7 +298,7 @@ public class Main extends javax.swing.JFrame {
             
             try
             {
-                textAreaEdit.write(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
+                textPaneAreaEdit.write(new OutputStreamWriter(new FileOutputStream(file), "utf-8"));
                 Desktop.getDesktop().open(file);
             }
             
@@ -342,6 +350,87 @@ public class Main extends javax.swing.JFrame {
         return lines;
     }
     
+    public void initializeReservedWord()
+    {
+        hashWord = new HashSet<String>();
+        
+        hashWord.add("program");
+        hashWord.add("procedure");
+        hashWord.add("var");
+        hashWord.add("int");
+        hashWord.add("boolean");
+        hashWord.add("read");
+        hashWord.add("write");
+        hashWord.add("true");
+        hashWord.add("false");
+        hashWord.add("begin");
+        hashWord.add("end");
+        hashWord.add("if");
+        hashWord.add("while");
+        hashWord.add("do");
+        hashWord.add("else");
+        hashWord.add("then");
+        hashWord.add("div");
+        hashWord.add("and");
+        hashWord.add("or");
+        hashWord.add("not");
+    }
+    
+    public void setColorReservedWords()
+    {   
+        SimpleAttributeSet set = new SimpleAttributeSet();
+        StyleConstants.setBold(set, true);
+        StyleConstants.setItalic(set, true);
+        StyleConstants.setForeground(set, Color.CYAN);
+        Document doc = textPaneAreaEdit.getStyledDocument();
+        
+        try {
+            if ( textPaneAreaEdit.getText().contains("program") )
+                doc.insertString(doc.getLength(), "program", set);
+            if ( textPaneAreaEdit.getText().contains("procedure") )
+                doc.insertString(doc.getLength(), "procedure", set);
+            if ( textPaneAreaEdit.getText().contains("var") )
+                doc.insertString(doc.getLength(), "var", set);
+            if ( textPaneAreaEdit.getText().contains("int") )
+                doc.insertString(doc.getLength(), "int", set);
+            if ( textPaneAreaEdit.getText().contains("boolean") )
+                doc.insertString(doc.getLength(), "boolean", set);
+            if ( textPaneAreaEdit.getText().contains("read") )
+                doc.insertString(doc.getLength(), "read", set);
+            if ( textPaneAreaEdit.getText().contains("write") )
+                doc.insertString(doc.getLength(), "write", set);
+            if ( textPaneAreaEdit.getText().contains("true") )
+                doc.insertString(doc.getLength(), "true", set);
+            if ( textPaneAreaEdit.getText().contains("false") )
+                doc.insertString(doc.getLength(), "false", set);
+            if ( textPaneAreaEdit.getText().contains("begin") )
+                doc.insertString(doc.getLength(), "begin", set);
+            if ( textPaneAreaEdit.getText().contains("end") )
+                doc.insertString(doc.getLength(), "end", set);
+            if ( textPaneAreaEdit.getText().contains("if") )
+                doc.insertString(doc.getLength(), "if", set);
+            if ( textPaneAreaEdit.getText().contains("while") )
+                doc.insertString(doc.getLength(), "while", set);
+            if ( textPaneAreaEdit.getText().contains("do") )
+                doc.insertString(doc.getLength(), "do", set);
+            if ( textPaneAreaEdit.getText().contains("else") )
+                doc.insertString(doc.getLength(), "else", set);
+            if ( textPaneAreaEdit.getText().contains("then") )
+                doc.insertString(doc.getLength(), "then", set);
+            if ( textPaneAreaEdit.getText().contains("div") )
+                doc.insertString(doc.getLength(), "div", set);
+            if ( textPaneAreaEdit.getText().contains("and") )
+                doc.insertString(doc.getLength(), "and", set);
+            if ( textPaneAreaEdit.getText().contains("or") )
+                doc.insertString(doc.getLength(), "or", set);
+            if ( textPaneAreaEdit.getText().contains("not") )
+                doc.insertString(doc.getLength(), "not", set);
+            
+        } catch (BadLocationException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -391,7 +480,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTabbedPane tabbedPaneEditor;
     private javax.swing.JTable tableLexical;
-    private javax.swing.JTextArea textAreaEdit;
     private javax.swing.JTextArea textAreaLines;
+    private javax.swing.JTextPane textPaneAreaEdit;
     // End of variables declaration//GEN-END:variables
 }
