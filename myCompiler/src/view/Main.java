@@ -40,6 +40,7 @@ public class Main extends javax.swing.JFrame {
     private ArrayList<Analyse> listAnalyse;
     File file;
     HashSet<String> hashWord;
+    IU_About about;
     /**
      * Creates new form Main
      */
@@ -47,6 +48,7 @@ public class Main extends javax.swing.JFrame {
         initComponents();
         control = new Control();
         listAnalyse = new ArrayList<>();
+        about = new IU_About();
         initializeReservedWord();
     }
 
@@ -62,6 +64,9 @@ public class Main extends javax.swing.JFrame {
         tabbedLexical = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableLexical = new javax.swing.JTable();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        textAreaResult = new javax.swing.JTextArea();
         tabbedPaneEditor = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         textPaneAreaEdit = new javax.swing.JTextPane();
@@ -74,6 +79,9 @@ public class Main extends javax.swing.JFrame {
         menuItemClose = new javax.swing.JMenuItem();
         menuAnalyse = new javax.swing.JMenu();
         menuItemLexic = new javax.swing.JMenuItem();
+        menuItemSintatic = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("myCompiler");
@@ -106,6 +114,14 @@ public class Main extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tableLexical);
 
         tabbedLexical.addTab("Lexical Table", jScrollPane1);
+
+        textAreaResult.setColumns(20);
+        textAreaResult.setRows(5);
+        jScrollPane3.setViewportView(textAreaResult);
+
+        jTabbedPane1.addTab("Sintatic Analyse", jScrollPane3);
+
+        tabbedLexical.addTab("Result", jTabbedPane1);
 
         jScrollPane2.setViewportView(textPaneAreaEdit);
 
@@ -163,7 +179,28 @@ public class Main extends javax.swing.JFrame {
         });
         menuAnalyse.add(menuItemLexic);
 
+        menuItemSintatic.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemSintatic.setText("Sintatic");
+        menuItemSintatic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSintaticActionPerformed(evt);
+            }
+        });
+        menuAnalyse.add(menuItemSintatic);
+
         jMenuBar1.add(menuAnalyse);
+
+        jMenu1.setText("More");
+
+        jMenuItem1.setText("About");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -308,6 +345,15 @@ public class Main extends javax.swing.JFrame {
              }
         }
     }//GEN-LAST:event_menuItemSaveActionPerformed
+
+    private void menuItemSintaticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSintaticActionPerformed
+        
+    }//GEN-LAST:event_menuItemSintaticActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        about.setTitle("About");
+        about.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     public void populateLexicalTable(ArrayList<Analyse> list)
     {
@@ -467,20 +513,26 @@ public class Main extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenu menuAnalyse;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuItemClose;
     private javax.swing.JMenuItem menuItemLexic;
     private javax.swing.JMenuItem menuItemOpen;
     private javax.swing.JMenuItem menuItemSave;
+    private javax.swing.JMenuItem menuItemSintatic;
     private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTabbedPane tabbedPaneEditor;
     private javax.swing.JTable tableLexical;
     private javax.swing.JTextArea textAreaLines;
+    private javax.swing.JTextArea textAreaResult;
     private javax.swing.JTextPane textPaneAreaEdit;
     // End of variables declaration//GEN-END:variables
 }
