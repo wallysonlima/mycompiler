@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Analyse;
 import model.LexicalAnalyzer;
+import model.SintaticError;
 
 /**
  *
@@ -27,7 +28,7 @@ public class Control {
     
     public void Control() {}
     
-    // Read Text in file
+    // Do the analyse lexic
     public ArrayList<Analyse> analyseLexic(String textEdit)
     {
         int i = 1;
@@ -77,5 +78,55 @@ public class Control {
             JOptionPane.showMessageDialog(null, "Error ! You miss close the comment !");
        
         return list;
+    }
+    
+    // Do the Analyse Sintatic
+    public ArrayList<SintaticError> analyseSintatic(String textEdit) {
+        ArrayList<Analyse> tokens = analyseLexic(textEdit);
+        ArrayList<SintaticError> list = new ArrayList<>();
+        int i = 0;
+        
+        if ( tokens.size() == 0 ) {
+            list.add( new SintaticError( "0", "Erro ! Não possui tokens para ser feita a análise sintática !") );
+            return list;
+        }
+        
+        while( i < tokens.size() ) {
+            if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Program") ) {
+                nextToken(i, tokens);
+                
+                if ( tokens.get(i).getToken().equalsIgnoreCase("Identificador") ) {
+                    nextToken(i, tokens);
+                    
+                    if ( tokens.get(i).getToken().equalsIgnoreCase("Ponto_Virgula") ) {
+                        nextToken(i, tokens);
+                        
+                       
+                    }
+                    
+                    else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser ';'") );
+                }
+                
+                else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser um 'identificado' ") );
+            }
+            
+            else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
+        }
+
+
+        if ( list.size() == 0 )
+            list.add( new SintaticError( "-1", "Sucesso ! A análise sintática obteve sucesso !" ) );
+        
+        return list;
+    }
+    
+    public void nextToken(int i, ArrayList<Analyse> tokens) {
+        if ( i < tokens.size() )
+            ++i;
+    }
+    
+    public void previousToken(int i, ArrayList<Analyse> tokens) {
+        if ( i > 0 )
+            --i;
     }
 }

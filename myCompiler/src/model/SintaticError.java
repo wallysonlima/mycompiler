@@ -15,6 +15,11 @@ public class SintaticError {
     
     public SintaticError() {}
 
+    public SintaticError(String line, String error) {
+        this.line = line;
+        this.error = error;
+    }
+    
     public String getLine() {
         return line;
     }
