@@ -92,27 +92,39 @@ public class Control {
         }
         
         while( i < tokens.size() ) {
-            if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Program") ) {
-                nextToken(i, tokens);
-                
-                if ( tokens.get(i).getToken().equalsIgnoreCase("Identificador") ) {
+            if ( tokens.get(i).getLine().equals("0") ) 
+                if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Program") ) {
                     nextToken(i, tokens);
-                    
-                    if ( tokens.get(i).getToken().equalsIgnoreCase("Ponto_Virgula") ) {
+
+                    if ( tokens.get(i).getToken().equalsIgnoreCase("Identificador") ) {
                         nextToken(i, tokens);
-                        
-                       
+
+                        if ( !tokens.get(i).getToken().equalsIgnoreCase("Ponto_Virgula") ) 
+                            list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser ';'") );
+
                     }
-                    
-                    else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser ';'") );
+
+                    else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser um 'Identificador (int, boolean)'") );
                 }
-                
-                else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser um 'identificado' ") );
-            }
             
             else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
         }
 
+        if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Int") || tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Boolean") ) {
+            nextToken(i, tokens);
+
+            if ( tokens.get(i).getToken().equalsIgnoreCase(""))
+        }
+        
+        else if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Procedure") ) {
+             nextToken(i, tokens);
+        }
+        
+        else if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Begin") ) {
+            
+        }
+        
+        else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser um 'bloco' !") );
 
         if ( list.size() == 0 )
             list.add( new SintaticError( "-1", "Sucesso ! A análise sintática obteve sucesso !" ) );
