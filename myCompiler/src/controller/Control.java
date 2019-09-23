@@ -166,12 +166,58 @@ public class Control {
         return count;
     }
     
+    public void compCondition() {
+        if ( accept("Palavra_Reservada_Begin") ) {
+            nextToken();
+            condition();
+            
+            while ( expect("Ponto_Virgula") ) {
+                nextToken();
+                condition();
+                
+                if ( !expect("Palavra_Reservada_End") )
+                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'end' ! ") );
+            }
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'begin' ! ") );
+    }
+    
+    public void condition() {
+        if ( accept("Identificador") ) {
+           attribution();
+        
+        } else if ( accept("Palavra_Reservada_Begin") ) {
+           compCondition();
+        
+        } else if ( accept("Palavra_Reservada_If") ) {
+            conditionIf();
+        
+        } else if ( accept("Palavra_Reservada_While") ) {
+            conditionLoop();
+        
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado algum 'comando' ! ") );
+    }
+    
+    public void attribution() {
+        variable();
+        
+        if ( expect("Operador_Igual") ) {
+            nextToken();
+            expression();
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o operador ':=' ! ") );
+    }
+    
     public void procedureCall() {
         if ( accept("Identificador") ) {
             if ( expect("Abre_Parenteses") ) {
+                nextToken();
+                listExpression();
                 
-            }
-        }
+                if ( !expect("Fecha_Parenteses") )
+                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado ')' ! ") );
+                
+            } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado '(' ! ") );
+            
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado um 'Identificador' ! ") );
     }
     
     // Parse the conditionIF
