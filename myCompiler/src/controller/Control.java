@@ -199,6 +199,27 @@ public class Control {
         }
     }
     
+    // Parse the expression
+    public void expression() {
+        if ( accept("Operador_Soma") || accept("Operador_Subtração") ) {
+            nextToken();
+        }
+        
+        term();
+        
+        while( accept("Operador_Soma") || accept("Operador_Subtração") || accept("Palavra_Reservada_Or") ) {
+            nextToken();
+            term();
+        }
+    }
+    
+    // Parse the condition
+    public void condition() {
+        
+    }
+    
+    
+    
     
     public void verificarFator(int i, ArrayList<Analyse> tokens, ArrayList<SintaticError> list) {
         if ( tokens.get(i).getToken().equalsIgnoreCase("Abre_Parenteses") ) {
