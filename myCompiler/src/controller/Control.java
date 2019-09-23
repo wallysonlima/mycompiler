@@ -113,7 +113,7 @@ public class Control {
         if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Int") || tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Boolean") ) {
             nextToken(i, tokens);
 
-            if ( tokens.get(i).getToken().equalsIgnoreCase(""))
+            //if ( tokens.get(i).getToken().equalsIgnoreCase(""))
         }
         
         else if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Procedure") ) {
@@ -121,7 +121,22 @@ public class Control {
         }
         
         else if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Begin") ) {
+            nextToken(i, tokens);
             
+            if ( tokens.get(i).getToken().equalsIgnoreCase("Identificador") ) {
+                nextToken(i, tokens);
+                
+                if ( tokens.get(i).getToken().equalsIgnoreCase("Operador_Soma") || tokens.get(i).getToken().equalsIgnoreCase("Operador_Subtração") ) {
+                    nextToken(i, tokens);
+                    
+                    if ( tokens.get(i).getToken().equalsIgnoreCase("Identificador") ) {
+                        nextToken(i, tokens);
+                    }
+                    
+                }
+            }
+            
+            else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser um 'Identificador' ! ") );
         }
         
         else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser um 'bloco' !") );
@@ -141,4 +156,14 @@ public class Control {
         if ( i > 0 )
             --i;
     }
+    
+    public void verificarFator(int i, ArrayList<Analyse> tokens, ArrayList<SintaticError> list) {
+        if ( tokens.get(i).getToken().equalsIgnoreCase("Abre_Parenteses") ) {
+            nextToken(i, tokens);
+            
+        }
+        
+        
+    }
 }
+    
