@@ -166,6 +166,75 @@ public class Control {
         return count;
     }
     
+    public void procedureCall() {
+        if ( accept("Identificador") ) {
+            if ( expect("Abre_Parenteses") ) {
+                
+            }
+        }
+    }
+    
+    // Parse the conditionIF
+    public void conditionIf() {
+        if ( accept("Palavra_Reservada_If") ) {
+            nextToken();
+            expression();
+            
+            if ( expect("Palavra_Reservada_Then") ) {
+                nextToken();
+                condition();
+                
+                if ( expect("Palavra_Reservada_Else") ) {
+                    nextToken();
+                    condition();
+                } 
+                
+            } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'then' ! ") );
+            
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'if' ! ") );
+    }
+    
+    // Parse the condition
+    public void conditionLoop() {
+        if ( accept("Palavra_Reservada_While") ) {
+            nextToken();
+            expression();
+            
+            if ( expect("Palavra_Reservada_Do") ) {
+                nextToken();
+                condition();
+            } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'do' ! ") );
+            
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'while' ! ") );
+    }
+    
+    // Parse the expression
+    public void expression() {
+        simpleExpression();
+        nextToken();
+        
+        if ( accept("Operador_Menor") || accept("Operador_Igual") || accept("Operador_Maior") || accept("Operador_Menor_Igual") ||
+            accept("Operador_Maior_Igual") || accept("Operador_Diferente") ) {
+            nextToken();
+            
+            simpleExpression();
+        }
+    }
+    
+    // Parse the Simple Expression
+    public void simpleExpression() {
+        if ( accept("Operador_Soma") || accept("Operador_Subtração") ) {
+            nextToken();
+        }
+        
+        term();
+        
+        while( accept("Operador_Soma") || accept("Operador_Subtração") || accept("Palavra_Reservada_Or") ) {
+            nextToken();
+            term();
+        }
+    }
+    
     // Parse the term
     public void term() {
         factor();
@@ -199,57 +268,22 @@ public class Control {
         }
     }
     
-    // Parse the Simple Expression
-    public void simpleExpression() {
-        if ( accept("Operador_Soma") || accept("Operador_Subtração") ) {
-            nextToken();
-        }
-        
-        term();
-        
-        while( accept("Operador_Soma") || accept("Operador_Subtração") || accept("Palavra_Reservada_Or") ) {
-            nextToken();
-            term();
-        }
-    }
-    
-    // Parse the expression
-    public void expression() {
-        simpleExpression();
-        nextToken();
-        
-        if ( accept("Operador_Menor") || accept("Operador_Igual") || accept("Operador_Maior") || accept("Operador_Menor_Igual") ||
-            accept("Operador_Maior_Igual") || accept("Operador_Diferente") ) {
-            nextToken();
-            
-            simpleExpression();
-        }
-    }
-    
-    // Parse the condition
-    public void conditionLoop() {
-        if ( accept("Palavra_Reservada_While") ) {
+    // Parse the variable
+    public void variable() {
+        if ( accept("Identificador") ) {
             nextToken();
             expression();
-            
-            if ( expect("Palavra_Reservada_Do") ) {
-                nextToken();
-                condition();
-            } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'do' ! ") );
-            
-        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'while' ! ") );
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' ! ") );
     }
     
-    
-    
-    
-    public void verificarFator(int i, ArrayList<Analyse> tokens, ArrayList<SintaticError> list) {
-        if ( tokens.get(i).getToken().equalsIgnoreCase("Abre_Parenteses") ) {
-            nextToken();
-            
-        }
+    // Parse list of expression
+    public void listExpression() {
+        expression();
         
-        
+        if ( expect("Virgula") ) {
+            while( expect("Operador_Soma") || expect("Operador_Subtração") )
+                expression();
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado ',' ! ") );
     }
 }
     
