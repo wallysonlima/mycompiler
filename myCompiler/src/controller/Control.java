@@ -25,6 +25,9 @@ import model.SintaticError;
  */
 public class Control {
     int MAX = 15;
+    ArrayList<Analyse> tokens;
+    ArrayList<SintaticError> list;
+    int count;
     
     public void Control() {}
     
@@ -82,32 +85,27 @@ public class Control {
     
     // Do the Analyse Sintatic
     public ArrayList<SintaticError> analyseSintatic(String textEdit) {
-        ArrayList<Analyse> tokens = analyseLexic(textEdit);
-        ArrayList<SintaticError> list = new ArrayList<>();
-        int i = 0;
+        tokens = analyseLexic(textEdit);
+        list = new ArrayList<>();
+        int count = 0;
         
         if ( tokens.size() == 0 ) {
             list.add( new SintaticError( "0", "Erro ! Não possui tokens para ser feita a análise sintática !") );
             return list;
         }
         
-        while( i < tokens.size() ) {
-            if ( tokens.get(i).getLine().equals("0") ) 
-                if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Program") ) {
-                    nextToken(i, tokens);
-
-                    if ( tokens.get(i).getToken().equalsIgnoreCase("Identificador") ) {
-                        nextToken(i, tokens);
-
-                        if ( !tokens.get(i).getToken().equalsIgnoreCase("Ponto_Virgula") ) 
-                            list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser ';'") );
-
+        while( count < tokens.size() ) {
+            if ( tokens.get(count).getLine().equals("0") ) 
+                if ( accept("Palavra_Reservada_Program") ) {
+                    if ( expect("Identificador") ) {
+                        if ( !expect(tokens.get(count).getToken() ) ) 
+                            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O próximo token precisa ser ';'") );
                     }
 
-                    else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser um 'Identificador (int, boolean)'") );
+                    else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O próximo token precisa ser um 'Identificador (int, boolean)'") );
                 }
             
-            else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
+            else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
         }
 
         if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Int") || tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Boolean") ) {
@@ -123,20 +121,6 @@ public class Control {
         else if ( tokens.get(i).getToken().equalsIgnoreCase("Palavra_Reservada_Begin") ) {
             nextToken(i, tokens);
             
-            if ( tokens.get(i).getToken().equalsIgnoreCase("Identificador") ) {
-                nextToken(i, tokens);
-                
-                if ( tokens.get(i).getToken().equalsIgnoreCase("Operador_Soma") || tokens.get(i).getToken().equalsIgnoreCase("Operador_Subtração") ) {
-                    nextToken(i, tokens);
-                    
-                    if ( tokens.get(i).getToken().equalsIgnoreCase("Identificador") ) {
-                        nextToken(i, tokens);
-                    }
-                    
-                }
-            }
-            
-            else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser um 'Identificador' ! ") );
         }
         
         else list.add( new SintaticError( tokens.get(i).getLine(), "Erro ! O próximo token precisa ser um 'bloco' !") );
@@ -147,14 +131,30 @@ public class Control {
         return list;
     }
     
-    public void nextToken(int i, ArrayList<Analyse> tokens) {
-        if ( i < tokens.size() )
-            ++i;
+     public boolean accept(String token) {
+        if ( tokens.get(count).getToken().equalsIgnoreCase(token) )
+            return true;   
+        
+        return false;
     }
     
-    public void previousToken(int i, ArrayList<Analyse> tokens) {
-        if ( i > 0 )
-            --i;
+    public boolean expect(String token) {
+        nextToken();
+        
+        if ( accept(token) )
+            return true;
+        
+        return false;
+    }
+    
+    public void nextToken() {
+        if ( count < tokens.size() )
+            ++count;
+    }
+    
+    public void previousToken(int ) {
+        if ( count > 0 )
+            --count;
     }
     
     public void verificarFator(int i, ArrayList<Analyse> tokens, ArrayList<SintaticError> list) {
