@@ -183,7 +183,7 @@ public class Control {
         } else if ( accept("Inteiro") ) {
             nextToken();
         } else if ( accept( tokens.get( previousToken() ).getToken()) ) {
-            expression();
+            simpleExpression();
             
             nextToken();
             nextToken();
@@ -199,8 +199,8 @@ public class Control {
         }
     }
     
-    // Parse the expression
-    public void expression() {
+    // Parse the Simple Expression
+    public void simpleExpression() {
         if ( accept("Operador_Soma") || accept("Operador_Subtração") ) {
             nextToken();
         }
@@ -213,9 +213,31 @@ public class Control {
         }
     }
     
-    // Parse the condition
-    public void condition() {
+    // Parse the expression
+    public void expression() {
+        simpleExpression();
+        nextToken();
         
+        if ( accept("Operador_Menor") || accept("Operador_Igual") || accept("Operador_Maior") || accept("Operador_Menor_Igual") ||
+            accept("Operador_Maior_Igual") || accept("Operador_Diferente") ) {
+            nextToken();
+            
+            simpleExpression();
+        }
+    }
+    
+    // Parse the condition
+    public void conditionLoop() {
+        if ( accept("Palavra_Reservada_While") ) {
+            nextToken();
+            expression();
+            
+            if ( expect("Palavra_Reservada_Do") ) {
+                nextToken();
+                condition();
+            } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'do' ! ") );
+            
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'while' ! ") );
     }
     
     
