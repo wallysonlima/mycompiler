@@ -131,13 +131,18 @@ public class Control {
         return list;
     }
     
-     public boolean accept(String token) {
+    
+    // Help Methods to do sintatic analyse
+    
+    // Compare specific Token
+    public boolean accept(String token) {
         if ( tokens.get(count).getToken().equalsIgnoreCase(token) )
             return true;   
         
         return false;
     }
     
+    // Compare the next token
     public boolean expect(String token) {
         nextToken();
         
@@ -147,19 +152,57 @@ public class Control {
         return false;
     }
     
+    // Increment to the next token
     public void nextToken() {
         if ( count < tokens.size() )
             ++count;
     }
     
-    public void previousToken(int ) {
+    // Decrement previous token
+    public int previousToken() {
         if ( count > 0 )
             --count;
+        
+        return count;
     }
+    
+    // Parse the term
+    public void term() {
+        factor();
+        
+        while ( accept("Operador_Multiplicação") || accept("Palavra_Reservada_Div") || accept("Palavra_Reservada_And") ) {
+            nextToken();
+            factor();
+        }
+    }
+    
+    // Parse the factor
+    public void factor() {
+        if ( accept("Identificador") ) {
+            nextToken();
+        } else if ( accept("Inteiro") ) {
+            nextToken();
+        } else if ( accept( tokens.get( previousToken() ).getToken()) ) {
+            expression();
+            
+            nextToken();
+            nextToken();
+            
+            if ( accept( tokens.get(count).getToken()) ) {
+                nextToken();
+            } else {
+                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado um fator ! ") );
+            }
+        } else {
+            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado um fator ! ") );
+            nextToken();
+        }
+    }
+    
     
     public void verificarFator(int i, ArrayList<Analyse> tokens, ArrayList<SintaticError> list) {
         if ( tokens.get(i).getToken().equalsIgnoreCase("Abre_Parenteses") ) {
-            nextToken(i, tokens);
+            nextToken();
             
         }
         
