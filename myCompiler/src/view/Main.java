@@ -29,6 +29,7 @@ import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import model.Analyse;
+import model.SintaticError;
 import model.TableCellRenderer;
 
 /**
@@ -347,7 +348,20 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemSaveActionPerformed
 
     private void menuItemSintaticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSintaticActionPerformed
+        ArrayList<SintaticError> list; 
+        String temp = "";
         
+        if ( textPaneAreaEdit.getText() != "" )
+            if ( (list = control.analyseSintatic(textPaneAreaEdit.getText())).size() == 1 ) {
+                textAreaResult.setText("A Análise Sintática obteve sucesso !!\n Sem erros !!\n");
+            } else {
+                for (SintaticError s: list ) 
+                    temp += s.getError() + "  /  Linha = " + s.getLine() + "/n";
+                
+                textAreaResult.setText(temp);
+            }
+        else 
+            JOptionPane.showMessageDialog(null, "Error ! Without Text ! You need fill the textArea !");
     }//GEN-LAST:event_menuItemSintaticActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
