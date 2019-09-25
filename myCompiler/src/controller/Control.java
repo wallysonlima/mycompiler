@@ -148,6 +148,36 @@ public class Control {
         return count;
     }
     
+    public void varDeclaration() {
+        if ( accept("Palavra_Reservada_Int") || accept("Palavra_Reservada_Boolean") ) {
+            nextToken();
+            identList();
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado uma palavra reservada 'int/boolean' !") );   
+    }
+    
+    public void identList() {
+        if ( accept("Identificador") ) {
+            while( expect("Virgula") ) {
+                nextToken();
+                identList();
+            }
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado um 'Identificador' !") );   
+    }
+    
+    public void procedurePart() {
+        boolean enter = false;
+        
+        while( accept("Palavra_Reservada_Procedure") ) {
+            nextToken();
+            procedureDeclaration();
+            enter = true;
+        }
+        
+        if ( enter )
+            if ( !expect("Ponto_Virgula") )
+                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );   
+    }
+    
     public void procedureDeclaration() {
         if ( accept("Palavra_Reservada_Procedure") ) {
             if ( expect("Identificador") ) {
