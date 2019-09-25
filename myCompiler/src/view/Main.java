@@ -193,6 +193,7 @@ public class Main extends javax.swing.JFrame {
 
         jMenu1.setText("More");
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem1.setText("About");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -352,13 +353,14 @@ public class Main extends javax.swing.JFrame {
         String temp = "";
         
         if ( textPaneAreaEdit.getText() != "" )
-            if ( (list = control.analyseSintatic(textPaneAreaEdit.getText())).size() == 1 ) {
+            if ( (list = control.analyseSintatic(textPaneAreaEdit.getText())).size() == 1 && list.get(0).getLine().equals("-1") ) {
                 textAreaResult.setText("A Análise Sintática obteve sucesso !!\n Sem erros !!\n");
             } else {
                 for (SintaticError s: list ) 
                     temp += s.getError() + "  /  Linha = " + s.getLine() + "/n";
                 
                 textAreaResult.setText(temp);
+                tabbedPaneEditor.setFocusable(true);
             }
         else 
             JOptionPane.showMessageDialog(null, "Error ! Without Text ! You need fill the textArea !");
