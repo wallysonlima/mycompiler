@@ -94,6 +94,7 @@ public class Control {
             return list;
         }
         
+        // Control a sintatic analyse
         while( count < tokens.size() ) {
             if ( tokens.get(count).getLine().equals("0") ) 
                 if ( accept("Palavra_Reservada_Program") ) {
@@ -105,7 +106,8 @@ public class Control {
                 
                 } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
             
-                
+                block();
+                nextToken();
         }
 
         if ( list.size() == 0 )
@@ -146,6 +148,31 @@ public class Control {
             --count;
         
         return count;
+    }
+    
+    public void block() {
+        if ( accept("Palavra_Reservada_Int") || accept("Palavra_Reservada_Boolean") )
+            partVarDeclaration();
+        
+        if ( accept("Palavra_Reservada_Procedure") )
+            procedurePart();
+        
+        if ( accept("Palavra_Reservada_Begin") )
+            compCondition();
+        else
+            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado a palavra reservada 'begin' !") );
+    }
+    
+    public void partVarDeclaration() {
+        varDeclaration();
+        
+        while ( expect("Ponto_Virgula") ) {
+            nextToken();
+            varDeclaration();
+        }
+        
+        if ( !expect("Ponto_Virgula") )
+            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );   
     }
     
     public void varDeclaration() {
@@ -217,7 +244,7 @@ public class Control {
     public void formalSectionParam() {
         if ( accept("Palavra_Reservada_Var") ) {
             nextToken();
-            listIdent();
+            identList();
             
             if ( accept("Operador_Dois_Pontos")) {
                 nextToken();
@@ -227,7 +254,7 @@ public class Control {
             
             } else  list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ':' !") );
         } else {
-            listIdent();
+            identList();
             
             if ( accept("Operador_Dois_Pontos")) {
                 nextToken();
