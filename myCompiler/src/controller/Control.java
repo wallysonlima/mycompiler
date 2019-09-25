@@ -98,12 +98,14 @@ public class Control {
             if ( tokens.get(count).getLine().equals("0") ) 
                 if ( accept("Palavra_Reservada_Program") ) {
                     if ( expect("Identificador") ) {
-                        if ( !expect(tokens.get(count).getToken() ) ) 
+                        if ( !expect("Ponto_Virgula") ) 
                             list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O próximo token precisa ser ';'") );
                 
                     } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O próximo token precisa ser um 'Identificador (int, boolean)'") );
                 
                 } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
+            
+                
         }
 
         if ( list.size() == 0 )
@@ -146,6 +148,67 @@ public class Control {
         return count;
     }
     
+    public void procedureDeclaration() {
+        if ( accept("Palavra_Reservada_Procedure") ) {
+            if ( expect("Identificador") ) {
+                if ( expect("Abre_Parenteses") ) {
+                    formalParam();
+                    
+                    if ( expect("Ponto_Virgula") ) {
+                        nextToken();
+                        block();
+                    } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") ); 
+                }
+                
+                if ( expect("Ponto_Virgula") ) {
+                    nextToken();
+                    block();
+                } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") ); 
+            }
+        }
+    }
+    
+    public void formalParam() {
+        if ( accept("Abre_Parenteses") ) {
+            nextToken();
+            formalSectionParam();
+           
+            while( expect("Ponto_Virgula") ) {
+                nextToken();
+                formalSectionParam();
+            }
+            
+            if ( !expect("Fecha_Parenteses") )
+               list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ')' !") ); 
+        
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo '(' !") );  
+    }
+    
+    public void formalSectionParam() {
+        if ( accept("Palavra_Reservada_Var") ) {
+            nextToken();
+            listIdent();
+            
+            if ( accept("Operador_Dois_Pontos")) {
+                nextToken();
+                
+                if ( !accept("Identificador") )
+                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
+            
+            } else  list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ':' !") );
+        } else {
+            listIdent();
+            
+            if ( accept("Operador_Dois_Pontos")) {
+                nextToken();
+                
+                if ( !accept("Identificador") )
+                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
+            
+            } else  list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ':' !") );
+        }
+    }
+    
     public void compCondition() {
         if ( accept("Palavra_Reservada_Begin") ) {
             nextToken();
@@ -156,9 +219,9 @@ public class Control {
                 condition();
                 
                 if ( !expect("Palavra_Reservada_End") )
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'end' ! ") );
+                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'end' !") );
             }
-        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'begin' ! ") );
+        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'begin' !") );
     }
     
     // Missing  Chamada de Procedimento ???????
