@@ -155,7 +155,7 @@ public class Control {
         if ( accept("Palavra_Reservada_Int") || accept("Palavra_Reservada_Boolean") )
             partVarDeclaration();
         
-        if ( accept("Palavra_Reservada_Procedure") )
+        if ( expect("Palavra_Reservada_Procedure") )
             procedurePart();
         
         if ( accept("Palavra_Reservada_Begin") )
@@ -200,8 +200,8 @@ public class Control {
         boolean enter = false;
         
         while( accept("Palavra_Reservada_Procedure") ) {
-            nextToken();
             procedureDeclaration();
+            nextToken();
             enter = true;
         }
         
@@ -234,13 +234,13 @@ public class Control {
         if ( accept("Abre_Parenteses") ) {
             nextToken();
             formalSectionParam();
-           
+            
             while( expect("Ponto_Virgula") ) {
                 nextToken();
                 formalSectionParam();
             }
             
-            if ( !expect("Fecha_Parenteses") )
+            if ( !accept("Fecha_Parenteses") )
                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ')' !") ); 
         
         } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo '(' !") );  
@@ -254,7 +254,7 @@ public class Control {
             if ( accept("Operador_Dois_Pontos")) {
                 nextToken();
                 
-                if ( !accept("Identificador") )
+                if ( !accept("Palavra_Reservada_Int") && !accept("Palavra_Reservada_Boolean")  )
                     list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
             
             } else  list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ':' !") );
