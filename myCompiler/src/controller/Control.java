@@ -306,7 +306,7 @@ public class Control {
     public void attribution() {
         variable();
         
-        if ( expect("Operador_Igual") ) {
+        if ( accept("Operador_Igual") ) {
             nextToken();
             expression();
         } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o operador ':=' !") );
@@ -380,7 +380,7 @@ public class Control {
         
         term();
         
-        while( expect("Operador_Soma") || expect("Operador_Subtração") || expect("Palavra_Reservada_Or") ) {
+        while( accept("Operador_Soma") || accept("Operador_Subtração") || accept("Palavra_Reservada_Or") ) {
             nextToken();
             term();
         }
@@ -390,7 +390,7 @@ public class Control {
     public void term() {
         factor();
         
-        while ( expect("Operador_Multiplicação") || expect("Palavra_Reservada_Div") || expect("Palavra_Reservada_And") ) {
+        while ( accept("Operador_Multiplicação") || accept("Palavra_Reservada_Div") || accept("Palavra_Reservada_And") ) {
             nextToken();
             factor();
         }
@@ -421,7 +421,9 @@ public class Control {
     // Parse the variable
     public void variable() {
         if ( accept("Identificador") ) {
-            if ( expect("Operador_Soma") || expect("Operador_Subtração") )
+            
+            nextToken();
+            if ( accept("Operador_Soma") || accept("Operador_Subtração") )
                 expression();
         } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
     }
