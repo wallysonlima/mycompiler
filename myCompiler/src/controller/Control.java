@@ -155,7 +155,7 @@ public class Control {
         if ( accept("Palavra_Reservada_Int") || accept("Palavra_Reservada_Boolean") )
             partVarDeclaration();
         
-        if ( expect("Palavra_Reservada_Procedure") )
+        if ( accept("Palavra_Reservada_Procedure") )
             procedurePart();
         
         if ( accept("Palavra_Reservada_Begin") )
@@ -175,7 +175,9 @@ public class Control {
         previousToken();
         
         if ( !accept("Ponto_Virgula") )
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );   
+            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") ); 
+        
+        nextToken();
     }
     
     public void varDeclaration() {
@@ -280,7 +282,7 @@ public class Control {
                 nextToken();
                 condition();
                 
-                if ( !expect("Palavra_Reservada_End") )
+                if ( !accept("Palavra_Reservada_End") && !accept("Ponto_Virgula") )
                     list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'end' !") );
             }
         } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'begin' !") );
@@ -425,7 +427,7 @@ public class Control {
             nextToken();
             if ( accept("Operador_Soma") || accept("Operador_Subtração") )
                 expression();
-        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
+        } //else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
     }
     
     // Parse list of expression
