@@ -276,7 +276,7 @@ public class Control {
             nextToken();
             condition();
             
-            while ( expect("Ponto_Virgula") ) {
+            while ( accept("Ponto_Virgula") ) {
                 nextToken();
                 condition();
                 
@@ -336,7 +336,7 @@ public class Control {
                 nextToken();
                 condition();
                 
-                if ( expect("Palavra_Reservada_Else") ) {
+                if ( accept("Palavra_Reservada_Else") ) {
                     nextToken();
                     condition();
                 } 
@@ -364,8 +364,8 @@ public class Control {
     public void expression() {
         simpleExpression();
         
-        if ( expect("Operador_Menor") || expect("Operador_Igual") || expect("Operador_Maior") || expect("Operador_Menor_Igual") ||
-            expect("Operador_Maior_Igual") || expect("Operador_Diferente") ) {
+        if ( accept("Operador_Menor") || accept("Operador_Igual") || accept("Operador_Maior") || accept("Operador_Menor_Igual") ||
+            accept("Operador_Maior_Igual") || accept("Operador_Diferente") ) {
             nextToken();
             
             simpleExpression();
@@ -407,7 +407,7 @@ public class Control {
             nextToken();
             expression();
             
-            if ( !expect("Fecha_Parenteses") )
+            if ( !accept("Fecha_Parenteses") )
                 list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado ')' !") );
             
         } else if ( accept("Palavra_Reservada_Not") ) {
