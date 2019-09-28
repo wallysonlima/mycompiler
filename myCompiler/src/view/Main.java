@@ -50,7 +50,7 @@ public class Main extends javax.swing.JFrame {
         control = new Control();
         listAnalyse = new ArrayList<>();
         about = new IU_About();
-        initializeReservedWord();
+        //initializeReservedWord();
     }
 
     /**
@@ -281,7 +281,7 @@ public class Main extends javax.swing.JFrame {
                 
                 
                 textPaneAreaEdit.setText(textEdit);
-                setColorReservedWords();
+                //setColorReservedWords();
                 textAreaLines.setText( populateLines(counter) );
             }
         }

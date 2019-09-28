@@ -85,6 +85,7 @@ public class Control {
     
     // Do the Analyse Sintatic
     public ArrayList<SintaticError> analyseSintatic(String textEdit) {
+        // Do the Lexic Analyse
         tokens = analyseLexic(textEdit);
         list = new ArrayList<>();
         int count = 0;
@@ -106,8 +107,8 @@ public class Control {
                 
                 } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
             
-                block();
-                nextToken();
+            block();
+            nextToken();
         }
 
         if ( list.size() == 0 )
