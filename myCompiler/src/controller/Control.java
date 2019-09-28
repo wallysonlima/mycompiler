@@ -97,7 +97,7 @@ public class Control {
         
         // Control a sintatic analyse
         while( count < tokens.size() ) {
-            if ( tokens.get(count).getLine().equals("0") ) 
+            if ( tokens.get(count).getLine().equals("1") ) 
                 if ( accept("Palavra_Reservada_Program") ) {
                     if ( expect("Identificador") ) {
                         if ( !expect("Ponto_Virgula") ) 
@@ -107,8 +107,8 @@ public class Control {
                 
                 } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
             
-            block();
             nextToken();
+            block();
         }
 
         if ( list.size() == 0 )
@@ -167,12 +167,14 @@ public class Control {
     public void partVarDeclaration() {
         varDeclaration();
         
-        while ( expect("Ponto_Virgula") ) {
+        while ( accept("Ponto_Virgula") ) {
             nextToken();
             varDeclaration();
         }
         
-        if ( !expect("Ponto_Virgula") )
+        previousToken();
+        
+        if ( !accept("Ponto_Virgula") )
             list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );   
     }
     
@@ -180,12 +182,14 @@ public class Control {
         if ( accept("Palavra_Reservada_Int") || accept("Palavra_Reservada_Boolean") ) {
             nextToken();
             identList();
-        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado uma palavra reservada 'int/boolean' !") );   
+        } //else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado uma palavra reservada 'int/boolean' !") );   
     }
     
     public void identList() {
         if ( accept("Identificador") ) {
-            while( expect("Virgula") ) {
+            nextToken();
+            
+            while( accept("Virgula") ) {
                 nextToken();
                 identList();
             }
