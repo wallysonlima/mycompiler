@@ -50,6 +50,7 @@ public class Main extends javax.swing.JFrame {
         control = new Control();
         listAnalyse = new ArrayList<>();
         about = new IU_About();
+        disableMenuItem();
         //initializeReservedWord();
     }
 
@@ -278,11 +279,10 @@ public class Main extends javax.swing.JFrame {
                     Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-                
-                
                 textPaneAreaEdit.setText(textEdit);
                 //setColorReservedWords();
                 textAreaLines.setText( populateLines(counter) );
+                enableMenuItem();
             }
         }
 
@@ -491,6 +491,18 @@ public class Main extends javax.swing.JFrame {
         } catch (BadLocationException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public void disableMenuItem() {
+        menuItemLexic.setEnabled(false);
+        menuItemSave.setEnabled(false);
+        menuItemSintatic.setEnabled(false);
+    }
+    
+    public void enableMenuItem() {
+        menuItemLexic.setEnabled(true);
+        menuItemSave.setEnabled(true);
+        menuItemSintatic.setEnabled(true);
     }
     
     /**
