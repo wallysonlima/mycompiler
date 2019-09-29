@@ -137,6 +137,19 @@ public class Control {
         return false;
     }
     
+    // Compare if the previous token is accept
+    public boolean acceptPreviousToken(String token) {
+        --count;
+        
+        if ( accept(token) ) {
+            ++count;
+            return true;
+        }
+        
+        ++count;
+        return false;
+    }
+    
     // Increment to the next token
     public void nextToken() {
         if ( count < tokens.size() )
@@ -290,7 +303,7 @@ public class Control {
     
     // Missing  Chamada de Procedimento ???????
     public void condition() {
-        if ( accept("Identificador") ) {
+        if ( accept("Identificador") || accept("Palavra_Reservada_Write") || accept("Palavra_Reservada_Read") ) {
            attribution();
         
         } else if ( accept("Palavra_Reservada_Begin") ) {
@@ -311,7 +324,13 @@ public class Control {
         if ( accept("Operador_Igual") ) {
             nextToken();
             expression();
-        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o operador ':=' !") );
+        
+        } else if ( accept("Abre_Parenteses") && (acceptPreviousToken("Palavra_Reservada_Write") || acceptPreviousToken("Palavra_Reservada_Read")) ) {
+            nextToken();
+            expression();
+        }
+        
+        else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o operador ':=' !") );
     }
     
     public void procedureCall() {
@@ -400,7 +419,7 @@ public class Control {
     
     // Parse the factor
     public void factor() {
-        if ( accept("Identificador") ) {
+        if ( accept("Identificador") || accept("Palavra_Reservada_True") || accept("Palavra_Reservada_False") || accept("Palavra_Reservada_Write") || accept("Palavra_Reservada_Read") ) {
             nextToken();
             variable();
         } else if ( accept("Inteiro") ) {
@@ -422,12 +441,15 @@ public class Control {
     
     // Parse the variable
     public void variable() {
-        if ( accept("Identificador") ) {
+        if ( accept("Identificador") || accept("Palavra_Reservada_True") || accept("Palavra_Reservada_False") || accept("Palavra_Reservada_Write") || accept("Palavra_Reservada_Read") ) {
             
             nextToken();
             if ( accept("Operador_Soma") || accept("Operador_Subtração") )
                 expression();
-        } //else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
+            
+           
+        } else if ( accept("Fecha_Parenteses") )
+            nextToken(); //else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
     }
     
     // Parse list of expression
