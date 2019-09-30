@@ -353,7 +353,7 @@ public class Control {
             nextToken();
             expression();
             
-            if ( expect("Palavra_Reservada_Then") ) {
+            if ( accept("Palavra_Reservada_Then") ) {
                 nextToken();
                 condition();
                 
