@@ -428,7 +428,7 @@ public class Control {
             nextToken();
             expression();
             
-            if ( !accept("Fecha_Parenteses") )
+            if ( !accept("Fecha_Parenteses") && !accept("Palavra_Reservada_Begin") )
                 list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado ')' !") );
             
         } else if ( accept("Palavra_Reservada_Not") ) {
