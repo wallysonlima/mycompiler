@@ -353,7 +353,7 @@ public class Control {
             nextToken();
             expression();
             
-            if ( accept("Palavra_Reservada_Then") ) {
+            if ( expect("Palavra_Reservada_Then") ) {
                 nextToken();
                 condition();
                 
@@ -362,6 +362,14 @@ public class Control {
                     condition();
                 } 
                 
+            } else if ( acceptPreviousToken("Palavra_Reservada_Then") ) {
+                nextToken();
+                condition();
+                
+                if ( accept("Palavra_Reservada_Else") ) {
+                    nextToken();
+                    condition();
+                } 
             } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'then' !") );
             
         } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'if' !") );
