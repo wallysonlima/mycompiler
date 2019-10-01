@@ -66,7 +66,7 @@ public class Main extends javax.swing.JFrame {
         tabbedLexical = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableLexical = new javax.swing.JTable();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        tabbedPaneResult = new javax.swing.JTabbedPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         textAreaResult = new javax.swing.JTextArea();
         tabbedPaneEditor = new javax.swing.JTabbedPane();
@@ -121,9 +121,11 @@ public class Main extends javax.swing.JFrame {
         textAreaResult.setRows(5);
         jScrollPane3.setViewportView(textAreaResult);
 
-        jTabbedPane1.addTab("Sintatic Analyse", jScrollPane3);
+        tabbedPaneResult.addTab("Sintatic Analyse", jScrollPane3);
 
-        tabbedLexical.addTab("Result", jTabbedPane1);
+        tabbedLexical.addTab("Result", tabbedPaneResult);
+
+        tabbedLexical.setSelectedIndex(1);
 
         jScrollPane2.setViewportView(textPaneAreaEdit);
 
@@ -306,7 +308,10 @@ public class Main extends javax.swing.JFrame {
         
         if ( listAnalyse.get( listAnalyse.size() - 1).getLexeme().equals("Error") )
             JOptionPane.showMessageDialog(null, "Error ! You missed close the comment !");
-
+        else
+            JOptionPane.showMessageDialog(null, "Análise Léxica realizada com sucesso !");
+        
+        tabbedLexical.setSelectedIndex(0);
     }//GEN-LAST:event_menuItemLexicActionPerformed
 
     private void menuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemCloseActionPerformed
@@ -352,18 +357,24 @@ public class Main extends javax.swing.JFrame {
         ArrayList<SintaticError> list; 
         String temp = "";
         
-        if ( textPaneAreaEdit.getText() != "" )
+        if ( textPaneAreaEdit.getText() != "" ) {
             if ( (list = control.analyseSintatic(textPaneAreaEdit.getText())).size() == 1 && list.get(0).getLine().equals("-1") ) {
                 textAreaResult.setText("A Análise Sintática obteve sucesso !!\n Sem erros !!\n");
+                JOptionPane.showMessageDialog(null, "Análise Sintática realizada com sucesso ! Sem erros !");
             } else {
                 for (SintaticError s: list ) 
                     temp += s.getError() + "  /  Linha = " + s.getLine() + "/n";
                 
                 textAreaResult.setText(temp);
-                tabbedPaneEditor.setFocusable(true);
-            }
+                
+                JOptionPane.showMessageDialog(null, "Análise Sintática obteve erros !");
+            }    
+        }
         else 
             JOptionPane.showMessageDialog(null, "Error ! Without Text ! You need fill the textArea !");
+        
+        
+        tabbedLexical.setSelectedIndex(1);
     }//GEN-LAST:event_menuItemSintaticActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -548,7 +559,6 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JMenu menuAnalyse;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenuItem menuItemClose;
@@ -558,6 +568,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemSintatic;
     private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTabbedPane tabbedPaneEditor;
+    private javax.swing.JTabbedPane tabbedPaneResult;
     private javax.swing.JTable tableLexical;
     private javax.swing.JTextArea textAreaLines;
     private javax.swing.JTextArea textAreaResult;

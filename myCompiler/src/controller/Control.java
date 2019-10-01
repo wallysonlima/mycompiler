@@ -88,7 +88,7 @@ public class Control {
         // Do the Lexic Analyse
         tokens = analyseLexic(textEdit);
         list = new ArrayList<>();
-        int count = 0;
+        count = 0;
         
         if ( tokens.isEmpty() ) {
             list.add( new SintaticError( "0", "Erro ! Não possui tokens para ser feita a análise sintática !") );
@@ -108,6 +108,12 @@ public class Control {
                 } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
             
             nextToken();
+            
+            if ( accept("Palavra_Reservada_End") || count == tokens.size() - 1 ) {
+                count++;
+                continue;
+            }
+            
             block();
         }
 
@@ -152,7 +158,9 @@ public class Control {
     
     // Increment to the next token
     public void nextToken() {
-        if ( count < tokens.size() )
+        int MAX = tokens.size() - 1;
+        
+        if ( count < MAX)
             ++count;
     }
     
@@ -212,17 +220,12 @@ public class Control {
     }
     
     public void procedurePart() {
-        boolean enter = false;
-        
         while( accept("Palavra_Reservada_Procedure") ) {
             procedureDeclaration();
-            nextToken();
-            enter = true;
+            
+            if ( !accept("Ponto_Virgula") && !accept("Palavra_Reservada_End") && !accept("Palavra_Reservada_Begin") )
+                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );
         }
-        
-        if ( enter )
-            if ( !expect("Ponto_Virgula") )
-                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );   
     }
     
     public void procedureDeclaration() {
@@ -295,7 +298,7 @@ public class Control {
                 nextToken();
                 condition();
                 
-                if ( !accept("Palavra_Reservada_End") && !accept("Ponto_Virgula") )
+                if ( !accept("Palavra_Reservada_End") && !accept("Ponto_Virgula") && !accept("Palavra_Reservada_Begin"))
                     list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'end' !") );
             }
         } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'begin' !") );
@@ -363,7 +366,6 @@ public class Control {
                 } 
                 
             } else if ( acceptPreviousToken("Palavra_Reservada_Then") ) {
-                nextToken();
                 condition();
                 
                 if ( accept("Palavra_Reservada_Else") ) {
@@ -384,7 +386,10 @@ public class Control {
             if ( expect("Palavra_Reservada_Do") ) {
                 nextToken();
                 condition();
-            } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'do' !") );
+            } //else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'do' !") );
+            
+            if ( accept("Fecha_Parenteses") )
+                nextToken();
             
         } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'while' !") );
     }
@@ -422,6 +427,9 @@ public class Control {
         while ( accept("Operador_Multiplicação") || accept("Palavra_Reservada_Div") || accept("Palavra_Reservada_And") ) {
             nextToken();
             factor();
+            
+            if ( accept("Palavra_Reservada_End") )
+                nextToken();
         }
     }
     
@@ -436,7 +444,7 @@ public class Control {
             nextToken();
             expression();
             
-            if ( !accept("Fecha_Parenteses") && !accept("Palavra_Reservada_Begin") )
+            if ( !accept("Fecha_Parenteses") && !accept("Palavra_Reservada_Begin") && !accept("Palavra_Reservada_Then") )
                 list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado ')' !") );
             
         } else if ( accept("Palavra_Reservada_Not") ) {
