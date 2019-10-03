@@ -363,7 +363,7 @@ public class Main extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Análise Sintática realizada com sucesso ! Sem erros !");
             } else {
                 for (SintaticError s: list ) 
-                    temp += s.getError() + "  /  Linha = " + s.getLine() + "/n";
+                    temp += s.getError() + "  /  Linha = " + s.getLine() + "\n";
                 
                 textAreaResult.setText(temp);
                 
