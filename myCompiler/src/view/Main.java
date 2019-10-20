@@ -13,9 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.logging.Level;
@@ -23,7 +21,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
@@ -362,8 +359,10 @@ public class Main extends javax.swing.JFrame {
                 textAreaResult.setText("A Análise Sintática obteve sucesso !!\n Sem erros !!\n");
                 JOptionPane.showMessageDialog(null, "Análise Sintática realizada com sucesso ! Sem erros !");
             } else {
-                for (SintaticError s: list ) 
+                for (SintaticError s: list ) {
                     temp += s.getError() + "  /  Linha = " + s.getLine() + "\n";
+                    temp += "------------------------------------------------------------------------------------------------------------------------------------\n";
+                }
                 
                 textAreaResult.setText(temp);
                 
