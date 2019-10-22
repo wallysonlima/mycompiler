@@ -418,8 +418,12 @@ public class Control {
             list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado algum 'comando' !") );
             list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!\n\n") );
                 
-            while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") )
+            while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                 nextToken();
+                
+                if ( count == tokens.size() - 1 )
+                    break;
+            }
         }
     }
     
@@ -458,8 +462,12 @@ public class Control {
                     list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado ')' !") );
                     list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!\n\n") );
                 
-                    while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") )
+                    while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                         nextToken();
+                        
+                        if ( count == tokens.size() - 1 )
+                            break;
+                    }
                 }
                 
             } else{
