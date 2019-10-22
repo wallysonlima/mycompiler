@@ -320,9 +320,8 @@ public class Control {
                         if ( count == tokens.size() - 1 )
                             break;
                     }
-                        
                 }
-            
+                
             } else {
                 list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ':' !") );
                 list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!\n\n") );
@@ -331,7 +330,7 @@ public class Control {
                     nextToken();
                     
                     if ( count == tokens.size() - 1 )
-                            break;
+                        break;
                 }
             }                    
             
@@ -388,7 +387,17 @@ public class Control {
                     }
                 }
             }
-        } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'begin' !") );
+        } else {
+            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'begin' !") );
+            list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!\n\n") );
+                
+            while ( !accept("Ponto_Virgula") ) {
+                nextToken();
+
+                if ( count == tokens.size() - 1 )
+                    break;
+            }
+        }
     }
     
     // Missing  Chamada de Procedimento ???????
