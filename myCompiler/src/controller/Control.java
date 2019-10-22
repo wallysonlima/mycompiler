@@ -292,9 +292,12 @@ public class Control {
                 list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ')' !") ); 
                 list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!\n\n") );
                 
-                while ( !accept("Ponto_Virgula") )
+                while ( !accept("Ponto_Virgula") ) {
                     nextToken();
-                
+                    
+                    if ( count == tokens.size() - 1 )
+                        break;
+                }
             } 
         }
     }
