@@ -480,7 +480,6 @@ public class Control {
                     if ( count == tokens.size() - 1 )
                         break;
                 }
-                    
             }
             
         } else {
@@ -528,7 +527,6 @@ public class Control {
                     if ( count == tokens.size() - 1 )
                         break;
                 }
-                    
             }
             
         } else {
@@ -541,7 +539,6 @@ public class Control {
                 if ( count == tokens.size() - 1 )
                     break;
             }
-                
         }
     }
     
@@ -646,7 +643,7 @@ public class Control {
                 nextToken();
                 
                 if ( count == tokens.size() - 1 )
-                        break;
+                    break;
             }
         } 
     }
