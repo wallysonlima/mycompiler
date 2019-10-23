@@ -353,6 +353,7 @@ public class Main extends javax.swing.JFrame {
     private void menuItemSintaticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSintaticActionPerformed
         ArrayList<SintaticError> list; 
         String temp = "";
+        int i = 0;
         
         if ( textPaneAreaEdit.getText() != "" ) {
             if ( (list = control.analyseSintatic(textPaneAreaEdit.getText())).size() == 1 && list.get(0).getLine().equals("-1") ) {
@@ -361,7 +362,11 @@ public class Main extends javax.swing.JFrame {
             } else {
                 for (SintaticError s: list ) {
                     temp += s.getError() + "  /  Linha = " + s.getLine() + "\n";
-                    temp += "------------------------------------------------------------------------------------------------------------------------------------\n";
+                    
+                    if ( i % 2 != 0 )
+                        temp += "--------------------------------------------------------------------------------------------------------------------------------------------\n";
+                    
+                    i++;
                 }
                 
                 textAreaResult.setText(temp);
