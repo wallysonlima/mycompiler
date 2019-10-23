@@ -104,7 +104,8 @@ public class Control {
                 
                 } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
             
-            nextToken();
+            if ( !accept("Palavra_Reservada_Begin") )
+                nextToken();
             
             if ( accept("Palavra_Reservada_End") || count == tokens.size() - 1 ) {
                 count++;
@@ -658,7 +659,8 @@ public class Control {
             
            
         } else if ( accept("Fecha_Parenteses") )
-            nextToken(); //else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
+            nextToken();
+        
     }
     
     // Parse list of expression
