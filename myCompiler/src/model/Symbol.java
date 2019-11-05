@@ -10,5 +10,71 @@ package model;
  * @author wallysonlima
  */
 public class Symbol {
-    
+    private String lexeme, token, category, type, value, scope, isUsed;
+
+    public Symbol(String lexeme, String token, String category, String type, String value, String scope, String isUsed) {
+        this.lexeme = lexeme;
+        this.token = token;
+        this.category = category;
+        this.type = type;
+        this.value = value;
+        this.scope = scope;
+        this.isUsed = isUsed;
+    }
+
+    public String getLexeme() {
+        return lexeme;
+    }
+
+    public void setLexeme(String lexeme) {
+        this.lexeme = lexeme;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    public String getIsUsed() {
+        return isUsed;
+    }
+
+    public void setIsUsed(String isUsed) {
+        this.isUsed = isUsed;
+    }
 }
