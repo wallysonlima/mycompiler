@@ -702,13 +702,26 @@ public class Control {
     }
     
     // Insert a Symbol in the table
-    public boolean insertSymbol(Symbol symbol) {
+    public boolean insertSymbol(Symbol symbol, int level) {
         
         return false;
     }
     
     // Remove a Symbol in the table
-    public boolean removeSymbol(String lexem) {
+    public boolean removeSymbol(String lexeme, int level) {
+        ArrayList<Symbol> temp = new ArrayList<>();
+        
+        if ( level == 0 )
+           temp = globalList;
+        else
+           temp = internalList;
+        
+        for( Symbol s: temp )
+            if ( s.getLexeme().equals(lexeme) ) {
+                temp.remove(s);
+                
+                return true;
+            } 
         
         return false;
     }
