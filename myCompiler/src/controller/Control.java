@@ -703,6 +703,17 @@ public class Control {
     
     // Insert a Symbol in the table
     public boolean insertSymbol(Symbol symbol, int level) {
+        ArrayList<Symbol> temp = new ArrayList<>();
+        
+        if ( level == 0 )
+            temp = globalList;
+        else
+            temp = internalList;
+        
+        if ( searchSymbol(symbol.getLexeme(), level) == null ) {
+            temp.add(symbol);
+            return true;
+        } 
         
         return false;
     }
