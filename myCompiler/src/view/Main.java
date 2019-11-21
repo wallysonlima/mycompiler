@@ -59,6 +59,9 @@ public class Main extends javax.swing.JFrame {
         tabbedPaneResult = new javax.swing.JTabbedPane();
         jScrollPane3 = new javax.swing.JScrollPane();
         textAreaResult = new javax.swing.JTextArea();
+        tabbedPaneSemantic = new javax.swing.JTabbedPane();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        textAreaResultSemantic = new javax.swing.JTextArea();
         tabbedPaneEditor = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         textPaneAreaEdit = new javax.swing.JTextPane();
@@ -115,6 +118,14 @@ public class Main extends javax.swing.JFrame {
         tabbedPaneResult.addTab("Sintatic Analyse", jScrollPane3);
 
         tabbedLexical.addTab("Result Sintatic", tabbedPaneResult);
+
+        textAreaResultSemantic.setColumns(20);
+        textAreaResultSemantic.setRows(5);
+        jScrollPane4.setViewportView(textAreaResultSemantic);
+
+        tabbedPaneSemantic.addTab("Semantic Analyse", jScrollPane4);
+
+        tabbedLexical.addTab("ResultSemantic", tabbedPaneSemantic);
 
         tabbedLexical.setSelectedIndex(1);
 
@@ -388,6 +399,40 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void menuItemSemanticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSemanticActionPerformed
+        // Do Analyse Semantic
+        ArrayList<Error> list = new ArrayList<>();
+        String temp = "";
+        int i = 0;
+        
+        if ( !textPaneAreaEdit.getText().equals("") ) {
+            list = control.analyseSemantic(textPaneAreaEdit.getText());
+        
+            if ( list.size() == 1 && list.get(0).getLine().equals("-1") ) {
+                textAreaResultSemantic.setText("A Análise Semantica obteve sucesso !!\n Sem erros !!\n");
+                JOptionPane.showMessageDialog(null, "Análise Semantica realizada com sucesso ! Sem erros !");
+            } 
+            
+            else {
+                for (Error s: list ) {
+                        temp += s.getError() + "  /  Linha = " + s.getLine() + "\n";
+
+                        if ( i % 2 != 0 )
+                            temp += "---------------------------------------------------------------------------------------------------------------------------------------\n";
+
+                        i++;
+                    }
+
+                textAreaResult.setText(temp);
+
+                JOptionPane.showMessageDialog(null, "Análise Sintática obteve erros !");
+
+            }
+
+            tabbedLexical.setSelectedIndex(2);
+        }
+        
+        else 
+            JOptionPane.showMessageDialog(null, "Error ! Without Text ! You need fill the textArea !");
         
     }//GEN-LAST:event_menuItemSemanticActionPerformed
 
@@ -488,6 +533,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JMenu menuAnalyse;
     private javax.swing.JMenu menuFile;
@@ -500,9 +546,11 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTabbedPane tabbedPaneEditor;
     private javax.swing.JTabbedPane tabbedPaneResult;
+    private javax.swing.JTabbedPane tabbedPaneSemantic;
     private javax.swing.JTable tableLexical;
     private javax.swing.JTextArea textAreaLines;
     private javax.swing.JTextArea textAreaResult;
+    private javax.swing.JTextArea textAreaResultSemantic;
     private javax.swing.JTextPane textPaneAreaEdit;
     // End of variables declaration//GEN-END:variables
 }
