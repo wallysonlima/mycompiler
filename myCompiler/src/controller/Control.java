@@ -672,5 +672,10 @@ public class Control {
             expression();
         }
     }
+    
+    // ######################### --- Semantic Methods --- ###################################
+    /*public ArrayList<SemanticError> analyseSemantic(String textEdit) {
+        
+    }*/
 }
     

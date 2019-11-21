@@ -54,7 +54,7 @@ public class IU_About extends javax.swing.JFrame {
 
         jLabel6.setText("Wallyson Lima");
 
-        jLabel7.setText("William Lopez");
+        jLabel7.setText("William Lopes");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

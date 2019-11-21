@@ -6,7 +6,6 @@
 package view;
 
 import controller.Control;
-import java.awt.Color;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,10 +20,6 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
 import model.Analyse;
 import model.SintaticError;
 import model.TableCellRenderer;
@@ -37,7 +32,6 @@ public class Main extends javax.swing.JFrame {
     private Control control;
     private ArrayList<Analyse> listAnalyse;
     File file;
-    HashSet<String> hashWord;
     IU_About about;
     /**
      * Creates new form Main
@@ -48,7 +42,6 @@ public class Main extends javax.swing.JFrame {
         listAnalyse = new ArrayList<>();
         about = new IU_About();
         disableMenuItem();
-        //initializeReservedWord();
     }
 
     /**
@@ -79,6 +72,7 @@ public class Main extends javax.swing.JFrame {
         menuAnalyse = new javax.swing.JMenu();
         menuItemLexic = new javax.swing.JMenuItem();
         menuItemSintatic = new javax.swing.JMenuItem();
+        menuItemSemantic = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -188,6 +182,15 @@ public class Main extends javax.swing.JFrame {
             }
         });
         menuAnalyse.add(menuItemSintatic);
+
+        menuItemSemantic.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemSemantic.setText("Semantic");
+        menuItemSemantic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemSemanticActionPerformed(evt);
+            }
+        });
+        menuAnalyse.add(menuItemSemantic);
 
         jMenuBar1.add(menuAnalyse);
 
@@ -386,6 +389,10 @@ public class Main extends javax.swing.JFrame {
         about.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
+    private void menuItemSemanticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSemanticActionPerformed
+        
+    }//GEN-LAST:event_menuItemSemanticActionPerformed
+
     public void populateLexicalTable(ArrayList<Analyse> list)
     {
         DefaultTableModel model = (DefaultTableModel) tableLexical.getModel();
@@ -427,97 +434,18 @@ public class Main extends javax.swing.JFrame {
         return lines;
     }
     
-    public void initializeReservedWord()
-    {
-        hashWord = new HashSet<String>();
-        
-        hashWord.add("program");
-        hashWord.add("procedure");
-        hashWord.add("var");
-        hashWord.add("int");
-        hashWord.add("boolean");
-        hashWord.add("read");
-        hashWord.add("write");
-        hashWord.add("true");
-        hashWord.add("false");
-        hashWord.add("begin");
-        hashWord.add("end");
-        hashWord.add("if");
-        hashWord.add("while");
-        hashWord.add("do");
-        hashWord.add("else");
-        hashWord.add("then");
-        hashWord.add("div");
-        hashWord.add("and");
-        hashWord.add("or");
-        hashWord.add("not");
-    }
-    
-    public void setColorReservedWords()
-    {   
-        SimpleAttributeSet set = new SimpleAttributeSet();
-        StyleConstants.setBold(set, true);
-        StyleConstants.setItalic(set, true);
-        StyleConstants.setForeground(set, Color.CYAN);
-        Document doc = textPaneAreaEdit.getStyledDocument();
-        
-        try {
-            if ( textPaneAreaEdit.getText().contains("program") )
-                doc.insertString(doc.getLength(), "program", set);
-            if ( textPaneAreaEdit.getText().contains("procedure") )
-                doc.insertString(doc.getLength(), "procedure", set);
-            if ( textPaneAreaEdit.getText().contains("var") )
-                doc.insertString(doc.getLength(), "var", set);
-            if ( textPaneAreaEdit.getText().contains("int") )
-                doc.insertString(doc.getLength(), "int", set);
-            if ( textPaneAreaEdit.getText().contains("boolean") )
-                doc.insertString(doc.getLength(), "boolean", set);
-            if ( textPaneAreaEdit.getText().contains("read") )
-                doc.insertString(doc.getLength(), "read", set);
-            if ( textPaneAreaEdit.getText().contains("write") )
-                doc.insertString(doc.getLength(), "write", set);
-            if ( textPaneAreaEdit.getText().contains("true") )
-                doc.insertString(doc.getLength(), "true", set);
-            if ( textPaneAreaEdit.getText().contains("false") )
-                doc.insertString(doc.getLength(), "false", set);
-            if ( textPaneAreaEdit.getText().contains("begin") )
-                doc.insertString(doc.getLength(), "begin", set);
-            if ( textPaneAreaEdit.getText().contains("end") )
-                doc.insertString(doc.getLength(), "end", set);
-            if ( textPaneAreaEdit.getText().contains("if") )
-                doc.insertString(doc.getLength(), "if", set);
-            if ( textPaneAreaEdit.getText().contains("while") )
-                doc.insertString(doc.getLength(), "while", set);
-            if ( textPaneAreaEdit.getText().contains("do") )
-                doc.insertString(doc.getLength(), "do", set);
-            if ( textPaneAreaEdit.getText().contains("else") )
-                doc.insertString(doc.getLength(), "else", set);
-            if ( textPaneAreaEdit.getText().contains("then") )
-                doc.insertString(doc.getLength(), "then", set);
-            if ( textPaneAreaEdit.getText().contains("div") )
-                doc.insertString(doc.getLength(), "div", set);
-            if ( textPaneAreaEdit.getText().contains("and") )
-                doc.insertString(doc.getLength(), "and", set);
-            if ( textPaneAreaEdit.getText().contains("or") )
-                doc.insertString(doc.getLength(), "or", set);
-            if ( textPaneAreaEdit.getText().contains("not") )
-                doc.insertString(doc.getLength(), "not", set);
-            
-        } catch (BadLocationException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
     public void disableMenuItem() {
         menuItemLexic.setEnabled(false);
         menuItemSave.setEnabled(false);
         menuItemSintatic.setEnabled(false);
+        menuItemSemantic.setEnabled(false);
     }
     
     public void enableMenuItem() {
         menuItemLexic.setEnabled(true);
         menuItemSave.setEnabled(true);
         menuItemSintatic.setEnabled(true);
+        menuItemSemantic.setEnabled(true);
     }
     
     /**
@@ -569,6 +497,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemLexic;
     private javax.swing.JMenuItem menuItemOpen;
     private javax.swing.JMenuItem menuItemSave;
+    private javax.swing.JMenuItem menuItemSemantic;
     private javax.swing.JMenuItem menuItemSintatic;
     private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTabbedPane tabbedPaneEditor;
