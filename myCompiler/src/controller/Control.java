@@ -15,6 +15,7 @@ import javax.swing.JOptionPane;
 import model.Analyse;
 import model.LexicalAnalyzer;
 import model.Error;
+import model.Symbol;
 
 /**
  *
@@ -674,8 +675,27 @@ public class Control {
     }
     
     // ######################### --- Semantic Methods --- ###################################
-    /*public ArrayList<SemanticError> analyseSemantic(String textEdit) {
+    public ArrayList<Error> analyseSemantic(String textEdit) {
         
-    }*/
+        return null;
+    }
+    
+    // Search for a existent symbol in the table
+    public Symbol searchSymbol(String lexeme) {
+        
+        return null;
+    }
+    
+    // Insert a Symbol in the table
+    public boolean insertSymbol(Symbol symbol) {
+        
+        return false;
+    }
+    
+    // Remove a Symbol in the table
+    public boolean removeSymbol(String lexem) {
+        
+        return false;
+    }
 }
     

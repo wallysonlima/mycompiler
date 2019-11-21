@@ -198,8 +198,8 @@
         <Container class="javax.swing.JTabbedPane" name="tabbedPaneResult">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Result">
-                <Property name="tabTitle" type="java.lang.String" value="Result"/>
+              <JTabbedPaneConstraints tabName="Result Sintatic">
+                <Property name="tabTitle" type="java.lang.String" value="Result Sintatic"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>

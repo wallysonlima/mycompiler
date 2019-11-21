@@ -114,7 +114,7 @@ public class Main extends javax.swing.JFrame {
 
         tabbedPaneResult.addTab("Sintatic Analyse", jScrollPane3);
 
-        tabbedLexical.addTab("Result", tabbedPaneResult);
+        tabbedLexical.addTab("Result Sintatic", tabbedPaneResult);
 
         tabbedLexical.setSelectedIndex(1);
 
@@ -296,8 +296,6 @@ public class Main extends javax.swing.JFrame {
 
     private void menuItemLexicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemLexicActionPerformed
         // Do Analyse Lexic
-        //JOptionPane.showMessageDialog(null, "Entrou aqui !");
-        
         if ( textPaneAreaEdit.getText() != "" )
             listAnalyse = control.analyseLexic(textPaneAreaEdit.getText());
         else
