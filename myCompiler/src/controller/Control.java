@@ -26,8 +26,13 @@ public class Control {
     ArrayList<Analyse> tokens;
     ArrayList<Error> list;
     int count;
+    ArrayList<Symbol> globalList; 
+        ArrayList<Symbol> internalList;
     
-    public void Control() {}
+    public void Control() {
+        globalList = new ArrayList<>();
+        internalList = new ArrayList<>();
+    }
     
     // Do the analyse lexic
     public ArrayList<Analyse> analyseLexic(String textEdit)
@@ -676,12 +681,15 @@ public class Control {
     
     // ######################### --- Semantic Methods --- ###################################
     public ArrayList<Error> analyseSemantic(String textEdit) {
-        
+        int level = 0;
         return null;
     }
     
     // Search for a existent symbol in the table
-    public Symbol searchSymbol(String lexeme) {
+    public Symbol searchSymbol(String lexeme, int level) {
+        
+        
+        
         
         return null;
     }
