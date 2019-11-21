@@ -687,9 +687,16 @@ public class Control {
     
     // Search for a existent symbol in the table
     public Symbol searchSymbol(String lexeme, int level) {
+        ArrayList<Symbol> temp = new ArrayList<>();
         
-        
-        
+        if ( level == 0 )
+            temp = globalList;
+        else
+            temp = internalList;
+       
+        for( Symbol s: temp )
+            if ( s.getLexeme().equals(lexeme) )
+                return s;
         
         return null;
     }
