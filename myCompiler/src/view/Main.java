@@ -21,7 +21,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Analyse;
-import model.SintaticError;
+import model.Error;
 import model.TableCellRenderer;
 
 /**
@@ -354,7 +354,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemSaveActionPerformed
 
     private void menuItemSintaticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSintaticActionPerformed
-        ArrayList<SintaticError> list; 
+        ArrayList<Error> list; 
         String temp = "";
         int i = 0;
         
@@ -363,7 +363,7 @@ public class Main extends javax.swing.JFrame {
                 textAreaResult.setText("A Análise Sintática obteve sucesso !!\n Sem erros !!\n");
                 JOptionPane.showMessageDialog(null, "Análise Sintática realizada com sucesso ! Sem erros !");
             } else {
-                for (SintaticError s: list ) {
+                for (Error s: list ) {
                     temp += s.getError() + "  /  Linha = " + s.getLine() + "\n";
                     
                     if ( i % 2 != 0 )

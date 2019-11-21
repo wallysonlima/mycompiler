@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Analyse;
 import model.LexicalAnalyzer;
-import model.SintaticError;
+import model.Error;
 
 /**
  *
@@ -23,7 +23,7 @@ import model.SintaticError;
 public class Control {
     int MAX = 15;
     ArrayList<Analyse> tokens;
-    ArrayList<SintaticError> list;
+    ArrayList<Error> list;
     int count;
     
     public void Control() {}
@@ -81,14 +81,14 @@ public class Control {
     }
     
     // Do the Analyse Sintatic
-    public ArrayList<SintaticError> analyseSintatic(String textEdit) {
+    public ArrayList<Error> analyseSintatic(String textEdit) {
         // Do the Lexic Analyse
         tokens = analyseLexic(textEdit);
         list = new ArrayList<>();
         count = 0;
         
         if ( tokens.isEmpty() ) {
-            list.add( new SintaticError( "0", "Erro ! Não possui tokens para ser feita a análise sintática !") );
+            list.add(new Error( "0", "Erro ! Não possui tokens para ser feita a análise sintática !") );
             return list;
         }
         
@@ -98,11 +98,11 @@ public class Control {
                 if ( accept("Palavra_Reservada_Program") ) {
                     if ( expect("Identificador") ) {
                         if ( !expect("Ponto_Virgula") ) 
-                            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O próximo token precisa ser ';'") );
+                            list.add(new Error( tokens.get(count).getLine(), "Erro ! O próximo token precisa ser ';'") );
                 
-                    } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O próximo token precisa ser um 'Identificador (int, boolean)'") );
+                    } else list.add(new Error( tokens.get(count).getLine(), "Erro ! O próximo token precisa ser um 'Identificador (int, boolean)'") );
                 
-                } else list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
+                } else list.add(new Error( tokens.get(count).getLine(), "Erro ! O programa precisa inicializar com a palavra reservada 'program' ") );
             
             if ( !accept("Palavra_Reservada_Begin") )
                 nextToken();
@@ -116,7 +116,7 @@ public class Control {
         }
 
         if ( list.size() == 0 )
-            list.add( new SintaticError( "-1", "Sucesso ! A análise sintática obteve sucesso !" ) );
+            list.add(new Error( "-1", "Sucesso ! A análise sintática obteve sucesso !" ) );
         
         return list;
     }
@@ -183,8 +183,8 @@ public class Control {
             
         else {
             if ( !accept("Ponto_Virgula") ) {
-                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado a palavra reservada 'begin'/'procedure'/'int'/'boolean' !") );
-                list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' !") );
+                list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado a palavra reservada 'begin'/'procedure'/'int'/'boolean' !") );
+                list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' !") );
 
                 while( !accept("PONTO_VIRGULA") ) {
                     nextToken();
@@ -207,7 +207,7 @@ public class Control {
         previousToken();
         
         if ( !accept("Ponto_Virgula") ) {
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") ); 
+            list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") ); 
             nextToken();
         }
         
@@ -230,8 +230,8 @@ public class Control {
                 identList();
             }
         } else {
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado um 'Identificador' !") );
-            list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | ':' !") );
+            list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado um 'Identificador' !") );
+            list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | ':' !") );
             
             while ( !accept("Ponto_Virgula") || !accept("DOIS_PONTOS") ) {
                 nextToken();
@@ -247,7 +247,7 @@ public class Control {
             procedureDeclaration();
             
             if ( !accept("Ponto_Virgula") && !accept("Palavra_Reservada_End") && !accept("Palavra_Reservada_Begin") ) {
-                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );
+                list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );
                 nextToken();
             }
         }
@@ -263,7 +263,7 @@ public class Control {
                         nextToken();
                         block();
                     } else {
-                        list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );
+                        list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );
                         nextToken();
                     } 
                 }
@@ -272,7 +272,7 @@ public class Control {
                     nextToken();
                     block();
                 } else {
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );
+                    list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ';' !") );
                     nextToken();
                 } 
             }
@@ -290,8 +290,8 @@ public class Control {
             }
             
             if ( !accept("Fecha_Parenteses") ) {
-                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ')' !") ); 
-                list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
+                list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ')' !") ); 
+                list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
                 
                 while ( !accept("Ponto_Virgula") ) {
                     nextToken();
@@ -312,8 +312,8 @@ public class Control {
                 nextToken();
                 
                 if ( !accept("Palavra_Reservada_Int") && !accept("Palavra_Reservada_Boolean")  ) {
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
+                    list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
+                    list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
                 
                     while ( !accept("Ponto_Virgula") ) {
                         nextToken();
@@ -324,8 +324,8 @@ public class Control {
                 }
                 
             } else {
-                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ':' !") );
-                list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' !") );
+                list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ':' !") );
+                list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' !") );
                 
                 while ( !accept("Ponto_Virgula") ) {
                     nextToken();
@@ -342,8 +342,8 @@ public class Control {
                 nextToken();
                 
                 if ( !accept("Identificador") ) {
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
+                    list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado 'Identificador' !") );
+                    list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
                 
                     while ( !accept("Ponto_Virgula") ) {
                         nextToken();
@@ -354,8 +354,8 @@ public class Control {
                 }
             
             } else {
-                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ':' !") );
-                list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
+                list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado o símbolo ':' !") );
+                list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
                 
                     while ( !accept("Ponto_Virgula") ) {
                         nextToken();
@@ -377,8 +377,8 @@ public class Control {
                 condition();
                 
                 if ( !accept("Palavra_Reservada_End") && !accept("Ponto_Virgula") && !accept("Palavra_Reservada_Begin")) {
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'end' !") );
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
+                    list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'end' !") );
+                    list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
                 
                     while ( !accept("Ponto_Virgula") ) {
                         nextToken();
@@ -389,8 +389,8 @@ public class Control {
                 }
             }
         } else {
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'begin' !") );
-            list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
+            list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'begin' !") );
+            list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
                 
             while ( !accept("Ponto_Virgula") ) {
                 nextToken();
@@ -416,8 +416,8 @@ public class Control {
             conditionLoop();
         
         } else {
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado algum 'comando' !") );
-            list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
+            list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado algum 'comando' !") );
+            list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
                 
             while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                 nextToken();
@@ -441,8 +441,8 @@ public class Control {
         }
         
         else {
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado o operador ':=' !") );
-            list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
+            list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado o operador ':=' !") );
+            list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
                 
             while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                 nextToken();
@@ -460,8 +460,8 @@ public class Control {
                 listExpression();
                 
                 if ( !expect("Fecha_Parenteses") ) {
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado ')' !") );
-                    list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
+                    list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado ')' !") );
+                    list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
                 
                     while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                         nextToken();
@@ -472,8 +472,8 @@ public class Control {
                 }
                 
             } else{
-                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado '(' !") );
-                list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
+                list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado '(' !") );
+                list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
                 
                 while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                     nextToken();
@@ -484,8 +484,8 @@ public class Control {
             }
             
         } else {
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado um 'Identificador' !") );
-            list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
+            list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado um 'Identificador' !") );
+            list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
                 
             while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                 nextToken();
@@ -519,8 +519,8 @@ public class Control {
                     condition();
                 } 
             } else {
-                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'then' !") );
-                list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
+                list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'then' !") );
+                list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
                 
                 while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                     nextToken();
@@ -531,8 +531,8 @@ public class Control {
             }
             
         } else {
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'if' !") );
-            list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
+            list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'if' !") );
+            list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
                 
             while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                 nextToken();
@@ -558,8 +558,8 @@ public class Control {
                 nextToken();
             
         } else {
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'while' !") );
-            list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
+            list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado palavra reservada 'while' !") );
+            list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';' | 'end' | 'else'!") );
                 
             while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                 nextToken();
@@ -621,8 +621,8 @@ public class Control {
             expression();
             
             if ( !accept("Fecha_Parenteses") && !accept("Palavra_Reservada_Begin") && !accept("Palavra_Reservada_Then") ) {
-                list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado ')' !") );
-                list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
+                list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado ')' !") );
+                list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
                 
                 while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                     nextToken();
@@ -637,8 +637,8 @@ public class Control {
             factor();
             
         } else {
-            list.add( new SintaticError( tokens.get(count).getLine(), "Erro ! Esperado um fator !") );
-            list.add( new SintaticError( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
+            list.add(new Error( tokens.get(count).getLine(), "Erro ! Esperado um fator !") );
+            list.add(new Error( tokens.get(count).getLine(), "Realizado o tratamento de erros ! Ignorar tokens até encontrar ';'!") );
                 
             while ( !accept("Ponto_Virgula") || !accept("Palavra_Reservada_End") || !accept("Palavra_Reservada_Else") ) {
                 nextToken();

@@ -10,12 +10,12 @@ package model;
  * @author wallysonlima
  */
 
-public class SintaticError {
+public class Error {
     private String line, error;
     
-    public SintaticError() {}
+    public Error() {}
 
-    public SintaticError(String line, String error) {
+    public Error(String line, String error) {
         this.line = line;
         this.error = error;
     }
