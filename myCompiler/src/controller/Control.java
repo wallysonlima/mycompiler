@@ -684,6 +684,9 @@ public class Control {
         int level;
         ArrayList<Error> errorList;
         level = count = 0;
+        String category = "";
+        String type = "";
+        String value = "";
         
         // Verify if sintatic analyse is ok, if yes, clean the errorList and do the semantic analyse
         if ( (errorList = analyseSintatic(textEdit)).size() == 1 && list.get(0).getLine().equals("-1") ) {
@@ -693,12 +696,18 @@ public class Control {
                 if ( accept("Palavra_Reservada_Procedure") )
                     level++;
                 
-                /*if ( searchSymbol(tokens.get(count).getLexeme(), level) == null ) {
-                    if ( level == 0 ) 
+                if ( searchSymbol(tokens.get(count).getLexeme(), level) == null ) {
+                    category = setCategory(tokens.get(count).getToken());
+                    
+                    if ( category.equals("Variavel") ) {
+                        
+                    }
+                  
+                    /*if ( level == 0 ) 
                         globalList.add( new Symbol(tokens.get(count).getLexeme(), tokens.get(count).getToken(), ) )
+                    */
                     
-                    
-                }*/
+                }
 
                 count++;
             }
@@ -800,6 +809,17 @@ public class Control {
             default:
                 return "--------------";
         }
+    }
+    
+    public String setType(int count, int level) {  
+        for ( int i = count; i > 0; i-- ) {
+            if ( tokens.get(i).getToken().equals("Palavra_Reservada_Int") )
+                return "Inteiro";
+            else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Boolean") )
+                return "Booleano";
+        }
+        
+        return "";       
     }
 }
     
