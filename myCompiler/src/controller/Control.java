@@ -681,7 +681,34 @@ public class Control {
     
     // ######################### --- Semantic Methods --- ###################################
     public ArrayList<Error> analyseSemantic(String textEdit) {
-        int level = 0;
+        int level;
+        ArrayList<Error> errorList;
+        level = count = 0;
+        
+        // Verify if sintatic analyse is ok, if yes, clean the errorList and do the semantic analyse
+        if ( (errorList = analyseSintatic(textEdit)).size() == 1 && list.get(0).getLine().equals("-1") ) {
+            errorList = new ArrayList<>();
+            
+            while ( count < tokens.size() ) {
+                if ( accept("Palavra_Reservada_Procedure") )
+                    level++;
+                
+                /*if ( searchSymbol(tokens.get(count).getLexeme(), level) == null ) {
+                    if ( level == 0 ) 
+                        globalList.add( new Symbol(tokens.get(count).getLexeme(), tokens.get(count).getToken(), ) )
+                    
+                    
+                }*/
+
+                count++;
+            }
+            
+            
+        } 
+        // Return the errorList with sintatic errors
+        else {
+            return errorList;
+        }
         return null;
     }
     
@@ -735,6 +762,44 @@ public class Control {
             } 
         
         return false;
+    }
+    
+    public String setCategory(String token) {
+        switch(token) {
+            case "Palavra_Reservada_Program":
+                return "Palavra que inicia o programa";
+               
+            case "Identificador":
+                return "Variavel";
+                
+            case "Palavra_Reservada_Procedure":
+                return "Funcao do programa";
+                
+            case "Palavra_Reservada_Begin":
+                return "Inicio de um bloco";
+                
+            case "Palavra_Reservada_End":
+                return "Final de um bloco";
+                
+            case "Palavra_Reservada_If":
+                return "Condicional";
+                
+            case "Palavra_Reservada_Read":
+                return "Leitor";
+                
+            case "Palavra_Reservada_Write":
+                return "Escrita";
+                
+            case "Palavra_Reservada_While":
+                return "Laco de Repeticao";
+                
+            case "Palavra_Reservada_Int":
+            case "Palavra_Reservada_Boolean":
+                return "Tipo de variavel";
+                
+            default:
+                return "--------------";
+        }
     }
 }
     
