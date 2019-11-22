@@ -404,7 +404,7 @@ public class Main extends javax.swing.JFrame {
         int i = 0;
         
         if ( !textPaneAreaEdit.getText().equals("") ) {
-            list = control.analyseSemantic(textPaneAreaEdit.getText());
+            list = control.createSemanticTable(textPaneAreaEdit.getText());
         
             if ( list.size() == 1 && list.get(0).getLine().equals("-1") ) {
                 textAreaResultSemantic.setText("A Análise Semantica obteve sucesso !!\n Sem erros !!\n");

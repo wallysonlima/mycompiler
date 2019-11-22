@@ -27,11 +27,11 @@ public class Control {
     ArrayList<Error> list;
     int count;
     ArrayList<Symbol> globalList; 
-        ArrayList<Symbol> internalList;
+        ArrayList<Symbol> localList;
     
     public void Control() {
         globalList = new ArrayList<>();
-        internalList = new ArrayList<>();
+        localList = new ArrayList<>();
     }
     
     // Do the analyse lexic
@@ -681,11 +681,20 @@ public class Control {
     
     // ######################### --- Semantic Methods --- ###################################
     public ArrayList<Error> analyseSemantic(String textEdit) {
+        ArrayList<Error> errorList = createSemanticTable(textEdit);
+       
+        if ( errorList == null )
+            return errorList;
+        
+        return null;
+    }
+    
+    public ArrayList<Error> createSemanticTable(String textEdit) {
         int level;
         ArrayList<Error> errorList;
         level = count = 0;
-        String category, type, value, scope, isUsed;
-        Symbol temp = null;
+        String category, type, value, scope, isUsed, line;
+        Symbol symbol = null;
         
         // Verify if sintatic analyse is ok, if yes, clean the errorList and do the semantic analyse
         if ( (errorList = analyseSintatic(textEdit)).size() == 1 && list.get(0).getLine().equals("-1") ) {
@@ -697,21 +706,37 @@ public class Control {
                 if ( accept("Palavra_Reservada_Procedure") )
                     level++;
                 
-                if ( (temp = searchSymbol(tokens.get(count).getLexeme(), level)) == null ) {
+                if ( (symbol = searchSymbol(tokens.get(count).getLexeme(), level)) == null ) {
                     category = setCategory(tokens.get(count).getToken());
                     scope = setScope( tokens.get(count).getLexeme(), level);
+                    line = tokens.get(count).getLine();
                     isUsed = "N";
                     
                     if ( category.equals("Variavel") )
-                        type = setType(count);
+                        type = setType(count, tokens.get(count).getLine());
                   
                     if ( level == 0 ) 
                         globalList.add(
-                          new Symbol(tokens.get(count).getLexeme(), tokens.get(count).getToken(), category, type, value, scope, isUsed) );
+                          new Symbol(tokens.get(count).getLexeme(), tokens.get(count).getToken(), category, type, value, scope, isUsed, line) );
+                
+                    else
+                        localList.add(
+                          new Symbol(tokens.get(count).getLexeme(), tokens.get(count).getToken(), category, type, value, scope, isUsed, line) );
                 }
                 
                 else {
-                    
+                    if ( symbol.getToken().equals("Identificador") && tokens.get(count+1).getToken().equals("Operador_Igual") ) {
+                        if ( tokens.get(count+2).getToken().equals("Inteiro") )
+                            symbol.setValue(tokens.get(count+2).getLexeme() + ":Inteiro" );
+                        else if ( tokens.get(count+2).getToken().equals("Real") )
+                            symbol.setValue(tokens.get(count+2).getLexeme() + ":Real" );
+                        else if ( tokens.get(count+2).getToken().equals("Palavra_Reservada_True") || tokens.get(count+2).getToken().equals("Palavra_Reservada_False") )
+                            symbol.setValue(tokens.get(count+2).getLexeme() + ":Booleano" );
+                        else
+                            symbol.setValue(tokens.get(count+2).getLexeme() + ":Expressao" );
+                        
+                        symbol.setIsUsed("S");
+                    }
                 }
 
                 count++;
@@ -723,6 +748,7 @@ public class Control {
         else {
             return errorList;
         }
+        
         return null;
     }
     
@@ -733,7 +759,7 @@ public class Control {
         if ( level == 0 )
             temp = globalList;
         else
-            temp = internalList;
+            temp = localList;
        
         for( Symbol s: temp )
             if ( s.getLexeme().equals(lexeme) )
@@ -749,7 +775,7 @@ public class Control {
         if ( level == 0 )
             temp = globalList;
         else
-            temp = internalList;
+            temp = localList;
         
         if ( searchSymbol(symbol.getLexeme(), level) == null ) {
             temp.add(symbol);
@@ -766,7 +792,7 @@ public class Control {
         if ( level == 0 )
            temp = globalList;
         else
-           temp = internalList;
+           temp = localList;
         
         for( Symbol s: temp )
             if ( s.getLexeme().equals(lexeme) ) {
@@ -816,15 +842,20 @@ public class Control {
         }
     }
     
-    public String setType(int count) {  
+    public String setType(int count, String line) {  
         for ( int i = count; i > 0; i-- ) {
-            if ( tokens.get(i).getToken().equals("Palavra_Reservada_Int") )
-                return "Inteiro";
-            else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Boolean") )
-                return "Booleano";
+            if ( tokens.get(i).getLine().equals(line) ) {
+                if ( tokens.get(i).getToken().equals("Palavra_Reservada_Int") )
+                    return "Inteiro";
+                else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Boolean") )
+                    return "Booleano";
+            }
+            
+            else
+                break;
         }
         
-        return "";       
+        return null;
     }
     
     public String setScope(String lexeme, int level) {

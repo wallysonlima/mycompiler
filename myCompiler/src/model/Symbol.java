@@ -10,9 +10,9 @@ package model;
  * @author wallysonlima
  */
 public class Symbol {
-    private String lexeme, token, category, type, value, scope, isUsed;
+    private String lexeme, token, category, type, value, scope, isUsed, line;
 
-    public Symbol(String lexeme, String token, String category, String type, String value, String scope, String isUsed) {
+    public Symbol(String lexeme, String token, String category, String type, String value, String scope, String isUsed, String line) {
         this.lexeme = lexeme;
         this.token = token;
         this.category = category;
@@ -20,6 +20,7 @@ public class Symbol {
         this.value = value;
         this.scope = scope;
         this.isUsed = isUsed;
+        this.line = line;
     }
 
     public String getLexeme() {
@@ -76,5 +77,13 @@ public class Symbol {
 
     public void setIsUsed(String isUsed) {
         this.isUsed = isUsed;
+    }
+
+    public String getLine() {
+        return line;
+    }
+
+    public void setLine(String line) {
+        this.line = line;
     }
 }
