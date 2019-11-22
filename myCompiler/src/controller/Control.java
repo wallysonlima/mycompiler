@@ -699,12 +699,8 @@ public class Control {
                 
                 if ( (temp = searchSymbol(tokens.get(count).getLexeme(), level)) == null ) {
                     category = setCategory(tokens.get(count).getToken());
+                    scope = setScope( tokens.get(count).getLexeme(), level);
                     isUsed = "N";
-                    
-                    if ( level == 0 )
-                        scope = "Global";
-                    else
-                        scope = "Interno";
                     
                     if ( category.equals("Variavel") )
                         type = setType(count);
@@ -829,6 +825,17 @@ public class Control {
         }
         
         return "";       
+    }
+    
+    public String setScope(String lexeme, int level) {
+        if ( lexeme.equals("procedure") )
+            return "Procedimento";
+        else if ( lexeme.equals("a1") )
+            return "Parametro";
+        else if ( level == 0 )
+            return "Global";
+        else
+            return "Local";
     }
 }
     
