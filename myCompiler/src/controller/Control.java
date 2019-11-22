@@ -684,28 +684,37 @@ public class Control {
         int level;
         ArrayList<Error> errorList;
         level = count = 0;
-        String category = "";
-        String type = "";
-        String value = "";
+        String category, type, value, scope, isUsed;
+        Symbol temp = null;
         
         // Verify if sintatic analyse is ok, if yes, clean the errorList and do the semantic analyse
         if ( (errorList = analyseSintatic(textEdit)).size() == 1 && list.get(0).getLine().equals("-1") ) {
             errorList = new ArrayList<>();
             
             while ( count < tokens.size() ) {
+                category = type = value = scope = isUsed = "";
+                
                 if ( accept("Palavra_Reservada_Procedure") )
                     level++;
                 
-                if ( searchSymbol(tokens.get(count).getLexeme(), level) == null ) {
+                if ( (temp = searchSymbol(tokens.get(count).getLexeme(), level)) == null ) {
                     category = setCategory(tokens.get(count).getToken());
+                    isUsed = "N";
                     
-                    if ( category.equals("Variavel") ) {
-                        
-                    }
+                    if ( level == 0 )
+                        scope = "Global";
+                    else
+                        scope = "Interno";
+                    
+                    if ( category.equals("Variavel") )
+                        type = setType(count);
                   
-                    /*if ( level == 0 ) 
-                        globalList.add( new Symbol(tokens.get(count).getLexeme(), tokens.get(count).getToken(), ) )
-                    */
+                    if ( level == 0 ) 
+                        globalList.add(
+                          new Symbol(tokens.get(count).getLexeme(), tokens.get(count).getToken(), category, type, value, scope, isUsed) );
+                }
+                
+                else {
                     
                 }
 
@@ -811,7 +820,7 @@ public class Control {
         }
     }
     
-    public String setType(int count, int level) {  
+    public String setType(int count) {  
         for ( int i = count; i > 0; i-- ) {
             if ( tokens.get(i).getToken().equals("Palavra_Reservada_Int") )
                 return "Inteiro";
