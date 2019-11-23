@@ -693,7 +693,7 @@ public class Control {
         // Append the errorList in only one list
         errorList.addAll(globalError);
         
-        if ( errorList.size() > 0 ) {
+        if ( errorList.size() == 0 ) {
             errorList.add(new Error("-1", "Nenhum erro obtido, analise semantica feita com sucesso !"));
             return errorList;
         } else 
@@ -701,8 +701,28 @@ public class Control {
     }
     
     public ArrayList<Error> findSemanticErrors(int level) {
+        ArrayList<Symbol> temp;
+        ArrayList<Error> errorList = new ArrayList<>();
+        String lexeme = "";
         
+        if ( level == 0 )
+            temp = globalList;
+        else
+            temp = localList;
         
+        for( int i = 0; i < temp.size(); i++ )
+        {
+            lexeme = temp.get(i).getLexeme();
+            
+            if ( temp.get(i).getCategory().equals("Variavel") ) {
+                if ( !isDeclared(temp.get(i)) ) 
+                    errorList.add(new Error(temp.get(i).getLine(), "Erro ! Variavel nunca é declarada: " + temp.get(i).getLexeme() + " ! ") );
+                else if ( (level == 0 && searchSymbol(lexeme, 1) != null) || (level == 1) && searchSymbol(lexeme, 0) != null)
+                    errorList.add(new Error(temp.get(i).getLine(), "Erro ! Escopo inadequado: " + temp.get(i).getLexeme() + " ! ") );
+            }                        
+        }
+        
+        return null;
     }
     
     public ArrayList<Error> createSemanticTable(String textEdit) {
