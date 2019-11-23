@@ -719,6 +719,24 @@ public class Control {
                     errorList.add(new Error(temp.get(i).getLine(), "Erro ! Variavel nunca é declarada: " + temp.get(i).getLexeme() + " ! ") );
                 else if ( (level == 0 && searchSymbol(lexeme, 1) != null) || (level == 1) && searchSymbol(lexeme, 0) != null)
                     errorList.add(new Error(temp.get(i).getLine(), "Erro ! Escopo inadequado: " + temp.get(i).getLexeme() + " ! ") );
+            
+                int position = Integer.parseInt(temp.get(i).getPosition());
+                
+                if ( tokens.get(position+1).getToken().equals("Operador_Igual") ) {
+                    if ( temp.get(i).getType().equals("Inteiro") ) 
+                        if ( tokens.get(position+2).getToken().equals("Palavra_Reservada_True") || (tokens.get(position+2).getToken().equals("Palavra_Reservada_False") ) )
+                            errorList.add(new Error(temp.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
+                    
+                        String[] aux = tokens.get(i).getLexeme().split(":");
+                        
+                        if ( aux[1].equals("Expressao") )
+                            while( temp.get(i).getLine().equals( tokens.get(position).getLine() ) ) {
+                               
+                                
+                                position++;
+                            }
+                }
+            
             }                        
         }
         
