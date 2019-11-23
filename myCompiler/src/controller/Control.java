@@ -737,8 +737,18 @@ public class Control {
                         
                         symbol.setIsUsed("S");
                         
-                        if ( isDeclared(symbol.getLexeme(), symbol.getLine(), level) )
-                            errorList.add(new Error(symbol.getLine(), "Erro ! Variavel já declarada !"));
+                        if ( isDeclared(symbol) ) {
+                            int position = Integer.parseInt(symbol.getPosition());
+                            
+                            while ( symbol.getLine().equals( tokens.get(position).getLine()) ) {
+                                if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") ) {
+                                    errorList.add(new Error(symbol.getLine(), "Erro ! Variavel já declarada !"));
+                                    break;
+                                }
+
+                                position--;
+                            }
+                        }
                     }
                 }
 
@@ -755,26 +765,15 @@ public class Control {
     }
     
     // Verify if the variable is declared   
-    public boolean isDeclared(String lexeme, String line, int level) {
-        ArrayList<Symbol> temp;
-        
-        if ( level == 0 )
-            temp = globalList;
-        else
-            temp = localList;
-        
-        for ( Symbol s: temp ) {
-            if ( s.getLexeme().equals(lexeme) ) {
-                int position = Integer.parseInt(s.getPosition());
-                
-                while ( s.getLine().equals( tokens.get(position).getLine()) ) {
-                    if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") )
-                        return true;
-                    
-                    position--;
-                }
-            }
-        } 
+    public boolean isDeclared(Symbol symbol) {
+        int position = Integer.parseInt(symbol.getPosition());
+
+        while ( symbol.getLine().equals( tokens.get(position).getLine()) ) {
+            if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") )
+                return true;
+
+            position--;
+        }
         
         return false;
     }
