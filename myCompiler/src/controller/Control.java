@@ -706,7 +706,7 @@ public class Control {
                 if ( accept("Palavra_Reservada_Procedure") )
                     level++;
                 
-                if ( (symbol = searchSymbol(tokens.get(count).getLexeme(), tokens.get(count).getLine(), level)) == null ) {
+                if ( (symbol = searchSymbol(tokens.get(count).getLexeme(), level)) == null ) {
                     category = setCategory(tokens.get(count).getToken());
                     scope = setScope( tokens.get(count).getLexeme(), level);
                     line = tokens.get(count).getLine();
@@ -756,23 +756,31 @@ public class Control {
     
     // Verify if the variable is declared   
     public boolean isDeclared(String lexeme, String line, int level) {
-        Symbol symbol = searchSymbol(lexeme, line, level);
-        int position = Integer.parseInt(symbol.getPosition());
+        ArrayList<Symbol> temp;
         
-        if ( symbol != null ) {
-            while( symbol.getLine() == tokens.get(position).getLine() ) {
-                if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") )
-                    return true;
+        if ( level == 0 )
+            temp = globalList;
+        else
+            temp = localList;
+        
+        for ( Symbol s: temp ) {
+            if ( s.getLexeme().equals(lexeme) ) {
+                int position = Integer.parseInt(s.getPosition());
                 
-                position--;
+                while ( s.getLine().equals( tokens.get(position).getLine()) ) {
+                    if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") )
+                        return true;
+                    
+                    position--;
+                }
             }
-        }
+        } 
         
         return false;
     }
     
     // Search for a existent symbol in the table
-    public Symbol searchSymbol(String lexeme, String line, int level) {
+    public Symbol searchSymbol(String lexeme, int level) {
         ArrayList<Symbol> temp = new ArrayList<>();
         
         if ( level == 0 )
@@ -781,7 +789,7 @@ public class Control {
             temp = localList;
        
         for( Symbol s: temp )
-            if ( s.getLexeme().equals(lexeme) && s.getLine().equals(line) )
+            if ( s.getLexeme().equals(lexeme) )
                 return s;
         
         return null;
@@ -796,7 +804,7 @@ public class Control {
         else
             temp = localList;
         
-        if ( searchSymbol(symbol.getLexeme(), line,  level) == null ) {
+        if ( searchSymbol(symbol.getLexeme(),  level) == null ) {
             temp.add(symbol);
             return true;
         } 
@@ -805,7 +813,7 @@ public class Control {
     }
     
     // Remove a Symbol in the table
-    public boolean removeSymbol(String lexeme, String line, int level) {
+    public boolean removeSymbol(String lexeme, int level) {
         ArrayList<Symbol> temp = new ArrayList<>();
         
         if ( level == 0 )
@@ -814,7 +822,7 @@ public class Control {
            temp = localList;
         
         for( Symbol s: temp )
-            if ( s.getLexeme().equals(lexeme) && s.getLine().equals(line) ) {
+            if ( s.getLexeme().equals(lexeme) ) {
                 temp.remove(s);
                 
                 return true;
