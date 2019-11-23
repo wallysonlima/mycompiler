@@ -682,11 +682,24 @@ public class Control {
     // ######################### --- Semantic Methods --- ###################################
     public ArrayList<Error> analyseSemantic(String textEdit) {
         ArrayList<Error> errorList = createSemanticTable(textEdit);
-       
-        if ( errorList == null )
+        ArrayList<Error> globalError;
+        
+        if ( errorList != null )
             return errorList;
         
-        return null;
+        globalError = findSemanticErrors(0);
+        errorList = findSemanticErrors(1);
+        errorList.addAll(globalError);
+        
+        if ( errorList.size() > 0 ) {
+            errorList.add(new Error("-1", "Nenhum erro obtido, analise semantica feita com sucesso !"));
+            return errorList;
+        } else 
+            return errorList;
+    }
+    
+    public ArrayList<Error> findSemanticErrors(int level) {
+        
     }
     
     public ArrayList<Error> createSemanticTable(String textEdit) {
