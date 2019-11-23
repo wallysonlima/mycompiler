@@ -689,6 +689,8 @@ public class Control {
         
         globalError = findSemanticErrors(0);
         errorList = findSemanticErrors(1);
+        
+        // Append the errorList in only one list
         errorList.addAll(globalError);
         
         if ( errorList.size() > 0 ) {
@@ -699,6 +701,7 @@ public class Control {
     }
     
     public ArrayList<Error> findSemanticErrors(int level) {
+        
         
     }
     
