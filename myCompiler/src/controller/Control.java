@@ -915,7 +915,7 @@ public class Control {
         else
             temp = localList;
        
-        if ( temp.size() > 0 )
+        if ( temp != null )
             for( Symbol s: temp )
                 if ( s.getLexeme().equals(lexeme) )
                     return s;
