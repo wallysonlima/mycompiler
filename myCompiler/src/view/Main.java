@@ -61,6 +61,9 @@ public class Main extends javax.swing.JFrame {
         tabbedPaneSemantic = new javax.swing.JTabbedPane();
         jScrollPane4 = new javax.swing.JScrollPane();
         textAreaResultSemantic = new javax.swing.JTextArea();
+        tabbedPaneIntermediateCode = new javax.swing.JTabbedPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        textAreaResultIntermediateCode = new javax.swing.JTextArea();
         tabbedPaneEditor = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         textPaneAreaEdit = new javax.swing.JTextPane();
@@ -126,7 +129,15 @@ public class Main extends javax.swing.JFrame {
 
         tabbedPaneSemantic.addTab("Semantic Analyse", jScrollPane4);
 
-        tabbedLexical.addTab("ResultSemantic", tabbedPaneSemantic);
+        tabbedLexical.addTab("Result Semantic", tabbedPaneSemantic);
+
+        textAreaResultIntermediateCode.setColumns(20);
+        textAreaResultIntermediateCode.setRows(5);
+        jScrollPane5.setViewportView(textAreaResultIntermediateCode);
+
+        tabbedPaneIntermediateCode.addTab("Intermediate Code", jScrollPane5);
+
+        tabbedLexical.addTab("Result Intermediate Code", tabbedPaneIntermediateCode);
 
         tabbedLexical.setSelectedIndex(1);
 
@@ -542,6 +553,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JMenu menuAnalyse;
     private javax.swing.JMenu menuFile;
@@ -555,11 +567,13 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemSintatic;
     private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTabbedPane tabbedPaneEditor;
+    private javax.swing.JTabbedPane tabbedPaneIntermediateCode;
     private javax.swing.JTabbedPane tabbedPaneResult;
     private javax.swing.JTabbedPane tabbedPaneSemantic;
     private javax.swing.JTable tableLexical;
     private javax.swing.JTextArea textAreaLines;
     private javax.swing.JTextArea textAreaResult;
+    private javax.swing.JTextArea textAreaResultIntermediateCode;
     private javax.swing.JTextArea textAreaResultSemantic;
     private javax.swing.JTextPane textPaneAreaEdit;
     // End of variables declaration//GEN-END:variables
