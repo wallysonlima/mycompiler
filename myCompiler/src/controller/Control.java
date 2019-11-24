@@ -819,13 +819,14 @@ public class Control {
     public ArrayList<Error> createSemanticTable(String textEdit) {
         int level;
         ArrayList<Error> errorList;
-        level = count = 0;
+        
         String category, type, value, scope, isUsed, line;
         Symbol symbol = null;
         
         // Verify if sintatic analyse is ok, if yes, clean the errorList and do the semantic analyse
-        if ( (errorList = analyseSintatic(textEdit)).size() == 1 && list.get(0).getLine().equals("-1") ) {
+        if ( (errorList = analyseSintatic(textEdit)).size() == 1 && errorList.get(0).getLine().equals("-1") ) {
             errorList = new ArrayList<>();
+            level = count = 0;
             
             while ( count < tokens.size() ) {
                 category = type = value = scope = isUsed = "";
@@ -914,9 +915,10 @@ public class Control {
         else
             temp = localList;
        
-        for( Symbol s: temp )
-            if ( s.getLexeme().equals(lexeme) )
-                return s;
+        if ( temp.size() > 0 )
+            for( Symbol s: temp )
+                if ( s.getLexeme().equals(lexeme) )
+                    return s;
         
         return null;
     }
