@@ -901,7 +901,23 @@ public class Control {
             return errorList;
         }
         
+        errorList.addAll( isNeverUsedError() );
+        
         return null;
+    }
+    
+    public ArrayList<Error> isNeverUsedError() {
+        ArrayList<Error> errorList = new ArrayList<>();
+        
+        for ( Symbol s: globalList )
+            if ( s.getIsUsed().equals("N") && s.getToken().equals("Identificador") )
+                errorList.add(new Error(s.getLine(), "Erro ! Variavel nunca utilizada: " + s.getLexeme() + " ! ") );
+        
+        for ( Symbol s: localList )
+            if ( s.getIsUsed().equals("N") && s.getToken().equals("Identificador") )
+                errorList.add(new Error(s.getLine(), "Erro ! Variavel nunca utilizada: " + s.getLexeme() + " ! ") );
+        
+        return errorList;
     }
     
     // Verify if the variable is declared   
