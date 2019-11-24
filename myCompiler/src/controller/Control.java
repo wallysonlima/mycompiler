@@ -867,8 +867,9 @@ public class Control {
                         
                         if ( isDeclared(symbol) ) {
                             int position = count;
+                            String oldLine = tokens.get(position).getLine();
                             
-                            while ( symbol.getLine().equals( tokens.get(position).getLine()) ) {
+                            while ( tokens.get(position).getLine().equals(oldLine) ) {
                                 if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") ) {
                                     errorList.add(new Error(symbol.getLine(), "Erro ! Variavel já declarada !"));
                                     break;
