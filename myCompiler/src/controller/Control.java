@@ -818,6 +818,8 @@ public class Control {
             }
         }
         
+        errorList.addAll( isNeverUsedError() );
+        
         if ( errorList.size() == 0 )
             errorList.add(new Error( "-1", "Sucesso ! A análise sintática obteve sucesso !" ) );
         
@@ -900,8 +902,6 @@ public class Control {
         else {
             return errorList;
         }
-        
-        errorList.addAll( isNeverUsedError() );
         
         return null;
     }
