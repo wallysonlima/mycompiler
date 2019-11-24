@@ -704,6 +704,7 @@ public class Control {
         ArrayList<Error> errorList = new ArrayList<>();
         String lexeme = "";
         String type = "";
+        String oldLine = "";
         
         if ( level == 0 )
             temp = globalList;
@@ -728,20 +729,25 @@ public class Control {
                         if ( tokens.get(position+2).getToken().equals("Palavra_Reservada_True") || (tokens.get(position+2).getToken().equals("Palavra_Reservada_False") ) )
                             errorList.add(new Error(temp.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
                         
-                        if ( aux[1].equals("Expressao") )
-                            while( temp.get(i).getLine().equals( tokens.get(position).getLine() ) ) {
+                        if ( aux[1].equals("Expressao") ) {
+                             oldLine = tokens.get(position).getLine(); 
+                            
+                            while( tokens.get(position).getLine().equals(oldLine) ) {
                                if ( tokens.get(position).getToken().equals("Real") ) {
                                    errorList.add(new Error(temp.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
                                 
-                               if ( tokens.get(position).getLexeme().equals("Operador_Divisão") && tokens.get(position+1).getLexeme().equals("0") )
-                                   errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
-                                   
-                                position++;
+                                   if ( tokens.get(position).getLexeme().equals("Operador_Divisão") && tokens.get(position+1).getLexeme().equals("0") )
+                                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
+                                }
+                               
+                               position++;
                             }
                         }
                     } else if ( temp.get(i).getType().equals("Real") ) {
                         if ( aux[1].equals("Expressao") ) {
-                            while( temp.get(i).getLine().equals( tokens.get(position).getLine() ) ) {
+                            oldLine = tokens.get(position).getLine(); 
+                            
+                            while( tokens.get(position).getLine().equals(oldLine) ) {
                                if ( tokens.get(position).getLexeme().equals("Operador_Divisão") ) {
                                    if ( tokens.get(position-1).getLexeme().equals("Real") || tokens.get(position+1).getLexeme().equals("Real") )
                                         errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel realizar divisao com numeros reais !"));
@@ -749,7 +755,8 @@ public class Control {
                                     if ( tokens.get(position+1).getLexeme().equals("0") )
                                         errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
                                }
-                                position++;
+                               
+                               position++;
                             }
                         }
                     }
@@ -773,7 +780,9 @@ public class Control {
             
             
             if ( temp.get(i).getToken().equals("Palavra_Reservada_Procedure") ) {
-                 while( temp.get(i).getLine().equals( tokens.get(position).getLine() ) )
+                oldLine = tokens.get(position).getLine(); 
+                
+                while( tokens.get(position).getLine().equals(oldLine) )
                  {
                     position++;
                     
@@ -783,7 +792,9 @@ public class Control {
                         procedimento.add( tokens.get(position).getLexeme() );
                  }
             } else if ( temp.get(i).getLexeme().equals(procedimento.get(0)) ) {
-                while( temp.get(i).getLine().equals( tokens.get(position).getLine() ) )
+                oldLine = tokens.get(position).getLine();
+                
+                while( tokens.get(position).getLine().equals(oldLine) )
                 {
                     position++;
                     
