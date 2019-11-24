@@ -27,12 +27,9 @@ public class Control {
     ArrayList<Error> list;
     int count;
     ArrayList<Symbol> globalList; 
-        ArrayList<Symbol> localList;
+    ArrayList<Symbol> localList;
     
-    public void Control() {
-        globalList = new ArrayList<>();
-        localList = new ArrayList<>();
-    }
+    public void Control() {}
     
     // Do the analyse lexic
     public ArrayList<Analyse> analyseLexic(String textEdit)
@@ -819,6 +816,8 @@ public class Control {
     public ArrayList<Error> createSemanticTable(String textEdit) {
         int level;
         ArrayList<Error> errorList;
+        globalList = new ArrayList<>();
+        localList = new ArrayList<>();
         
         String category, type, value, scope, isUsed, line;
         Symbol symbol = null;
@@ -838,10 +837,11 @@ public class Control {
                     category = setCategory(tokens.get(count).getToken());
                     scope = setScope( tokens.get(count).getLexeme(), level);
                     line = tokens.get(count).getLine();
-                    isUsed = "N";
-                    
-                    if ( category.equals("Variavel") )
+                   
+                    if ( category.equals("Variavel") ) {
                         type = setType(count, tokens.get(count).getLine());
+                         isUsed = "N";
+                    }
                   
                     if ( level == 0 ) 
                         globalList.add(
