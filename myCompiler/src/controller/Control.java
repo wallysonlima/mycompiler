@@ -718,7 +718,7 @@ public class Control {
             if ( temp.get(i).getCategory().equals("Variavel") ) {
                 if ( !isDeclared(temp.get(i)) ) 
                     errorList.add(new Error(temp.get(i).getLine(), "Erro ! Variavel nunca é declarada: " + temp.get(i).getLexeme() + " ! ") );
-                else if ( (level == 0 && searchSymbol(lexeme, 1) != null) || (level == 1) && searchSymbol(lexeme, 0) != null)
+                else if ( (level == 1) && searchSymbol(lexeme, 0) != null )
                     errorList.add(new Error(temp.get(i).getLine(), "Erro ! Escopo inadequado: " + temp.get(i).getLexeme() + " ! ") );
             
                 int position = Integer.parseInt(temp.get(i).getPosition());
