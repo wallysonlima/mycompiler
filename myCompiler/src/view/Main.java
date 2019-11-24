@@ -75,6 +75,8 @@ public class Main extends javax.swing.JFrame {
         menuItemLexic = new javax.swing.JMenuItem();
         menuItemSintatic = new javax.swing.JMenuItem();
         menuItemSemantic = new javax.swing.JMenuItem();
+        menuGenerate = new javax.swing.JMenu();
+        menuItemIntermediateCode = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -203,6 +205,14 @@ public class Main extends javax.swing.JFrame {
         menuAnalyse.add(menuItemSemantic);
 
         jMenuBar1.add(menuAnalyse);
+
+        menuGenerate.setText("Generate");
+
+        menuItemIntermediateCode.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemIntermediateCode.setText("Intermediate Code");
+        menuGenerate.add(menuItemIntermediateCode);
+
+        jMenuBar1.add(menuGenerate);
 
         jMenu1.setText("More");
 
@@ -535,7 +545,9 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JMenu menuAnalyse;
     private javax.swing.JMenu menuFile;
+    private javax.swing.JMenu menuGenerate;
     private javax.swing.JMenuItem menuItemClose;
+    private javax.swing.JMenuItem menuItemIntermediateCode;
     private javax.swing.JMenuItem menuItemLexic;
     private javax.swing.JMenuItem menuItemOpen;
     private javax.swing.JMenuItem menuItemSave;
