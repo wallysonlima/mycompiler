@@ -702,6 +702,8 @@ public class Control {
     
     public ArrayList<Error> findSemanticErrors(int level) {
         ArrayList<Symbol> temp;
+        ArrayList<String> procedimento = new ArrayList<>();
+        ArrayList<String> procedimento2 = new ArrayList<>();    
         ArrayList<Error> errorList = new ArrayList<>();
         String lexeme = "";
         String type = "";
@@ -771,6 +773,41 @@ public class Control {
                 else
                     if ( type.equals("Inteiro") )
                         errorList.add(new Error(temp.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
+            
+            
+            if ( temp.get(i).getToken().equals("Palavra_Reservada_Procedure") ) {
+                 while( temp.get(i).getLine().equals( tokens.get(position).getLine() ) )
+                 {
+                    position++;
+                    
+                    if ( tokens.get(position).getToken().equals("Identificador") 
+                            || tokens.get(position).getToken().equals("Palavra_Reservada_Int")
+                            || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean"))
+                        procedimento.add( tokens.get(position).getLexeme() );
+                 }
+            } else if ( temp.get(i).getLexeme().equals(procedimento.get(0)) ) {
+                while( temp.get(i).getLine().equals( tokens.get(position).getLine() ) )
+                {
+                    position++;
+                    
+                    if ( tokens.get(position).getToken().equals("Identificador") 
+                            || tokens.get(position).getToken().equals("Palavra_Reservada_Int")
+                            || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean"))
+                        procedimento2.add( tokens.get(position).getLexeme() );
+                }
+                
+                if ( procedimento.size() != procedimento2.size() )
+                    errorList.add(new Error(temp.get(i).getLine(), "Erro ! O numero de elementos dos parametros estao errados !"));
+                
+                int j = 0;
+                
+                for ( String s: procedimento ) {
+                    if ( !s.equals(procedimento2.get(j)) )
+                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Os elementos dos parametros estao diferentes !"));
+                    
+                    j++;
+                }
+            }
         }
         
         return null;
