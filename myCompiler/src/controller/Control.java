@@ -866,7 +866,7 @@ public class Control {
                         symbol.setIsUsed("S");
                         
                         if ( isDeclared(symbol) ) {
-                            int position = Integer.parseInt(symbol.getPosition());
+                            int position = count;
                             
                             while ( symbol.getLine().equals( tokens.get(position).getLine()) ) {
                                 if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") ) {
