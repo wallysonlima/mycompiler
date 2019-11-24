@@ -704,6 +704,7 @@ public class Control {
         ArrayList<Symbol> temp;
         ArrayList<Error> errorList = new ArrayList<>();
         String lexeme = "";
+        String type = "";
         
         if ( level == 0 )
             temp = globalList;
@@ -721,23 +722,55 @@ public class Control {
                     errorList.add(new Error(temp.get(i).getLine(), "Erro ! Escopo inadequado: " + temp.get(i).getLexeme() + " ! ") );
             
                 int position = Integer.parseInt(temp.get(i).getPosition());
+                String[] aux = tokens.get(i).getLexeme().split(":");
                 
                 if ( tokens.get(position+1).getToken().equals("Operador_Igual") ) {
-                    if ( temp.get(i).getType().equals("Inteiro") ) 
+                    if ( temp.get(i).getType().equals("Inteiro") ) {
                         if ( tokens.get(position+2).getToken().equals("Palavra_Reservada_True") || (tokens.get(position+2).getToken().equals("Palavra_Reservada_False") ) )
                             errorList.add(new Error(temp.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
-                    
-                        String[] aux = tokens.get(i).getLexeme().split(":");
                         
                         if ( aux[1].equals("Expressao") )
                             while( temp.get(i).getLine().equals( tokens.get(position).getLine() ) ) {
-                               
+                               if ( tokens.get(position).getToken().equals("Real") ) {
+                                   errorList.add(new Error(temp.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
                                 
+                               if ( tokens.get(position).getLexeme().equals("Operador_Divisão") && tokens.get(position+1).getLexeme().equals("0") )
+                                   errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
+                                   
                                 position++;
                             }
+                        }
+                    } else if ( temp.get(i).getType().equals("Real") ) {
+                        if ( aux[1].equals("Expressao") ) {
+                            while( temp.get(i).getLine().equals( tokens.get(position).getLine() ) ) {
+                               if ( tokens.get(position).getLexeme().equals("Operador_Divisão") ) {
+                                   if ( tokens.get(position-1).getLexeme().equals("Real") || tokens.get(position+1).getLexeme().equals("Real") )
+                                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel realizar divisao com numeros reais !"));
+                                   
+                                    if ( tokens.get(position+1).getLexeme().equals("0") )
+                                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
+                               }
+                                position++;
+                            }
+                        }
+                    }
                 }
+            }
             
-            }                        
+            int position = Integer.parseInt(temp.get(i).getPosition());
+            
+            if ( temp.get(i).getToken().equals("Palavra_Reservada_Read") )
+                if ( tokens.get( position + 2 ).getToken().equals("Palavra_Reservada_Int") )
+                    type = "Inteiro";
+                else
+                    type = "Booleano";
+            else if ( temp.get(i).getToken().equals("Palavra_Reservada_Write") )
+                if ( tokens.get( position + 2 ).getToken().equals("Palavra_Reservada_Int") )
+                    if ( type.equals("Booleano") )
+                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
+                else
+                    if ( type.equals("Inteiro") )
+                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
         }
         
         return null;
