@@ -923,8 +923,9 @@ public class Control {
     // Verify if the variable is declared   
     public boolean isDeclared(Symbol symbol) {
         int position = Integer.parseInt(symbol.getPosition());
-
-        while ( symbol.getLine().equals( tokens.get(position).getLine()) ) {
+        String oldLine = tokens.get(position).getLine();
+        
+        while ( tokens.get(position).getLine().equals(oldLine) ) {
             if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") )
                 return true;
 
