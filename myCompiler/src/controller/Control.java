@@ -810,7 +810,10 @@ public class Control {
             }
         }
         
-        return null;
+        if ( errorList.size() == 0 )
+            errorList.add(new Error( "-1", "Sucesso ! A análise sintática obteve sucesso !" ) );
+        
+        return errorList;
     }
     
     public ArrayList<Error> createSemanticTable(String textEdit) {
