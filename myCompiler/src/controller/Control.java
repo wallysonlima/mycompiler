@@ -698,7 +698,6 @@ public class Control {
     }
     
     public ArrayList<Error> findSemanticErrors(int level) {
-        ArrayList<Symbol> temp = new ArrayList<>();
         ArrayList<String> procedimento = new ArrayList<>();
         ArrayList<String> procedimento2 = new ArrayList<>();    
         ArrayList<Error> errorList = new ArrayList<>();
@@ -729,7 +728,7 @@ public class Control {
                     errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Variavel nunca é declarada: " + symbol.getLexeme() + " ! ") );
                 else if ( (level == 0) && searchSymbol(lexeme, 1) != null && !isDeclared(symbol) )
                     errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Escopo inadequado: " + symbol.getLexeme() + " ! ") );
-            
+                
                 String[] aux = symbol.getLexeme().split(":");
                 
                 if ( tokens.get(i+1).getToken().equals("Operador_Igual") ) {
@@ -786,7 +785,7 @@ public class Control {
                         errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
             
             } else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Procedure") ) {
-                oldLine = tokens.get(position).getLine(); 
+                oldLine = tokens.get(i).getLine(); 
                 position = i;
                 position++;
                 
@@ -801,7 +800,8 @@ public class Control {
                  }
                 
             } else if ( procedimento.size() > 0 && tokens.get(i).getLexeme().equals(procedimento.get(0)) && !tokens.get(i-1).getToken().equals("Palavra_Reservada_Procedure") ) {
-                    oldLine = tokens.get(position).getLine();
+                    oldLine = tokens.get(i).getLine();
+                    position = i;
                     position++;
                     
                     while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) )
@@ -873,31 +873,32 @@ public class Control {
                 }
                 
                 else {
-                    if ( symbol.getToken().equals("Identificador") && tokens.get(count+1).getToken().equals("Operador_Igual") ) {
-                        if ( tokens.get(count+2).getToken().equals("Inteiro") )
-                            symbol.setValue(tokens.get(count+2).getLexeme() + ":Inteiro" );
-                        else if ( tokens.get(count+2).getToken().equals("Real") )
-                            symbol.setValue(tokens.get(count+2).getLexeme() + ":Real" );
-                        else if ( tokens.get(count+2).getToken().equals("Palavra_Reservada_True") || tokens.get(count+2).getToken().equals("Palavra_Reservada_False") )
-                            symbol.setValue(tokens.get(count+2).getLexeme() + ":Booleano" );
-                        else
-                            symbol.setValue(tokens.get(count+2).getLexeme() + ":Expressao" );
+                    if ( tokens.get(count).getToken().equals("Identificador") ) {
+                        if ( tokens.get(count+1).getToken().equals("Operador_Igual") )
+                            if ( tokens.get(count+2).getToken().equals("Inteiro") )
+                                symbol.setValue(tokens.get(count+2).getLexeme() + ":Inteiro" );
+                            else if ( tokens.get(count+2).getToken().equals("Real") )
+                                symbol.setValue(tokens.get(count+2).getLexeme() + ":Real" );
+                            else if ( tokens.get(count+2).getToken().equals("Palavra_Reservada_True") || tokens.get(count+2).getToken().equals("Palavra_Reservada_False") )
+                                symbol.setValue(tokens.get(count+2).getLexeme() + ":Booleano" );
+                            else
+                                symbol.setValue(tokens.get(count+2).getLexeme() + ":Expressao" );
                         
                         symbol.setIsUsed("S");
-                        
-                        /*if ( isDeclared(symbol) ) {
-                            int position = count;
-                            String oldLine = tokens.get(position).getLine();
-                            
-                            while ( position > 0 && tokens.get(position).getLine().equals(oldLine) ) {
-                                if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") ) {
-                                    errorList.add(new Error(symbol.getLine(), "Erro ! Variavel já declarada !"));
-                                    break;
-                                }
+  
+                        if ( isDeclared(symbol) ) {
+                           int position = count;
+                           String oldLine = tokens.get(position).getLine();
 
-                                position--;
-                            }
-                        }*/
+                           while ( position > 0 && tokens.get(position).getLine().equals(oldLine) ) {
+                               if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") ) {
+                                   errorList.add(new Error(symbol.getLine(), "Erro ! Variavel já declarada !"));
+                                   break;
+                               }
+
+                               position--;
+                           }
+                        }
                     }
                 }
 
