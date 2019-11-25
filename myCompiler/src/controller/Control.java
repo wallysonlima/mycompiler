@@ -617,7 +617,7 @@ public class Control {
         if ( accept("Identificador") || accept("Palavra_Reservada_True") || accept("Palavra_Reservada_False") || accept("Palavra_Reservada_Write") || accept("Palavra_Reservada_Read") ) {
             nextToken();
             variable();
-        } else if ( accept("Inteiro") ) {
+        } else if ( accept("Inteiro") || accept("Real") ) {
             nextToken();
         } else if ( accept("Abre_Parenteses") ) {
             nextToken();
@@ -688,17 +688,17 @@ public class Control {
         errorList = findSemanticErrors(1);
         
         // Append the errorList in only one list
-        errorList.addAll(globalError);
+        globalError.addAll(errorList);
         
-        if ( errorList.size() == 0 ) {
-            errorList.add(new Error("-1", "Nenhum erro obtido, analise semantica feita com sucesso !"));
-            return errorList;
+        if ( globalError.size() == 0 ) {
+            globalError.add(new Error("-1", "Nenhum erro obtido, analise semantica feita com sucesso !"));
+            return globalError;
         } else 
-            return errorList;
+            return globalError;
     }
     
     public ArrayList<Error> findSemanticErrors(int level) {
-        ArrayList<Symbol> temp;
+        ArrayList<Symbol> temp = new ArrayList<>();
         ArrayList<String> procedimento = new ArrayList<>();
         ArrayList<String> procedimento2 = new ArrayList<>();    
         ArrayList<Error> errorList = new ArrayList<>();
@@ -716,9 +716,9 @@ public class Control {
             lexeme = temp.get(i).getLexeme();
             
             if ( temp.get(i).getCategory().equals("Variavel") ) {
-                if ( !isDeclared(temp.get(i)) ) 
+                if ( !isDeclared(temp.get(i)) && !temp.get(i-1).getLexeme().equals("program") && !temp.get(i-1).getLexeme().equals("procedure") && !temp.get(i-1).getLexeme().equals("var") ) 
                     errorList.add(new Error(temp.get(i).getLine(), "Erro ! Variavel nunca é declarada: " + temp.get(i).getLexeme() + " ! ") );
-                else if ( (level == 1) && searchSymbol(lexeme, 0) != null )
+                else if ( (level == 0) && searchSymbol(lexeme, 1) != null && searchSymbol(lexeme, 0) == null )
                     errorList.add(new Error(temp.get(i).getLine(), "Erro ! Escopo inadequado: " + temp.get(i).getLexeme() + " ! ") );
             
                 int position = Integer.parseInt(temp.get(i).getPosition());
@@ -821,10 +821,7 @@ public class Control {
                 }
         }
         
-        errorList.addAll( isNeverUsedError() );
-        
-        if ( errorList.size() == 0 )
-            errorList.add(new Error( "-1", "Sucesso ! A análise sintática obteve sucesso !" ) );
+        errorList.addAll( isNeverUsedError(level) );
         
         return errorList;
     }
@@ -909,17 +906,24 @@ public class Control {
         return null;
     }
     
-    public ArrayList<Error> isNeverUsedError() {
+    public ArrayList<Error> isNeverUsedError(int level) {
         ArrayList<Error> errorList = new ArrayList<>();
+        ArrayList<Symbol> temp;
+        int i = 0;
         
-        for ( Symbol s: globalList )
-            if ( s.getIsUsed().equals("N") && s.getToken().equals("Identificador") )
+        if ( level == 0 ) {
+            temp = globalList;
+            temp.addAll(localList);
+        }
+        else
+            temp = localList;
+        
+        for ( Symbol s: temp ) {
+            if ( s.getIsUsed().equals("N") && !temp.get(i-1).getLexeme().equals("program") && !temp.get(i-1).getLexeme().equals("procedure") && !temp.get(i-1).getLexeme().equals("var"))
                 errorList.add(new Error(s.getLine(), "Erro ! Variavel nunca utilizada: " + s.getLexeme() + " ! ") );
         
-        for ( Symbol s: localList )
-            if ( s.getIsUsed().equals("N") && s.getToken().equals("Identificador") )
-                errorList.add(new Error(s.getLine(), "Erro ! Variavel nunca utilizada: " + s.getLexeme() + " ! ") );
-        
+            i++;
+        }
         return errorList;
     }
     
@@ -1042,7 +1046,7 @@ public class Control {
                 break;
         }
         
-        return null;
+        return "";
     }
     
     public String setScope(String lexeme, int level) {
