@@ -732,7 +732,7 @@ public class Control {
                         if ( aux[1].equals("Expressao") ) {
                              oldLine = tokens.get(position).getLine(); 
                             
-                            while( tokens.get(position).getLine().equals(oldLine) ) {
+                            while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) ) {
                                if ( tokens.get(position).getToken().equals("Real") ) {
                                    errorList.add(new Error(temp.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
                                 
@@ -747,7 +747,7 @@ public class Control {
                         if ( aux[1].equals("Expressao") ) {
                             oldLine = tokens.get(position).getLine(); 
                             
-                            while( tokens.get(position).getLine().equals(oldLine) ) {
+                            while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) ) {
                                if ( tokens.get(position).getLexeme().equals("Operador_Divisão") ) {
                                    if ( tokens.get(position-1).getLexeme().equals("Real") || tokens.get(position+1).getLexeme().equals("Real") )
                                         errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel realizar divisao com numeros reais !"));
@@ -781,41 +781,44 @@ public class Control {
             
             if ( temp.get(i).getToken().equals("Palavra_Reservada_Procedure") ) {
                 oldLine = tokens.get(position).getLine(); 
+                position++;
                 
-                while( tokens.get(position).getLine().equals(oldLine) )
+                while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) )
                  {
-                    position++;
-                    
                     if ( tokens.get(position).getToken().equals("Identificador") 
                             || tokens.get(position).getToken().equals("Palavra_Reservada_Int")
                             || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean"))
                         procedimento.add( tokens.get(position).getLexeme() );
+                    
+                    position++;
                  }
-            } else if ( temp.get(i).getLexeme().equals(procedimento.get(0)) ) {
-                oldLine = tokens.get(position).getLine();
-                
-                while( tokens.get(position).getLine().equals(oldLine) )
-                {
+            } else if ( procedimento.size() > 0 ) 
+                if ( temp.get(i).getLexeme().equals(procedimento.get(0)) && !temp.get(i-1).getToken().equals("Palavra_Reservada_Procedure") ) {
+                    oldLine = tokens.get(position).getLine();
                     position++;
                     
-                    if ( tokens.get(position).getToken().equals("Identificador") 
-                            || tokens.get(position).getToken().equals("Palavra_Reservada_Int")
-                            || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean"))
-                        procedimento2.add( tokens.get(position).getLexeme() );
-                }
-                
-                if ( procedimento.size() != procedimento2.size() )
-                    errorList.add(new Error(temp.get(i).getLine(), "Erro ! O numero de elementos dos parametros estao errados !"));
-                
-                int j = 0;
-                
-                for ( String s: procedimento ) {
-                    if ( !s.equals(procedimento2.get(j)) )
-                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Os elementos dos parametros estao diferentes !"));
+                    while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) )
+                    {
+                        if ( tokens.get(position).getToken().equals("Identificador") 
+                                || tokens.get(position).getToken().equals("Palavra_Reservada_Int")
+                                || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean"))
+                            procedimento2.add( tokens.get(position).getLexeme() );
+                        
+                        position++;
+                    }
+
+                    int j = 0;
                     
-                    j++;
+                    if ( procedimento.size() != procedimento2.size() )
+                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! O numero de elementos dos parametros estao errados !"));
+                    else
+                        for ( String s: procedimento ) {
+                            if ( !s.equals(procedimento2.get(j)) )
+                                errorList.add(new Error(temp.get(i).getLine(), "Erro ! Os elementos dos parametros estao diferentes !"));
+
+                            j++;
+                        }
                 }
-            }
         }
         
         errorList.addAll( isNeverUsedError() );
@@ -882,7 +885,7 @@ public class Control {
                             int position = count;
                             String oldLine = tokens.get(position).getLine();
                             
-                            while ( tokens.get(position).getLine().equals(oldLine) ) {
+                            while ( position > 0 && tokens.get(position).getLine().equals(oldLine) ) {
                                 if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") ) {
                                     errorList.add(new Error(symbol.getLine(), "Erro ! Variavel já declarada !"));
                                     break;
@@ -925,7 +928,7 @@ public class Control {
         int position = Integer.parseInt(symbol.getPosition());
         String oldLine = tokens.get(position).getLine();
         
-        while ( tokens.get(position).getLine().equals(oldLine) ) {
+        while ( position > 0 && tokens.get(position).getLine().equals(oldLine) ) {
             if ( tokens.get(position).getToken().equals("Palavra_Reservada_Int") || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean") )
                 return true;
 

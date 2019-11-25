@@ -501,6 +501,7 @@ public class Main extends javax.swing.JFrame {
         menuItemSave.setEnabled(false);
         menuItemSintatic.setEnabled(false);
         menuItemSemantic.setEnabled(false);
+        menuItemIntermediateCode.setEnabled(false);
     }
     
     public void enableMenuItem() {
@@ -508,6 +509,7 @@ public class Main extends javax.swing.JFrame {
         menuItemSave.setEnabled(true);
         menuItemSintatic.setEnabled(true);
         menuItemSemantic.setEnabled(true);
+        menuItemIntermediateCode.setEnabled(true);
     }
     
     /**
