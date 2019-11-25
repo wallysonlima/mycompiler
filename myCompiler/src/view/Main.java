@@ -80,6 +80,8 @@ public class Main extends javax.swing.JFrame {
         menuItemSemantic = new javax.swing.JMenuItem();
         menuGenerate = new javax.swing.JMenu();
         menuItemIntermediateCode = new javax.swing.JMenuItem();
+        menuRun = new javax.swing.JMenu();
+        menuItemExecute = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
 
@@ -219,11 +221,19 @@ public class Main extends javax.swing.JFrame {
 
         menuGenerate.setText("Generate");
 
-        menuItemIntermediateCode.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemIntermediateCode.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         menuItemIntermediateCode.setText("Intermediate Code");
         menuGenerate.add(menuItemIntermediateCode);
 
         jMenuBar1.add(menuGenerate);
+
+        menuRun.setText("Run");
+
+        menuItemExecute.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
+        menuItemExecute.setText("Load code and Execute");
+        menuRun.add(menuItemExecute);
+
+        jMenuBar1.add(menuRun);
 
         jMenu1.setText("More");
 
@@ -258,7 +268,7 @@ public class Main extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tabbedPaneEditor)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 30, Short.MAX_VALUE)
+                        .addGap(0, 32, Short.MAX_VALUE)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabbedLexical, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -559,12 +569,14 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuGenerate;
     private javax.swing.JMenuItem menuItemClose;
+    private javax.swing.JMenuItem menuItemExecute;
     private javax.swing.JMenuItem menuItemIntermediateCode;
     private javax.swing.JMenuItem menuItemLexic;
     private javax.swing.JMenuItem menuItemOpen;
     private javax.swing.JMenuItem menuItemSave;
     private javax.swing.JMenuItem menuItemSemantic;
     private javax.swing.JMenuItem menuItemSintatic;
+    private javax.swing.JMenu menuRun;
     private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTabbedPane tabbedPaneEditor;
     private javax.swing.JTabbedPane tabbedPaneIntermediateCode;
