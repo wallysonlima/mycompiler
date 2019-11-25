@@ -230,7 +230,7 @@ public class Main extends javax.swing.JFrame {
         menuRun.setText("Run");
 
         menuItemExecute.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
-        menuItemExecute.setText("Load code and Execute");
+        menuItemExecute.setText("Load Code and Execute");
         menuRun.add(menuItemExecute);
 
         jMenuBar1.add(menuRun);

@@ -705,55 +705,65 @@ public class Control {
         String lexeme = "";
         String type = "";
         String oldLine = "";
+        Symbol symbol = null;
+        int position = 0;
+        int begin = 0;
+        int end = 9999;
         
-        if ( level == 0 )
-            temp = globalList;
-        else
-            temp = localList;
+        if ( level == 0 ) {
+            begin = Integer.parseInt(globalList.get(0).getPosition());
+            end = Integer.parseInt(globalList.get( globalList.size() - 1).getPosition());
+        }
+        else {
+            begin = Integer.parseInt(localList.get(0).getPosition());
+            end = Integer.parseInt(localList.get( localList.size() - 1).getPosition());
+        }
         
-        for( int i = 0; i < temp.size(); i++ )
+        for( int i = begin; i < end; i++ )
         {
-            lexeme = temp.get(i).getLexeme();
-            int position = Integer.parseInt(temp.get(i).getPosition());
+            lexeme = tokens.get(i).getLexeme();
+            symbol = searchSymbol(tokens.get(i).getLexeme(), level);
             
-            if ( temp.get(i).getCategory().equals("Variavel") ) {
-                if ( !isDeclared(temp.get(i)) && !temp.get(i-1).getLexeme().equals("program") && !temp.get(i-1).getLexeme().equals("procedure") && !temp.get(i-1).getLexeme().equals("var") ) 
-                    errorList.add(new Error(temp.get(i).getLine(), "Erro ! Variavel nunca é declarada: " + temp.get(i).getLexeme() + " ! ") );
-                else if ( (level == 0) && searchSymbol(lexeme, 1) != null && searchSymbol(lexeme, 0) == null )
-                    errorList.add(new Error(temp.get(i).getLine(), "Erro ! Escopo inadequado: " + temp.get(i).getLexeme() + " ! ") );
+            if ( tokens.get(i).getToken().equals("Identificador") ) { 
+                if ( !isDeclared(symbol) && !tokens.get(i-1).getLexeme().equals("program") && !tokens.get(i-1).getLexeme().equals("procedure") && !tokens.get(i-1).getLexeme().equals("var") ) 
+                    errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Variavel nunca é declarada: " + symbol.getLexeme() + " ! ") );
+                else if ( (level == 0) && searchSymbol(lexeme, 1) != null && !isDeclared(symbol) )
+                    errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Escopo inadequado: " + symbol.getLexeme() + " ! ") );
             
-                String[] aux = tokens.get(i).getLexeme().split(":");
+                String[] aux = symbol.getLexeme().split(":");
                 
-                if ( tokens.get(position+1).getToken().equals("Operador_Igual") ) {
-                    if ( temp.get(i).getType().equals("Inteiro") ) {
-                        if ( tokens.get(position+2).getToken().equals("Palavra_Reservada_True") || (tokens.get(position+2).getToken().equals("Palavra_Reservada_False") ) )
-                            errorList.add(new Error(temp.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
+                if ( tokens.get(i+1).getToken().equals("Operador_Igual") ) {
+                    if ( tokens.get(i).getToken().equals("Inteiro") ) {
+                        if ( tokens.get(i+2).getToken().equals("Palavra_Reservada_True") || (tokens.get(i+2).getToken().equals("Palavra_Reservada_False") ) )
+                            errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
                         
                         if ( aux[1].equals("Expressao") ) {
-                             oldLine = tokens.get(position).getLine(); 
+                            oldLine = tokens.get(i).getLine(); 
+                            position = i;
                             
                             while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) ) {
-                               if ( tokens.get(position).getToken().equals("Real") ) {
-                                   errorList.add(new Error(temp.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
+                                if ( tokens.get(i).getToken().equals("Real") ) {
+                                   errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
                                 
-                                   if ( tokens.get(position).getLexeme().equals("Operador_Divisão") && tokens.get(position+1).getLexeme().equals("0") )
-                                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
+                                   if ( tokens.get(i).getLexeme().equals("Operador_Divisão") && tokens.get(i+1).getLexeme().equals("0") )
+                                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
                                 }
                                
                                position++;
                             }
                         }
-                    } else if ( temp.get(i).getType().equals("Real") ) {
+                    } else if ( tokens.get(i).getToken().equals("Real") ) {
                         if ( aux[1].equals("Expressao") ) {
                             oldLine = tokens.get(position).getLine(); 
+                            position = i;
                             
                             while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) ) {
                                if ( tokens.get(position).getLexeme().equals("Operador_Divisão") ) {
                                    if ( tokens.get(position-1).getLexeme().equals("Real") || tokens.get(position+1).getLexeme().equals("Real") )
-                                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel realizar divisao com numeros reais !"));
+                                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Nao e possivel realizar divisao com numeros reais !"));
                                    
                                     if ( tokens.get(position+1).getLexeme().equals("0") )
-                                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
+                                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
                                }
                                
                                position++;
@@ -761,24 +771,23 @@ public class Control {
                         }
                     }
                 }
-            } else if ( temp.get(i).getToken().equals("Palavra_Reservada_Read") ) {
-                
-                
+            } else if ( tokens.get(i).equals("Palavra_Reservada_Read") ) {
                 if ( tokens.get( position + 2 ).getToken().equals("Palavra_Reservada_Int") )
                     type = "Inteiro";
                 else
                     type = "Booleano";
             
-            } else if ( temp.get(i).getToken().equals("Palavra_Reservada_Write") ) {
+            } else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Write") ) {
                 if ( tokens.get( position + 2 ).getToken().equals("Palavra_Reservada_Int") )
                     if ( type.equals("Booleano") )
-                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
+                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
                 else
                     if ( type.equals("Inteiro") )
-                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
+                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
             
-            } else if ( temp.get(i).getToken().equals("Palavra_Reservada_Procedure") ) {
+            } else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Procedure") ) {
                 oldLine = tokens.get(position).getLine(); 
+                position = i;
                 position++;
                 
                 while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) )
@@ -791,7 +800,7 @@ public class Control {
                     position++;
                  }
                 
-            } else if ( procedimento.size() > 0 && temp.get(i).getLexeme().equals(procedimento.get(0)) && !temp.get(i-1).getToken().equals("Palavra_Reservada_Procedure") ) {
+            } else if ( procedimento.size() > 0 && tokens.get(i).getLexeme().equals(procedimento.get(0)) && !tokens.get(i-1).getToken().equals("Palavra_Reservada_Procedure") ) {
                     oldLine = tokens.get(position).getLine();
                     position++;
                     
@@ -808,11 +817,11 @@ public class Control {
                     int j = 0;
                     
                     if ( procedimento.size() != procedimento2.size() )
-                        errorList.add(new Error(temp.get(i).getLine(), "Erro ! O numero de elementos dos parametros estao errados !"));
+                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! O numero de elementos dos parametros estao errados !"));
                     else
                         for ( String s: procedimento ) {
                             if ( !s.equals(procedimento2.get(j)) )
-                                errorList.add(new Error(temp.get(i).getLine(), "Erro ! Os elementos dos parametros estao diferentes !"));
+                                errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Os elementos dos parametros estao diferentes !"));
 
                             j++;
                         }
@@ -876,7 +885,7 @@ public class Control {
                         
                         symbol.setIsUsed("S");
                         
-                        if ( isDeclared(symbol) ) {
+                        /*if ( isDeclared(symbol) ) {
                             int position = count;
                             String oldLine = tokens.get(position).getLine();
                             
@@ -888,7 +897,7 @@ public class Control {
 
                                 position--;
                             }
-                        }
+                        }*/
                     }
                 }
 
