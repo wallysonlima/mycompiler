@@ -909,19 +909,18 @@ public class Control {
         ArrayList<Symbol> temp;
         int i = 0;
         
-        if ( level == 0 ) {
+        if ( level == 0 )
             temp = globalList;
-            temp.addAll(localList);
-        }
         else
             temp = localList;
         
         for ( Symbol s: temp ) {
-            if ( s.getIsUsed().equals("N") && !temp.get(i-1).getLexeme().equals("program") && !temp.get(i-1).getLexeme().equals("procedure") && !temp.get(i-1).getLexeme().equals("var"))
+            if ( (level == 0 && searchSymbol(s.getLexeme(), 1) == null) && s.getIsUsed().equals("N") && !temp.get(i-1).getLexeme().equals("program") && !temp.get(i-1).getLexeme().equals("procedure") && !temp.get(i-1).getLexeme().equals("var") )
                 errorList.add(new Error(s.getLine(), "Erro ! Variavel nunca utilizada: " + s.getLexeme() + " ! ") );
         
             i++;
         }
+        
         return errorList;
     }
     
