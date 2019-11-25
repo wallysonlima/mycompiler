@@ -603,7 +603,7 @@ public class Control {
     public void term() {
         factor();
         
-        while ( accept("Operador_Multiplicação") || accept("Palavra_Reservada_Div") || accept("Palavra_Reservada_And") ) {
+        while ( accept("Operador_Multiplicação") || accept("Palavra_Reservada_Div") || accept("Palavra_Reservada_And") || accept("Operador_Divisão") ) {
             nextToken();
             factor();
             
@@ -714,6 +714,7 @@ public class Control {
         for( int i = 0; i < temp.size(); i++ )
         {
             lexeme = temp.get(i).getLexeme();
+            int position = Integer.parseInt(temp.get(i).getPosition());
             
             if ( temp.get(i).getCategory().equals("Variavel") ) {
                 if ( !isDeclared(temp.get(i)) && !temp.get(i-1).getLexeme().equals("program") && !temp.get(i-1).getLexeme().equals("procedure") && !temp.get(i-1).getLexeme().equals("var") ) 
@@ -721,7 +722,6 @@ public class Control {
                 else if ( (level == 0) && searchSymbol(lexeme, 1) != null && searchSymbol(lexeme, 0) == null )
                     errorList.add(new Error(temp.get(i).getLine(), "Erro ! Escopo inadequado: " + temp.get(i).getLexeme() + " ! ") );
             
-                int position = Integer.parseInt(temp.get(i).getPosition());
                 String[] aux = tokens.get(i).getLexeme().split(":");
                 
                 if ( tokens.get(position+1).getToken().equals("Operador_Igual") ) {
@@ -761,16 +761,15 @@ public class Control {
                         }
                     }
                 }
-            }
-            
-            int position = Integer.parseInt(temp.get(i).getPosition());
-            
-            if ( temp.get(i).getToken().equals("Palavra_Reservada_Read") )
+            } else if ( temp.get(i).getToken().equals("Palavra_Reservada_Read") ) {
+                
+                
                 if ( tokens.get( position + 2 ).getToken().equals("Palavra_Reservada_Int") )
                     type = "Inteiro";
                 else
                     type = "Booleano";
-            else if ( temp.get(i).getToken().equals("Palavra_Reservada_Write") )
+            
+            } else if ( temp.get(i).getToken().equals("Palavra_Reservada_Write") ) {
                 if ( tokens.get( position + 2 ).getToken().equals("Palavra_Reservada_Int") )
                     if ( type.equals("Booleano") )
                         errorList.add(new Error(temp.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
@@ -778,8 +777,7 @@ public class Control {
                     if ( type.equals("Inteiro") )
                         errorList.add(new Error(temp.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
             
-            
-            if ( temp.get(i).getToken().equals("Palavra_Reservada_Procedure") ) {
+            } else if ( temp.get(i).getToken().equals("Palavra_Reservada_Procedure") ) {
                 oldLine = tokens.get(position).getLine(); 
                 position++;
                 
@@ -792,8 +790,8 @@ public class Control {
                     
                     position++;
                  }
-            } else if ( procedimento.size() > 0 ) 
-                if ( temp.get(i).getLexeme().equals(procedimento.get(0)) && !temp.get(i-1).getToken().equals("Palavra_Reservada_Procedure") ) {
+                
+            } else if ( procedimento.size() > 0 && temp.get(i).getLexeme().equals(procedimento.get(0)) && !temp.get(i-1).getToken().equals("Palavra_Reservada_Procedure") ) {
                     oldLine = tokens.get(position).getLine();
                     position++;
                     
