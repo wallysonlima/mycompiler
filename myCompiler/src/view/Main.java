@@ -435,14 +435,12 @@ public class Main extends javax.swing.JFrame {
             else {
                 for (Error s: list ) {
                         temp += s.getError() + "  /  Linha = " + s.getLine() + "\n";
-
-                        if ( i % 2 != 0 )
-                            temp += "---------------------------------------------------------------------------------------------------------------------------------------\n";
+                        temp += "---------------------------------------------------------------------------------------------------------------------------------------\n";
 
                         i++;
                     }
 
-                textAreaResult.setText(temp);
+                textAreaResultSemantic.setText(temp);
 
                 JOptionPane.showMessageDialog(null, "Análise Semantica obteve erros !");
             }
