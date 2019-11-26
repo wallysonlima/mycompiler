@@ -223,6 +223,11 @@ public class Main extends javax.swing.JFrame {
 
         menuItemIntermediateCode.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
         menuItemIntermediateCode.setText("Intermediate Code");
+        menuItemIntermediateCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemIntermediateCodeActionPerformed(evt);
+            }
+        });
         menuGenerate.add(menuItemIntermediateCode);
 
         jMenuBar1.add(menuGenerate);
@@ -230,7 +235,12 @@ public class Main extends javax.swing.JFrame {
         menuRun.setText("Run");
 
         menuItemExecute.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_MASK));
-        menuItemExecute.setText("Load Code and Execute");
+        menuItemExecute.setText("Execute the Code");
+        menuItemExecute.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuItemExecuteActionPerformed(evt);
+            }
+        });
         menuRun.add(menuItemExecute);
 
         jMenuBar1.add(menuRun);
@@ -473,6 +483,14 @@ public class Main extends javax.swing.JFrame {
         
     }//GEN-LAST:event_menuItemSemanticActionPerformed
 
+    private void menuItemExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExecuteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuItemExecuteActionPerformed
+
+    private void menuItemIntermediateCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemIntermediateCodeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuItemIntermediateCodeActionPerformed
+
     public void populateLexicalTable(ArrayList<Analyse> list)
     {
         DefaultTableModel model = (DefaultTableModel) tableLexical.getModel();
@@ -520,6 +538,7 @@ public class Main extends javax.swing.JFrame {
         menuItemSintatic.setEnabled(false);
         menuItemSemantic.setEnabled(false);
         menuItemIntermediateCode.setEnabled(false);
+        menuItemExecute.setEnabled(false);
     }
     
     public void enableMenuItem() {
@@ -528,6 +547,7 @@ public class Main extends javax.swing.JFrame {
         menuItemSintatic.setEnabled(true);
         menuItemSemantic.setEnabled(true);
         menuItemIntermediateCode.setEnabled(true);
+        menuItemExecute.setEnabled(true);
     }
     
     /**

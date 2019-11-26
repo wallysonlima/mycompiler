@@ -1078,4 +1078,6 @@ class Sortybyroll implements Comparator<Error>
         return linea - lineb;
     }
 }
+
+// Methods to Generate Intermediate Code
     
