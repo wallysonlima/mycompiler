@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -684,18 +685,20 @@ public class Control {
         ArrayList<Error> localError;
         
         // Verify if a sintatic is ok, if not, return sintatic errors and stop semantic analyse
-        if ( errorList != null )
+        if ( errorList.size() > 0 )
             if ( errorList.get( errorList.size()-1 ).getLine().equals("999") )
                 return errorList;
-            
         
         globalError = findSemanticErrors(0);
         localError = findSemanticErrors(1);
-        
+
         // Append the errorList in only one list
-        errorList.addAll(globalError);
-        errorList.addAll(localError);
-        
+        if ( !globalError.isEmpty() )
+            errorList.addAll(globalError);
+
+        if ( !localError.isEmpty() )
+            errorList.addAll(localError);
+
         if ( errorList.isEmpty() ) {
             errorList.add(new Error("-1", "Nenhum erro obtido, analise semantica feita com sucesso !"));
             return errorList;
@@ -709,11 +712,13 @@ public class Control {
         ArrayList<String> procedimento = new ArrayList<>();
         ArrayList<String> procedimento2 = new ArrayList<>();    
         ArrayList<Error> errorList = new ArrayList<>();
-        String lexeme, type, oldLine;
+        HashMap <Integer, String> type = new HashMap<>();
+        int countRead = 0;
+        int countWrite = 0;
+        String lexeme, oldLine;
         Symbol symbol;
         int position = 0;
         int begin, end;
-        type = "";
         
         if ( level == 0 ) {
             begin = Integer.parseInt(globalList.get(0).getPosition());
@@ -734,8 +739,6 @@ public class Control {
                     errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Variavel nunca é declarada: " + symbol.getLexeme() + " ! ") );
                 else if ( (level == 0) && searchSymbol(lexeme, 1) != null && !isDeclared(symbol) )
                     errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Escopo inadequado: " + symbol.getLexeme() + " ! ") );
-                
-                String[] aux = symbol.getLexeme().split(":");
                 
                 if ( tokens.get(i+1).getToken().equals("Operador_Igual") ) {
                     if ( symbol.getType().equals("Inteiro") ) {
@@ -762,18 +765,23 @@ public class Control {
                     }
                 }
             } else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Read") ) {
-                if ( tokens.get( position + 2 ).getToken().equals("Palavra_Reservada_Int") )
-                    type = "Inteiro";
+                if ( searchSymbol(tokens.get(i+2).getLexeme(), level).getType().equals("Inteiro") )
+                    type.put(countRead, "Inteiro");
                 else
-                    type = "Booleano";
-            
+                    type.put(countRead,"Booleano");
+                   
+                countRead++;
+                
             } else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Write") ) {
-                if ( tokens.get( position + 2 ).getToken().equals("Palavra_Reservada_Int") )
-                    if ( type.equals("Booleano") )
+                if ( searchSymbol(tokens.get(i+2).getLexeme(), level).getType().equals("Inteiro") ) {
+                    if (type.get(countWrite).equals("Booleano") )
                         errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
-                else
-                    if ( type.equals("Inteiro") )
-                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
+                }
+                    
+                else if ( type.get(countWrite).equals("Inteiro") )
+                    errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Read and Write com tipos diferentes !"));
+                
+                countWrite++;
             
             } else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Procedure") ) {
                 oldLine = tokens.get(i).getLine(); 
@@ -781,14 +789,14 @@ public class Control {
                 position++;
                 
                 while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) )
-                 {
+                {
                     if ( tokens.get(position).getToken().equals("Identificador") 
                             || tokens.get(position).getToken().equals("Palavra_Reservada_Int")
                             || tokens.get(position).getToken().equals("Palavra_Reservada_Boolean"))
                         procedimento.add( tokens.get(position).getLexeme() );
                     
                     position++;
-                 }
+                }
                 
             } else if ( procedimento.size() > 0 && tokens.get(i).getLexeme().equals(procedimento.get(0)) && !tokens.get(i-1).getToken().equals("Palavra_Reservada_Procedure") ) {
                     oldLine = tokens.get(i).getLine();
@@ -826,7 +834,7 @@ public class Control {
     
     public ArrayList<Error> createSemanticTable(String textEdit) {
         int level;
-        ArrayList<Error> errorList;
+        ArrayList<Error> errorList = new ArrayList<>();
         globalList = new ArrayList<>();
         localList = new ArrayList<>();
         
@@ -903,10 +911,7 @@ public class Control {
             return errorList;
         }
         
-        if ( errorList.size() > 0 )
-            return errorList;
-        
-        return null;
+        return errorList;
     }
     
     public ArrayList<Error> isNeverUsedError(int level) {

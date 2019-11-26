@@ -430,12 +430,13 @@ public class Main extends javax.swing.JFrame {
 
     private void menuItemSemanticActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemSemanticActionPerformed
         // Do Analyse Semantic
-        ArrayList<Error> list = new ArrayList<>();
+        ArrayList<Error> list;
         String temp = "";
         int i = 0;
         boolean errorSintatic = false;
         
         if ( !textPaneAreaEdit.getText().equals("") ) {
+            list = new ArrayList<>();
             list = control.analyseSemantic(textPaneAreaEdit.getText());
         
             if ( list.size() == 1 && list.get(0).getLine().equals("-1") ) {
@@ -463,6 +464,7 @@ public class Main extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "Análise Semantica obteve erros !");
             }
 
+            list.clear();
             tabbedLexical.setSelectedIndex(2);
         }
         
