@@ -706,13 +706,11 @@ public class Control {
         ArrayList<String> procedimento = new ArrayList<>();
         ArrayList<String> procedimento2 = new ArrayList<>();    
         ArrayList<Error> errorList = new ArrayList<>();
-        String lexeme = "";
-        String type = "";
-        String oldLine = "";
-        Symbol symbol = null;
+        String lexeme, type, oldLine;
+        Symbol symbol;
         int position = 0;
-        int begin = 0;
-        int end = 9999;
+        int begin, end;
+        type = "";
         
         if ( level == 0 ) {
             begin = Integer.parseInt(globalList.get(0).getPosition());
@@ -737,42 +735,27 @@ public class Control {
                 String[] aux = symbol.getLexeme().split(":");
                 
                 if ( tokens.get(i+1).getToken().equals("Operador_Igual") ) {
-                    if ( tokens.get(i).getToken().equals("Inteiro") ) {
-                        if ( tokens.get(i+2).getToken().equals("Palavra_Reservada_True") || (tokens.get(i+2).getToken().equals("Palavra_Reservada_False") ) )
+                    if ( symbol.getType().equals("Inteiro") ) {
+                        if ( tokens.get(i+2).getToken().equals("Palavra_Reservada_True") || tokens.get(i+2).getToken().equals("Palavra_Reservada_False") || tokens.get(i+2).getToken().equals("Real") )
                             errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
                         
-                        if ( aux[1].equals("Expressao") ) {
+                        if ( tokens.get(i+3).getToken().equals("Operador_Divisão") ){
                             oldLine = tokens.get(i).getLine(); 
-                            position = i;
-                            
+                            position = i+2;
+
                             while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) ) {
-                                if ( tokens.get(i).getToken().equals("Real") ) {
-                                   errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
-                                
-                                   if ( tokens.get(i).getLexeme().equals("Operador_Divisão") && tokens.get(i+1).getLexeme().equals("0") )
-                                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
-                                }
-                               
-                               position++;
+                                if ( tokens.get(position).getToken().equals("Real") )
+                                   errorList.add(new Error(tokens.get(position).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
+
+                                if ( (tokens.get(position).getToken().equals("Operador_Divisão") || tokens.get(position).getToken().equals("Palavra_Reservada_Div"))  && tokens.get(position+1).getLexeme().equals("0") )
+                                    errorList.add(new Error(tokens.get(position).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
+
+                                position++;
                             }
                         }
-                    } else if ( tokens.get(i).getToken().equals("Real") ) {
-                        if ( aux[1].equals("Expressao") ) {
-                            oldLine = tokens.get(position).getLine(); 
-                            position = i;
-                            
-                            while( position < tokens.size() && tokens.get(position).getLine().equals(oldLine) ) {
-                               if ( tokens.get(position).getLexeme().equals("Operador_Divisão") ) {
-                                   if ( tokens.get(position-1).getLexeme().equals("Real") || tokens.get(position+1).getLexeme().equals("Real") )
-                                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Nao e possivel realizar divisao com numeros reais !"));
-                                   
-                                    if ( tokens.get(position+1).getLexeme().equals("0") )
-                                        errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Nao e possivel fazer divisao por zero !"));
-                               }
-                               
-                               position++;
-                            }
-                        }
+                    } else if ( symbol.getType().equals("Booleano") ) {
+                        if ( tokens.get(i+2).getToken().equals("Inteiro") || tokens.get(i+2).getToken().equals("Real") )
+                            errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
                     }
                 }
             } else if ( tokens.get(i).equals("Palavra_Reservada_Read") ) {
