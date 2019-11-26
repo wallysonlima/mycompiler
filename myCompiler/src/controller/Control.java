@@ -593,7 +593,7 @@ public class Control {
         
         term();
         
-        while( accept("Operador_Soma") || accept("Operador_Subtração") || accept("Palavra_Reservada_Or") ) {
+        while( accept("Operador_Soma") || accept("Operador_Subtração") || accept("Palavra_Reservada_Or") || accept("Operador_Multiplicação")) {
             nextToken();
             term();
         }
@@ -680,21 +680,28 @@ public class Control {
     public ArrayList<Error> analyseSemantic(String textEdit) {
         ArrayList<Error> errorList = createSemanticTable(textEdit);
         ArrayList<Error> globalError;
+        ArrayList<Error> localError;
         
+        // Verify if a sintatic is ok, if not, return sintatic errors and stop semantic analyse
         if ( errorList != null )
-            return errorList;
+            if ( errorList.get( errorList.size()-1 ).getLine().equals("999") )
+            {
+                errorList.remove( errorList.size() - 1);
+                return errorList;
+            }
         
         globalError = findSemanticErrors(0);
-        errorList = findSemanticErrors(1);
+        localError = findSemanticErrors(1);
         
         // Append the errorList in only one list
-        globalError.addAll(errorList);
+        errorList.addAll(globalError);
+        errorList.addAll(localError);
         
-        if ( globalError.size() == 0 ) {
-            globalError.add(new Error("-1", "Nenhum erro obtido, analise semantica feita com sucesso !"));
-            return globalError;
+        if ( errorList.isEmpty() ) {
+            errorList.add(new Error("-1", "Nenhum erro obtido, analise semantica feita com sucesso !"));
+            return errorList;
         } else 
-            return globalError;
+            return errorList;
     }
     
     public ArrayList<Error> findSemanticErrors(int level) {
@@ -908,8 +915,12 @@ public class Control {
         
         // Return the errorList with sintatic errors
         else {
+            errorList.add(new Error("999", "Erro ! Erro sintático !!") );
             return errorList;
         }
+        
+        if ( errorList.size() > 0 )
+            return errorList;
         
         return null;
     }
