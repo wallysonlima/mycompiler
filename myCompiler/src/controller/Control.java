@@ -15,8 +15,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Analyse;
+import model.Code;
 import model.LexicalAnalyzer;
 import model.Error;
+import model.Stack;
 import model.Symbol;
 
 /**
@@ -1070,8 +1072,57 @@ public class Control {
     // ######################### --- Generate and Execute Intermediate Code Methods --- ###################################
     public void generateIntermediateCode(String textEdit) {
         ArrayList<Analyse> tokens = analyseLexic(textEdit);
+        ArrayList<Code> codeList = new ArrayList<>();
+        Stack data = new Stack();
+        int count = 0;
+        int top = 0;
         
+        /*while ( count < tokens.size() ) {
+            if ( !codeList.isEmpty() && codeList.get("program").equals("PARA") )
+                break;
+            
+            switch(tokens.get(count).getToken())
+            {
+                case "Palavra_Reservada_Program":
+                    codeList.put(add("INPP");
+                    break;
+                
+                case "Identificador":
+                    if ( isDeclaring(tokens, count) )
+                        codeList.add("AMEM 1");
+                    /*
+                        FAZER DEPOIS else
+                    
+                    break;
+                    
+                case "Palavra_Reservada_Read":
+                    codeList.add("LEIT");
+                    codeList.add("ARMZ " )
+                
+            }
+            
+            count++;
+        } */
     }
+    
+    public boolean isDeclaring(ArrayList<Analyse> tokens, int position) {
+        String oldLine = tokens.get(position).getLine();
+        
+        while ( tokens.get(position).getLine().equals(oldLine) ) {
+            if ( tokens.get(position).getLexeme().equals("var") )
+                return true;
+            
+            position--;
+        }
+        
+        return false;
+    }
+    
+    /*public String getPosition(ArrayList<String> codeList, String to int position) {
+        while ( position > 0 ) {
+            if ( )
+        }
+    }*/
 }
 
 class Sortybyroll implements Comparator<Error>
