@@ -433,6 +433,7 @@ public class Main extends javax.swing.JFrame {
         ArrayList<Error> list = new ArrayList<>();
         String temp = "";
         int i = 0;
+        boolean errorSintatic = false;
         
         if ( !textPaneAreaEdit.getText().equals("") ) {
             list = control.analyseSemantic(textPaneAreaEdit.getText());
@@ -443,6 +444,10 @@ public class Main extends javax.swing.JFrame {
             } 
             
             else {
+                if ( list.get(list.size() - 1).getLine().equals("999") ) {
+                    list.remove(list.size() - 1);
+                    errorSintatic = true;
+                }
                 for (Error s: list ) {
                         temp += s.getError() + "  /  Linha = " + s.getLine() + "\n";
                         temp += "---------------------------------------------------------------------------------------------------------------------------------------\n";
@@ -451,8 +456,11 @@ public class Main extends javax.swing.JFrame {
                     }
 
                 textAreaResultSemantic.setText(temp);
-
-                JOptionPane.showMessageDialog(null, "Análise Semantica obteve erros !");
+                
+                if ( errorSintatic )
+                    JOptionPane.showMessageDialog(null, "Análise Sintática obteve erros ! Não foi realizada a semântica ! Erros Sintáticos !");
+                else
+                    JOptionPane.showMessageDialog(null, "Análise Semantica obteve erros !");
             }
 
             tabbedLexical.setSelectedIndex(2);

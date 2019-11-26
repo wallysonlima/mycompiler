@@ -685,10 +685,8 @@ public class Control {
         // Verify if a sintatic is ok, if not, return sintatic errors and stop semantic analyse
         if ( errorList != null )
             if ( errorList.get( errorList.size()-1 ).getLine().equals("999") )
-            {
-                errorList.remove( errorList.size() - 1);
                 return errorList;
-            }
+            
         
         globalError = findSemanticErrors(0);
         localError = findSemanticErrors(1);
