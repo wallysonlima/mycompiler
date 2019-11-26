@@ -8,6 +8,7 @@ package controller;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -698,8 +699,10 @@ public class Control {
         if ( errorList.isEmpty() ) {
             errorList.add(new Error("-1", "Nenhum erro obtido, analise semantica feita com sucesso !"));
             return errorList;
-        } else 
+        } else {
+            errorList.sort(new Sortybyroll());
             return errorList;
+        }
     }
     
     public ArrayList<Error> findSemanticErrors(int level) {
@@ -758,7 +761,7 @@ public class Control {
                             errorList.add(new Error(tokens.get(i).getLine(), "Erro ! Atribuindo valor de tipo diferente a variavel !"));
                     }
                 }
-            } else if ( tokens.get(i).equals("Palavra_Reservada_Read") ) {
+            } else if ( tokens.get(i).getToken().equals("Palavra_Reservada_Read") ) {
                 if ( tokens.get( position + 2 ).getToken().equals("Palavra_Reservada_Int") )
                     type = "Inteiro";
                 else
@@ -1057,6 +1060,17 @@ public class Control {
             return "Global";
         else
             return "Local";
+    }
+}
+
+class Sortybyroll implements Comparator<Error>
+{
+    public int compare(Error a, Error b)
+    {
+        int linea = Integer.parseInt(a.getLine());
+        int lineb = Integer.parseInt(b.getLine());
+
+        return linea - lineb;
     }
 }
     
