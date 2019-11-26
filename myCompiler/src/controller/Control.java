@@ -1070,39 +1070,63 @@ public class Control {
     }
     
     // ######################### --- Generate and Execute Intermediate Code Methods --- ###################################
-    public void generateIntermediateCode(String textEdit) {
+    public ArrayList<Code> generateIntermediateCode(String textEdit) {
         ArrayList<Analyse> tokens = analyseLexic(textEdit);
         ArrayList<Code> codeList = new ArrayList<>();
-        Stack data = new Stack();
         int count = 0;
-        int top = 0;
+        int i = 0;
         
-        /*while ( count < tokens.size() ) {
-            if ( !codeList.isEmpty() && codeList.get("program").equals("PARA") )
-                break;
-            
-            switch(tokens.get(count).getToken())
+        while ( true ) {            
+            switch(tokens.get(i).getToken())
             {
                 case "Palavra_Reservada_Program":
-                    codeList.put(add("INPP");
+                    codeList.add(new Code(-1, "program", "INPP", count) );
+                    count++;
                     break;
                 
                 case "Identificador":
-                    if ( isDeclaring(tokens, count) )
-                        codeList.add("AMEM 1");
-                    /*
-                        FAZER DEPOIS else
-                    
+                    if ( isDeclaring(tokens, count) ) {
+                        codeList.add(new Code(-1, tokens.get(i).getLexeme(), "AMEM 1", count) );
+                        count++;
+                    }
+                   
+                    else {
+                        codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
+                                "CRVL " + getPosition(codeList, tokens.get(i).getLexeme(), i), count) );
+                        count++;
+                    }
                     break;
                     
                 case "Palavra_Reservada_Read":
-                    codeList.add("LEIT");
-                    codeList.add("ARMZ " )
+                    codeList.add(new Code(-1, "read", "LEIT", count) );
+                    count++;
+                    
+                    codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
+                            "ARMZ " + getPosition(codeList, tokens.get(i+2).getLexeme(), i+2), count) );
+                    count++;
+                    
+                    codeList.add(new Code(-1, "read", "LEIT", count) );
+                    count++;
+                    
+                    codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
+                            "ARMZ " + getPosition(codeList, tokens.get(i+4).getLexeme(), i+4), count) );
+                    count++;
+                    break;
                 
+                case "Inteiro":
+                    codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
+                                "CRCT " + tokens.get(i).getLexeme(), count) );
+                    count++;
+                    break;
             }
             
-            count++;
-        } */
+            if ( codeList.get(count).getCode().equals("PARA") )
+                break;
+            
+            i++;
+        }
+        
+        return codeList;
     }
     
     public boolean isDeclaring(ArrayList<Analyse> tokens, int position) {
@@ -1118,11 +1142,14 @@ public class Control {
         return false;
     }
     
-    /*public String getPosition(ArrayList<String> codeList, String to int position) {
-        while ( position > 0 ) {
-            if ( )
+    public int getPosition(ArrayList<Code> codeList, String lexeme, int position) {
+        while ( --position > 0 ) {
+            if ( codeList.get(position).getLexeme().equals(lexeme) )
+                return position;
         }
-    }*/
+        
+        return -1;
+    }
 }
 
 class Sortybyroll implements Comparator<Error>
