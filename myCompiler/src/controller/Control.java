@@ -1066,6 +1066,12 @@ public class Control {
         else
             return "Local";
     }
+    
+    // ######################### --- Generate and Execute Intermediate Code Methods --- ###################################
+    public void generateIntermediateCode(String textEdit) {
+        ArrayList<Analyse> tokens = analyseLexic(textEdit);
+        
+    }
 }
 
 class Sortybyroll implements Comparator<Error>
@@ -1078,6 +1084,4 @@ class Sortybyroll implements Comparator<Error>
         return linea - lineb;
     }
 }
-
-// Methods to Generate Intermediate Code
-    
+ 
