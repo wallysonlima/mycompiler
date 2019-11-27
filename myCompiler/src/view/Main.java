@@ -20,6 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Analyse;
+import model.Code;
 import model.Error;
 import model.TableCellRenderer;
 
@@ -488,7 +489,25 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemExecuteActionPerformed
 
     private void menuItemIntermediateCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemIntermediateCodeActionPerformed
-        // TODO add your handling code here:
+        ArrayList<Code> codeList = new ArrayList<>(); 
+        String temp = "";
+        
+        if ( textPaneAreaEdit.getText() != "" ) {
+            codeList = control.generateIntermediateCode(textPaneAreaEdit.getText());
+            
+            for ( Code c: codeList )
+                if ( c.getCode().equals("NADA") )
+                    temp += "0 " + c.getCode() + "\n";
+                else
+                    temp += c.getCode() + "\n";
+            
+            textAreaResultIntermediateCode.setText(temp);
+        }
+        
+        else
+            JOptionPane.showMessageDialog(null, "Error ! Without Text ! You need fill the textArea !");
+        
+         tabbedLexical.setSelectedIndex(3);
     }//GEN-LAST:event_menuItemIntermediateCodeActionPerformed
 
     public void populateLexicalTable(ArrayList<Analyse> list)

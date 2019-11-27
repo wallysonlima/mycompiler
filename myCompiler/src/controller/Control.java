@@ -1090,23 +1090,24 @@ public class Control {
                     break;
                 
                 case "Identificador":
-                    if ( isDeclaring(tokens, count) ) {
-                        codeList.add(new Code(-1, tokens.get(i).getLexeme(), "AMEM 1", count) );
-                        count++;
-                    }
-                   
-                    else {
-                        codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
-                                "CRVL " + getPosition(codeList, tokens.get(i).getLexeme(), i), count) );
-                        
-                        if ( tokens.get(i+1).getToken().equals("Operador_Igual") ) {
-                            positionExpression = count;
-                            lineExpression = tokens.get(i).getLine();
+                    if ( !tokens.get(i-1).getToken().equals("Palavra_Reservada_Program") )
+                        if ( isDeclaring(tokens, i) ) {
+                            codeList.add(new Code(-1, tokens.get(i).getLexeme(), "AMEM 1", count) );
+                            count++;
                         }
-                        
-                        count++;
-                        
-                    }
+
+                        else {
+                            codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
+                                    "CRVL " + getPosition(codeList, tokens.get(i).getLexeme(), i), count) );
+
+                            if ( tokens.get(i+1).getToken().equals("Operador_Igual") ) {
+                                positionExpression = count;
+                                lineExpression = tokens.get(i).getLine();
+                            }
+
+                            count++;
+
+                        }
                     break;
                     
                 case "Palavra_Reservada_Read":
@@ -1114,15 +1115,16 @@ public class Control {
                     count++;
                     
                     codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
-                            "ARMZ " + getPosition(codeList, tokens.get(i+2).getLexeme(), i+2), count) );
+                            "ARMZ " + getPosition(codeList, tokens.get(i+2).getLexeme(), count), count) );
                     count++;
                     
                     codeList.add(new Code(-1, "read", "LEIT", count) );
                     count++;
                     
                     codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
-                            "ARMZ " + getPosition(codeList, tokens.get(i+4).getLexeme(), i+4), count) );
+                            "ARMZ " + getPosition(codeList, tokens.get(i+4).getLexeme(), count), count) );
                     count++;
+                    i+=6;
                     break;
                 
                 case "Inteiro":
@@ -1133,7 +1135,7 @@ public class Control {
                     
                 case "Palavra_Reservada_Div":
                     codeList.add(new Code(-1, tokens.get(i+1).getLexeme(), 
-                                "CRVL " + getPosition(codeList, tokens.get(i+1).getLexeme(), i+1), count) );
+                                "CRVL " + getPosition(codeList, tokens.get(i+1).getLexeme(), count), count) );
                     count++;
                     codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
                                 "DIVI", count) );
@@ -1155,26 +1157,70 @@ public class Control {
                      
                  case "Palavra_Reservada_Write":
                     codeList.add(new Code(-1, tokens.get(i+2).getLexeme(), 
-                            "CRVL " + getPosition(codeList, tokens.get(i+2).getLexeme(), i+2), count) );
+                            "CRVL 0", count));
                     count++;
                     
                     codeList.add(new Code(-1, "write", "IMPE", count) );
                     count++;
-                    
-                    codeList.add(new Code(-1, tokens.get(i+4).getLexeme(), 
-                            "CRVL " + getPosition(codeList, tokens.get(i+4).getLexeme(), i+4), count) );
-                    count++;
-                    
-                    codeList.add(new Code(-1, "write", "IMPE", count) );
-                    count++;
-                    
-                    codeList.add(new Code(-1, tokens.get(i+6).getLexeme(), 
-                            "CRVL " + getPosition(codeList, tokens.get(i+6).getLexeme(), i+6), count) );
-                    count++;
-                    
-                    codeList.add(new Code(-1, "write", "IMPE", count) );
-                    count++;
+                    i += 3;
                     break;
+                    
+                 case "Palavra_Reservada_If":
+                     codeList.add(new Code(-1, tokens.get(i+1).getLexeme(), 
+                            "CRVL " + getPosition(codeList, tokens.get(i+1).getLexeme(), count), count) );
+                     count++;
+                     
+                     codeList.add(new Code(-1, tokens.get(i+3).getLexeme(), 
+                            "CRVL " + getPosition(codeList, tokens.get(i+3).getLexeme(), count), count) );
+                     count++;
+                     
+                     if ( tokens.get(i+2).getLexeme().equals(">") ) {
+                         codeList.add(new Code(-1, tokens.get(i+2).getLexeme(), 
+                            "CMMA", count) );
+                         count++;
+                     }
+                     else if ( tokens.get(i+2).getLexeme().equals("<") ) {
+                         codeList.add(new Code(-1, tokens.get(i+2).getLexeme(), 
+                            "CMME", count) );
+                         count++;
+                     }
+                     else if ( tokens.get(i+2).getLexeme().equals("=") ) {
+                         codeList.add(new Code(-1, tokens.get(i+2).getLexeme(), 
+                            "CMIG", count) );
+                         count++;
+                     }
+                     else if ( tokens.get(i+2).getLexeme().equals(">=") ) {
+                         codeList.add(new Code(-1, tokens.get(i+2).getLexeme(), 
+                            "CMAG", count) );
+                         count++;
+                     }
+                     else if ( tokens.get(i+2).getLexeme().equals("<=") ) {
+                         codeList.add(new Code(-1, tokens.get(i+2).getLexeme(), 
+                            "CMEG", count) );
+                         count++;
+                     }
+                     else {
+                         codeList.add(new Code(-1, tokens.get(i+2).getLexeme(), 
+                            "CMDG", count) );
+                         count++;
+                     }
+                     
+                     codeList.add(new Code(-1, "DSVF", "DSVF 0", count) );
+                     count++;
+                     
+                     i += 3;
+                     break;
+                     
+                 case "Palavra_Reservada_End":
+                    codeList.add(new Code(-1, tokens.get(i).getLexeme(), "NADA", count) );
+                    count++;
+                    
+                    codeList.add(new Code(-1, tokens.get(i).getLexeme(), "PARA", count) );
+                    count++;
+            }
+            
+            if ( codeList.get(count-1).getCode().equals("PARA") ) {
+                break;
             }
             
             if ( positionExpression != -1 && !actualLine.equals(lineExpression) ) {
@@ -1185,8 +1231,6 @@ public class Control {
                 count++;
             }
             
-            if ( codeList.get(count).getCode().equals("PARA") )
-                break;
             i++;
         }
         
@@ -1196,20 +1240,21 @@ public class Control {
     public boolean isDeclaring(ArrayList<Analyse> tokens, int position) {
         String oldLine = tokens.get(position).getLine();
         
-        while ( tokens.get(position).getLine().equals(oldLine) ) {
-            if ( tokens.get(position).getLexeme().equals("var") )
-                return true;
-            
-            position--;
-        }
+        if ( position > 0)
+            while ( position > 0 && tokens.get(position).getLine().equals(oldLine) ) {
+                if ( tokens.get(position).getLexeme().equals("var") )
+                    return true;
+
+                position--;
+            }
         
         return false;
     }
     
     public int getPosition(ArrayList<Code> codeList, String lexeme, int position) {
-        while ( --position > 0 ) {
+        while ( --position > 0 && position < codeList.size()) {
             if ( codeList.get(position).getLexeme().equals(lexeme) )
-                return position;
+                return position-1;
         }
         
         return -1;
