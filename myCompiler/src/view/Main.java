@@ -22,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 import model.Analyse;
 import model.Code;
 import model.Error;
+import model.Stack;
 import model.TableCellRenderer;
 
 /**
@@ -31,6 +32,7 @@ import model.TableCellRenderer;
 public class Main extends javax.swing.JFrame {
     private Control control;
     private ArrayList<Analyse> listAnalyse;
+    ArrayList<Code> codeList;
     File file;
     IU_About about;
     /**
@@ -53,7 +55,7 @@ public class Main extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tabbedLexical = new javax.swing.JTabbedPane();
+        tabbedPaneLexical = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tableLexical = new javax.swing.JTable();
         tabbedPaneResult = new javax.swing.JTabbedPane();
@@ -65,6 +67,9 @@ public class Main extends javax.swing.JFrame {
         tabbedPaneIntermediateCode = new javax.swing.JTabbedPane();
         jScrollPane5 = new javax.swing.JScrollPane();
         textAreaResultIntermediateCode = new javax.swing.JTextArea();
+        tabbedPaneExecution = new javax.swing.JTabbedPane();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        textAreaResultExecution = new javax.swing.JTextArea();
         tabbedPaneEditor = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         textPaneAreaEdit = new javax.swing.JTextPane();
@@ -116,7 +121,7 @@ public class Main extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tableLexical);
 
-        tabbedLexical.addTab("Lexical Table", jScrollPane1);
+        tabbedPaneLexical.addTab("Lexical Table", jScrollPane1);
 
         textAreaResult.setColumns(20);
         textAreaResult.setRows(5);
@@ -124,7 +129,7 @@ public class Main extends javax.swing.JFrame {
 
         tabbedPaneResult.addTab("Sintatic Analyse", jScrollPane3);
 
-        tabbedLexical.addTab("Result Sintatic", tabbedPaneResult);
+        tabbedPaneLexical.addTab("Result Sintatic", tabbedPaneResult);
 
         textAreaResultSemantic.setColumns(20);
         textAreaResultSemantic.setRows(5);
@@ -132,7 +137,7 @@ public class Main extends javax.swing.JFrame {
 
         tabbedPaneSemantic.addTab("Semantic Analyse", jScrollPane4);
 
-        tabbedLexical.addTab("Result Semantic", tabbedPaneSemantic);
+        tabbedPaneLexical.addTab("Result Semantic", tabbedPaneSemantic);
 
         textAreaResultIntermediateCode.setColumns(20);
         textAreaResultIntermediateCode.setRows(5);
@@ -140,9 +145,17 @@ public class Main extends javax.swing.JFrame {
 
         tabbedPaneIntermediateCode.addTab("Intermediate Code", jScrollPane5);
 
-        tabbedLexical.addTab("Result Intermediate Code", tabbedPaneIntermediateCode);
+        tabbedPaneLexical.addTab("Result Intermediate Code", tabbedPaneIntermediateCode);
 
-        tabbedLexical.setSelectedIndex(1);
+        textAreaResultExecution.setColumns(20);
+        textAreaResultExecution.setRows(5);
+        jScrollPane7.setViewportView(textAreaResultExecution);
+
+        tabbedPaneExecution.addTab("Execution", jScrollPane7);
+
+        tabbedPaneLexical.addTab("Result Execution", tabbedPaneExecution);
+
+        tabbedPaneLexical.setSelectedIndex(1);
 
         jScrollPane2.setViewportView(textPaneAreaEdit);
 
@@ -270,7 +283,7 @@ public class Main extends javax.swing.JFrame {
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tabbedPaneEditor))
-            .addComponent(tabbedLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
+            .addComponent(tabbedPaneLexical, javax.swing.GroupLayout.DEFAULT_SIZE, 1000, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,7 +295,7 @@ public class Main extends javax.swing.JFrame {
                         .addGap(0, 32, Short.MAX_VALUE)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabbedLexical, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(tabbedPaneLexical, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -361,7 +374,7 @@ public class Main extends javax.swing.JFrame {
         else
             JOptionPane.showMessageDialog(null, "Análise Léxica realizada com sucesso !");
         
-        tabbedLexical.setSelectedIndex(0);
+        tabbedPaneLexical.setSelectedIndex(0);
     }//GEN-LAST:event_menuItemLexicActionPerformed
 
     private void menuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemCloseActionPerformed
@@ -431,7 +444,7 @@ public class Main extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Error ! Without Text ! You need fill the textArea !");
         
         
-        tabbedLexical.setSelectedIndex(1);
+        tabbedPaneLexical.setSelectedIndex(1);
     }//GEN-LAST:event_menuItemSintaticActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -476,7 +489,7 @@ public class Main extends javax.swing.JFrame {
             }
 
             list.clear();
-            tabbedLexical.setSelectedIndex(2);
+            tabbedPaneLexical.setSelectedIndex(2);
         }
         
         else 
@@ -485,11 +498,67 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_menuItemSemanticActionPerformed
 
     private void menuItemExecuteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemExecuteActionPerformed
-        // TODO add your handling code here:
+        int x, y;
+        boolean aux = false;
+        Stack stack = new Stack();
+        x = 0;
+        y = 0;
+        int maior = 0;
+        String result = "";
+        
+        if ( !codeList.isEmpty() ) {
+            for ( Code c: codeList) {
+                if ( c.getCode().equals("AMEM 1") ) {
+                    String valor = JOptionPane.showInputDialog("Entre com um inteiro: ");
+                    result += "Entre com um inteiro: \n";
+                    
+                    if ( !aux ) {
+                        aux = true;
+                       
+                        if ( !valor.isEmpty() )
+                            x = Integer.parseInt(valor);
+                    }
+                
+                    else {
+                        if ( !valor.isEmpty() )
+                            y = Integer.parseInt(valor);
+                    }
+                } else if ( c.getCode().equals("ARMZ 0") ) {
+                    stack.push(x);
+                } else if ( c.getCode().equals("ARMZ 1") ) {
+                    stack.push(y);
+                } else if ( c.getCode().equals("CMMA") ) {
+                    if ( x > y ) {
+                        maior = x;
+                    }
+                    
+                    else {
+                        maior = y;
+                    }
+                } else if ( c.getCode().equals("CMME") ) {
+                    if ( Integer.parseInt(stack.pop().toString()) < Integer.parseInt(stack.pop().toString()) ) {
+                        maior = x;
+                    }
+                    
+                    else {
+                        maior = y;
+                    }
+                }
+                
+                else if ( c.getCode().equals("PARA") ) {
+                    break;
+                }
+            }
+        }
+        result += maior + "\nExecução encerrada com sucesso !";
+        JOptionPane.showMessageDialog(null, maior + "\nExecução encerrada com sucesso !");
+        
+        textAreaResultExecution.setText(result);
+        tabbedPaneLexical.setSelectedIndex(4);
     }//GEN-LAST:event_menuItemExecuteActionPerformed
 
     private void menuItemIntermediateCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemIntermediateCodeActionPerformed
-        ArrayList<Code> codeList = new ArrayList<>(); 
+        codeList = new ArrayList<>(); 
         String temp = "";
         
         if ( textPaneAreaEdit.getText() != "" ) {
@@ -507,7 +576,7 @@ public class Main extends javax.swing.JFrame {
         else
             JOptionPane.showMessageDialog(null, "Error ! Without Text ! You need fill the textArea !");
         
-         tabbedLexical.setSelectedIndex(3);
+         tabbedPaneLexical.setSelectedIndex(3);
     }//GEN-LAST:event_menuItemIntermediateCodeActionPerformed
 
     public void populateLexicalTable(ArrayList<Analyse> list)
@@ -614,6 +683,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JMenu menuAnalyse;
     private javax.swing.JMenu menuFile;
     private javax.swing.JMenu menuGenerate;
@@ -626,14 +696,16 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JMenuItem menuItemSemantic;
     private javax.swing.JMenuItem menuItemSintatic;
     private javax.swing.JMenu menuRun;
-    private javax.swing.JTabbedPane tabbedLexical;
     private javax.swing.JTabbedPane tabbedPaneEditor;
+    private javax.swing.JTabbedPane tabbedPaneExecution;
     private javax.swing.JTabbedPane tabbedPaneIntermediateCode;
+    private javax.swing.JTabbedPane tabbedPaneLexical;
     private javax.swing.JTabbedPane tabbedPaneResult;
     private javax.swing.JTabbedPane tabbedPaneSemantic;
     private javax.swing.JTable tableLexical;
     private javax.swing.JTextArea textAreaLines;
     private javax.swing.JTextArea textAreaResult;
+    private javax.swing.JTextArea textAreaResultExecution;
     private javax.swing.JTextArea textAreaResultIntermediateCode;
     private javax.swing.JTextArea textAreaResultSemantic;
     private javax.swing.JTextPane textPaneAreaEdit;

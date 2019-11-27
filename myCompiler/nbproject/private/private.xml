@@ -7,7 +7,9 @@
             <file>file:/home/wallysonlima/Documents/Compiladores/myCompiler/myCompiler/src/model/Language.lex</file>
             <file>file:/home/wallysonlima/Documents/Compiladores/myCompiler/myCompiler/src/controller/Control.java</file>
             <file>file:/home/wallysonlima/Documents/Compiladores/myCompiler/myCompiler/src/model/Analyse.java</file>
+            <file>file:/home/wallysonlima/Documents/Compiladores/myCompiler/myCompiler/src/model/Stack.java</file>
             <file>file:/home/wallysonlima/Documents/Compiladores/myCompiler/myCompiler/src/model/Symbol.java</file>
+            <file>file:/home/wallysonlima/Documents/Compiladores/myCompiler/myCompiler/src/model/Code.java</file>
             <file>file:/home/wallysonlima/Documents/Compiladores/myCompiler/myCompiler/src/view/Main.java</file>
         </group>
     </open-files>
