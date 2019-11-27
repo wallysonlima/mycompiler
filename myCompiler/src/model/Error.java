@@ -19,6 +19,10 @@ public class Error {
         this.line = line;
         this.error = error;
     }
+
+    Error(String message) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     public String getLine() {
         return line;
