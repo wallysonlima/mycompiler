@@ -1,0 +1,7 @@
+program exemplo1;
+var x, y: int;
+begin
+	read(x,y);
+	if x > y
+		then write(x)
+end.

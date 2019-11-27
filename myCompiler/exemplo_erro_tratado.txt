@@ -1,12 +1,8 @@
 program correto;
-int a, b, c;
-begin
-	a:=1;
-	b:=2;
-	c:=3
-end;
+a, b, c;
+boolean d, e, f
 
-procedure proc(var a1 : int);
+proc(var a1 : int);
 int a, b, c;
 boolean d, e, f;
 begin
@@ -36,5 +32,4 @@ begin
 		if (b>10) then
 			b:=2;
 		a:=a-1
-	end
-end.
+

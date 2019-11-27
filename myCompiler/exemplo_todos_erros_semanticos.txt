@@ -1,0 +1,65 @@
+program correto;
+// Nunca utilizada
+int a, c;
+boolean b, d;
+begin
+	// Problema de Escopo
+	g:=6;
+	// Atribuindo tipo diferente
+	a:=true;
+	// Atribuindo tipo diferente
+	b:=1;
+	// Divisao por zero
+	c:=12/0;
+	// Atribuindo real a int
+	c:=12/12,4;
+	d:=false;
+	// Atribuindo real a int
+	a:=12,3;
+	read(c);
+	// Read and Write com tipos diferentes
+	write(d)	
+end;
+
+procedure proc(var a1 : int);
+int a, b, c;
+// Var declarada mais de uma vez
+int a;
+boolean d, e, f, g;
+begin
+	// incompatibilidade de tipo
+	a:=true;
+	if (a<1) then
+		// Incompatibilidade de tipo
+		// Atribuicao de um real a um inteiro
+		a:=12,3
+end;
+
+begin
+	a:=2;
+	b:=10;
+	c:=11;
+	a:=b+c;
+	d:=true;
+	e:=false;
+	f:=true;
+	read(a);
+	
+	// Read and Write com tipos diferentes
+	write(d);
+	if (d) then
+	begin
+		a:=20;
+		// Divisao por zero
+		b:=10 / 0 ;
+		// Divisao por um real
+		c:=a / 12,3
+	end;
+	while (a>1)
+	begin
+		if (b>10) then
+			b:=2;
+		a:=a-1
+	end
+end.
+
