@@ -1074,9 +1074,14 @@ public class Control {
         ArrayList<Analyse> tokens = analyseLexic(textEdit);
         ArrayList<Code> codeList = new ArrayList<>();
         int count = 0;
+        int positionExpression = -1;
+        String lineExpression = "";
+        String actualLine;
         int i = 0;
         
-        while ( true ) {            
+        while ( true ) {  
+            actualLine = tokens.get(i).getToken();
+            
             switch(tokens.get(i).getToken())
             {
                 case "Palavra_Reservada_Program":
@@ -1093,7 +1098,14 @@ public class Control {
                     else {
                         codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
                                 "CRVL " + getPosition(codeList, tokens.get(i).getLexeme(), i), count) );
+                        
+                        if ( tokens.get(i+1).getToken().equals("Operador_Igual") ) {
+                            positionExpression = count;
+                            lineExpression = tokens.get(i).getLine();
+                        }
+                        
                         count++;
+                        
                     }
                     break;
                     
@@ -1118,11 +1130,63 @@ public class Control {
                                 "CRCT " + tokens.get(i).getLexeme(), count) );
                     count++;
                     break;
+                    
+                case "Palavra_Reservada_Div":
+                    codeList.add(new Code(-1, tokens.get(i+1).getLexeme(), 
+                                "CRVL " + getPosition(codeList, tokens.get(i+1).getLexeme(), i+1), count) );
+                    count++;
+                    codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
+                                "DIVI", count) );
+                    count++;
+                    i++;
+                    break;
+                
+                case "Operador_Soma":
+                    codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
+                                "SOMA", count) );
+                    count++;
+                    break;
+                    
+                case "Operador_Multiplicação":
+                     codeList.add(new Code(-1, tokens.get(i).getLexeme(), 
+                                "MULT", count) );
+                     count++;
+                     break;
+                     
+                 case "Palavra_Reservada_Write":
+                    codeList.add(new Code(-1, tokens.get(i+2).getLexeme(), 
+                            "CRVL " + getPosition(codeList, tokens.get(i+2).getLexeme(), i+2), count) );
+                    count++;
+                    
+                    codeList.add(new Code(-1, "write", "IMPE", count) );
+                    count++;
+                    
+                    codeList.add(new Code(-1, tokens.get(i+4).getLexeme(), 
+                            "CRVL " + getPosition(codeList, tokens.get(i+4).getLexeme(), i+4), count) );
+                    count++;
+                    
+                    codeList.add(new Code(-1, "write", "IMPE", count) );
+                    count++;
+                    
+                    codeList.add(new Code(-1, tokens.get(i+6).getLexeme(), 
+                            "CRVL " + getPosition(codeList, tokens.get(i+6).getLexeme(), i+6), count) );
+                    count++;
+                    
+                    codeList.add(new Code(-1, "write", "IMPE", count) );
+                    count++;
+                    break;
+            }
+            
+            if ( positionExpression != -1 && !actualLine.equals(lineExpression) ) {
+                codeList.add(new Code(-1, "", 
+                                "ARMZ ", positionExpression));
+                positionExpression = -1;
+                lineExpression = "";
+                count++;
             }
             
             if ( codeList.get(count).getCode().equals("PARA") )
                 break;
-            
             i++;
         }
         
